@@ -1,11 +1,11 @@
 import { filterCards } from '../src/utils/cardHelpers';
-import type { CardType, CardColor, Rarity } from '../src/types/cards';
+import { CardType, Symbol, Color, Rarity } from '../src/types/cards';
 
 console.log('=== Filter Example ===\n');
 
 // Example 1: Filter by type
 console.log('1. Filtering Avatar cards:');
-const avatarCards = filterCards({ type: 'Avatar' });
+const avatarCards = filterCards({ type: CardType.Avatar });
 console.log(`Found ${avatarCards.length} Avatar cards`);
 avatarCards.slice(0, 3).forEach((card) => {
   console.log(`  - ${card.name} (${card.print})`);
@@ -17,7 +17,7 @@ console.log();
 
 // Example 2: Filter by color
 console.log('2. Filtering red (แดง) cards:');
-const redCards = filterCards({ color: 'แดง' });
+const redCards = filterCards({ color: Color.Red });
 console.log(`Found ${redCards.length} red cards`);
 redCards.slice(0, 3).forEach((card) => {
   console.log(`  - ${card.name} (${card.print})`);
@@ -29,7 +29,7 @@ console.log();
 
 // Example 3: Filter by rarity
 console.log('3. Filtering UR (Ultra Rare) cards:');
-const urCards = filterCards({ rarity: 'UR' });
+const urCards = filterCards({ rarity: Rarity.UR });
 console.log(`Found ${urCards.length} UR cards`);
 urCards.slice(0, 3).forEach((card) => {
   console.log(`  - ${card.name} (${card.print})`);
@@ -56,8 +56,8 @@ console.log();
 // Example 5: Filter by multiple criteria
 console.log('5. Filtering red Avatar cards with cost 3:');
 const complexFilter = filterCards({
-  type: 'Avatar',
-  color: 'แดง',
+  type: CardType.Avatar,
+  color: Color.Red,
   cost: 3,
 });
 console.log(`Found ${complexFilter.length} cards`);
@@ -75,7 +75,7 @@ console.log();
 
 // Example 6: Filter by symbol
 console.log('6. Filtering cards with symbol "เทพ" (God):');
-const godCards = filterCards({ symbol: 'เทพ' });
+const godCards = filterCards({ symbol: Symbol.God });
 console.log(`Found ${godCards.length} cards`);
 godCards.slice(0, 3).forEach((card) => {
   console.log(`  - ${card.name} (${card.print})`);
@@ -87,7 +87,7 @@ console.log();
 
 // Example 7: Filter by multiple types
 console.log('7. Filtering Avatar and Magic cards:');
-const avatarAndMagic = filterCards({ type: ['Avatar', 'Magic'] });
+const avatarAndMagic = filterCards({ type: [CardType.Avatar, CardType.Magic] });
 console.log(`Found ${avatarAndMagic.length} cards`);
 console.log(
   `  Avatar: ${avatarAndMagic.filter((c) => c.type === 'Avatar').length}`

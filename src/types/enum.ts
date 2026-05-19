@@ -1,30 +1,15 @@
-
 import {
-  CardColor,
-  type CardType,
-  type MagicSubtype,
-  type Rarity,
-  type Symbol,
-} from '@/src/types/cards';
+  Color,
+  CardType,
+  MagicSubtype,
+  Rarity,
+  Symbol,
+} from './base';
 
-export const cardTypes: CardType[] = ['Avatar', 'Magic', 'Life', 'Construct'];
-export const magicSubtypes: MagicSubtype[] = [
-  'Modification',
-  'React',
-  'Normal',
-  'Land',
-];
-export const rarities: Rarity[] = [
-  'SR',
-  'UR',
-  'PR',
-  'CBR',
-  'C',
-  'SCR',
-  'R',
-  'USEC',
-];
-export const colors: CardColor[] = ['แดง', 'ฟ้า', 'เขียว', 'ม่วง', 'ไม่มีสี'];
+export const cardTypes: CardType[] = Object.values(CardType);
+export const magicSubtypes: MagicSubtype[] = Object.values(MagicSubtype);
+export const rarities: Rarity[] = Object.values(Rarity);
+export const colors: Color[] = Object.values(Color);
 export const gems: number[] = [0, 1, 2, 3, 4];
 export const keywords: string[] = [
   'จุติ',
@@ -67,28 +52,7 @@ export const keywordColors: Record<
   แทงหลัง: 'red',
 };
 
-export const symbols: Symbol[] = [
-  'เทพ',
-  'ยักษ์',
-  'จอมเวทย์',
-  'คน',
-  'แมลง',
-  'สัตว์',
-  'รัททาทุย',
-  'นรก',
-  'ผี',
-  'ปลา',
-  'หุ่นยนต์',
-  'สิ่งก่อสร้าง',
-  'ต่างชาติ',
-  'ต้นไม้',
-  'เปรต',
-  'ฤษี',
-  'เอเลี่ยน',
-  'กะปอม',
-  'สัตว์มหัศจรรย์',
-  'ทหาร',
-];
+export const symbols: Symbol[] = Object.values(Symbol);
 
 export type SortOption = 'name' | 'type' | 'cost' | 'color' | 'gem' | 'keyword' | 'recommended';
 export type SortDirection = 'asc' | 'desc';

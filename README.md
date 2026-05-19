@@ -109,9 +109,13 @@ Filters cards based on various criteria.
 - `symbol?: Symbol | Symbol[]` - Filter by symbol
 - `cost?: number | { min?: number; max?: number }` - Filter by cost (specify value or range)
 - `gem?: number | { min?: number; max?: number }` - Filter by gem (specify value or range)
+- `gemColor?: Color | Color[]` - Filter by gem color ('แดง', 'ฟ้า', 'เขียว', 'ม่วง', 'ไม่มีสี')
 - `power?: number | { min?: number; max?: number }` - Filter by power (specify value or range)
 - `setCode?: string | string[]` - Filter by set code
 - `name?: string` - Filter by name (supports partial matching)
+- `ex?: string` - Filter by extension/extra field (e.g., 'Only #1')
+- `mainEffect?: string` - Filter by card effect text
+- `search?: string` - Global search across name, print code, effect, and extension fields
 
 **Returns:** Array of cards matching all filter criteria
 
@@ -119,8 +123,14 @@ Filters cards based on various criteria.
 // Filter by type
 const avatarCards = filterCards({ type: 'Avatar' });
 
-// Filter by color
-const redCards = filterCards({ color: 'แดง' });
+// Filter by gem color
+const redGemCards = filterCards({ gemColor: 'แดง' });
+
+// Filter by extension field (e.g., "Only #1" cards)
+const limitedCards = filterCards({ ex: 'Only #1' });
+```
+// Global search for "นนทก" in any field
+const globalResults = filterCards({ search: 'นนทก' });
 
 // Filter by cost range
 const midCostCards = filterCards({ cost: { min: 2, max: 4 } });

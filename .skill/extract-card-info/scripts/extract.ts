@@ -41,6 +41,7 @@ const EX_TPL = loadTemplates('ex');
 const DIGIT_TPL = loadTemplates('digit');
 const POWER_DIGIT_TPL = loadTemplates('powerDigit');
 const DIGIT_MIN_SCORE = 0.5;
+const DIGIT_MARGIN = 0.05;
 
 /**
  * Read a 1–3 digit number from a region: segment into digit columns, match
@@ -61,7 +62,7 @@ function readNumber(
   let digits = '';
   let minScore = 1;
   for (const seg of segs) {
-    const m = matchBest(seg, templates, DIGIT_MIN_SCORE, 0.05);
+    const m = matchBest(seg, templates, DIGIT_MIN_SCORE, DIGIT_MARGIN);
     digits += m.value;
     minScore = Math.min(minScore, m.score);
   }
@@ -258,7 +259,11 @@ export function extractCard(print: string): CardResult {
     const p = readNumber(png, regions.powerNum, POWER_DIGIT_TPL);
     if (p) fields.power = p;
   }
-  // customLimit — only when the override circle is present
+  // customLimit — only when the override circle is present.
+  // NOTE: the circle region yields inherently low NCC scores because its
+  // curved background produces noisy crops that don't cleanly match the
+  // white-on-dark digit templates. Consequently, customLimit confidence is
+  // essentially always 'low' even when the extracted value is correct.
   if (occluded) {
     const cl = readNumber(png, regions.circle);
     if (cl) fields.customLimit = cl;

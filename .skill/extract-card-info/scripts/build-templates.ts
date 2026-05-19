@@ -79,28 +79,39 @@ buildIconField('symbol', regions.symbol);
 buildIconField('subtype', regions.subtype ?? regions.costBox);
 buildIconField('ex', regions.ex);
 
-// Digits 0–9: crop from the cost region of an Avatar/Construct card whose cost
-// is that digit. Magic cards carry a subtype pictogram (not a digit) in the
-// COST box, so they are excluded. Among candidates (BT01 preferred) the first
-// whose cost region cleanly segments into exactly one glyph is used.
-mkdirSync(join(templatesDir, 'digit'), { recursive: true });
-for (let d = 0; d <= 9; d++) {
-  const candidates = cards
-    .filter((c) => c.cost === d && (c.type === 'Avatar' || c.type === 'Construct'))
-    .sort((a, b) => (String(a.print).startsWith('BT01') ? -1 : 1));
-  let built = false;
-  for (const card of candidates) {
-    const png = image(String(card.print));
-    if (!png) continue;
-    const segs = segmentDigits(crop(png, regions.costNum));
-    if (segs.length !== 1) continue;
-    writeFileSync(join(templatesDir, 'digit', `${d}.png`), PNG.sync.write(segs[0]));
-    crops.push({ label: `digit:${d}`, png: segs[0] });
-    built = true;
-    break;
+/**
+ * Build a 0-9 glyph set by cropping a numeric region from Avatar/Construct
+ * cards. Magic cards carry a subtype pictogram (not a digit) in the COST box,
+ * so they are excluded. Among candidates (BT01 preferred) the first whose
+ * region cleanly segments into exactly one glyph is used.
+ *
+ * @param dirName    - subdirectory under templates/ to write PNGs into
+ * @param costOrPower - card field to filter by digit value ('cost' or 'power')
+ * @param region      - image region to crop and segment
+ */
+function buildDigitField(dirName: string, costOrPower: 'cost' | 'power', region: Rect) {
+  mkdirSync(join(templatesDir, dirName), { recursive: true });
+  for (let d = 0; d <= 9; d++) {
+    const candidates = cards
+      .filter((c) => c[costOrPower] === d && (c.type === 'Avatar' || c.type === 'Construct'))
+      .sort((a, b) => (String(a.print).startsWith('BT01') ? -1 : 1));
+    let built = false;
+    for (const card of candidates) {
+      const png = image(String(card.print));
+      if (!png) continue;
+      const segs = segmentDigits(crop(png, region));
+      if (segs.length !== 1) continue;
+      writeFileSync(join(templatesDir, dirName, `${d}.png`), PNG.sync.write(segs[0]));
+      crops.push({ label: `${dirName}:${d}`, png: segs[0] });
+      built = true;
+      break;
+    }
+    if (!built) console.warn(`  no clean exemplar for ${dirName} ${d}`);
   }
-  if (!built) console.warn(`  no clean exemplar for digit ${d}`);
 }
+
+buildDigitField('digit', 'cost', regions.costNum);
+buildDigitField('powerDigit', 'power', regions.powerNum);
 
 // Contact sheet: a grid of every crop, each cell 64×64, for human review.
 const CELL = 64, COLS = 8;

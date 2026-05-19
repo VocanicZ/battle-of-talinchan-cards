@@ -35,5 +35,15 @@
   "digit:6",
   "digit:7",
   "digit:8",
-  "digit:9"
+  "digit:9",
+  "powerDigit:0",
+  "powerDigit:1",
+  "powerDigit:2",
+  "powerDigit:3",
+  "powerDigit:4",
+  "powerDigit:5",
+  "powerDigit:6",
+  "powerDigit:7",
+  "powerDigit:8",
+  "powerDigit:9"
 ]

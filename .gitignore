@@ -83,3 +83,10 @@ out/
 # TypeScript
 *.tsbuildinfo
 
+# Card audit — generated artifacts inside the extract-card-info skill
+# (the skill's scripts/ are tracked; its audit/ output is not)
+extract-card-info/audit/
+
+# Tesseract.js language data cache (downloaded at runtime)
+*.traineddata
+

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { extractCard } from './extract.ts';
+import { extractCardFull } from './extract.ts';
 
 test('extractCard reads type/color/gem for a Red Avatar (BT01-001)', () => {
   const r = extractCard('BT01-001');
@@ -38,4 +39,10 @@ test('extractCard reads cost and power for BT01-001 (cost 3, power 3)', () => {
 test('extractCard reads a two-digit customLimit override', () => {
   const r = extractCard('BT01-042');
   assert.equal(typeof r.fields.customLimit?.value, 'number');
+});
+
+test('extractCardFull adds a name field', async () => {
+  const r = await extractCardFull('BT01-001');
+  assert.ok(r.fields.name, 'name field present');
+  assert.equal(typeof r.fields.name?.value, 'string');
 });

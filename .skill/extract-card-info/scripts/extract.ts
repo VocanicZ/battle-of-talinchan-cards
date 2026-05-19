@@ -9,6 +9,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { PNG } from 'pngjs';
+import { createWorker } from 'tesseract.js';
 import { imagesDir, skillDir } from './paths.ts';
 import { avgRGB, crop, hasCircle, matchBest, nearestSwatch, segmentDigits, type Rect, type RGB } from './cv.ts';
 
@@ -272,9 +273,34 @@ export function extractCard(print: string): CardResult {
   return { print, source: 'image', fields };
 }
 
+/** OCR the Thai name plate. Tesseract confidence (0–100) maps to high/low. */
+async function readName(print: string): Promise<FieldResult> {
+  const png = loadCard(print);
+  const plate = crop(png, regions.namePlate);
+  const worker = await createWorker('tha');
+  try {
+    const { data } = await worker.recognize(PNG.sync.write(plate));
+    const text = data.text.trim().replace(/\s+/g, ' ');
+    return {
+      value: text || null,
+      confidence: data.confidence >= 70 ? 'high' : 'low',
+      score: data.confidence / 100,
+    };
+  } finally {
+    await worker.terminate();
+  }
+}
+
+/** extractCard + the async OCR `name` field. */
+export async function extractCardFull(print: string): Promise<CardResult> {
+  const base = extractCard(print);
+  base.fields.name = await readName(print);
+  return base;
+}
+
 // CLI
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const print = process.argv[2];
   if (!print) throw new Error('usage: extract.ts <print-code>');
-  console.log(JSON.stringify(extractCard(print), null, 2));
+  extractCardFull(print).then((r) => console.log(JSON.stringify(r, null, 2)));
 }

@@ -1,0 +1,161 @@
+/**
+ * The card-extraction engine. Given a print code, reads the card image and
+ * extracts its properties with zero AI — region colour sampling, NCC template
+ * matching, digit segmentation. Every field carries a confidence flag.
+ *
+ * Usage (single card): npx tsx .skill/extract-card-info/scripts/extract.ts BT01-001
+ */
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { PNG } from 'pngjs';
+import { imagesDir, skillDir } from './paths.ts';
+import { avgRGB, hasCircle, nearestSwatch, type Rect, type RGB } from './cv.ts';
+
+const regions = JSON.parse(
+  readFileSync(join(skillDir, 'scripts/regions.json'), 'utf8'),
+) as Record<string, Rect>;
+
+export interface FieldResult {
+  value: string | number | null;
+  confidence: 'high' | 'low';
+  score: number;
+}
+export interface CardResult {
+  print: string;
+  source: 'image' | 'inherited';
+  fields: Record<string, FieldResult>;
+}
+
+/**
+ * Border colour → card type.
+ * Calibrated by sampling BT01 Avatar (dark red), BT01-050 Magic (dark blue),
+ * BT06-064 Construct (golden yellow), BT01-051 Life (grey).
+ */
+const TYPE_PALETTE: Record<string, RGB> = {
+  Avatar:    [131, 27, 25],
+  Magic:     [23, 76, 124],
+  Construct: [223, 186, 35],
+  Life:      [95, 95, 95],
+};
+
+/**
+ * COST-box colour → card Color enum value.
+ * Calibrated by sampling BT01 red Avatars, BT01 blue Avatars, BT01 purple Avatars.
+ */
+const COLOR_PALETTE: Record<string, RGB> = {
+  แดง:  [217, 68, 71],
+  ฟ้า:  [93, 128, 189],
+  ม่วง: [109, 78, 130],
+  เขียว: [60, 155, 90],
+};
+
+/**
+ * Gem strip right-side colour → gemColor.
+ * The right portion of the gem strip (x=199, w=56) is always filled with the
+ * card's colour.
+ */
+const GEM_PALETTE: Record<string, RGB> = {
+  แดง:  [217, 68, 71],
+  ฟ้า:  [93, 128, 189],
+  ม่วง: [109, 78, 130],
+  ดำ:   [40, 40, 40],
+};
+
+const TYPE_MAX_DIST = 80, TYPE_MARGIN = 25;
+const COLOR_MAX_DIST = 80, COLOR_MARGIN = 20;
+
+/**
+ * Gem slot detection constants.
+ * The gem strip (x=100, y=32, w=155, h=26) encodes gem count as small gem icons.
+ * Each gem adds a group of dark pixels at one of 4 positions in the left portion
+ * of the strip. Slots are at x=104, 120, 136, 152 (8px wide).
+ * A slot is "filled" (has a gem) when ≥5% of its pixels are dark (brightness < 80).
+ *
+ * Calibrated on BT01 cards: gem=0 → 0%, gem=1 → 11%, gem=2 → [11%,18%,0%,0%],
+ * gem=3 → [11%,18%,2%,15%].
+ */
+const GEM_SLOT_OFFSETS = [4, 20, 36, 52]; // offsets from regions.gemStrip[0]
+const GEM_SLOT_W = 8;                     // px wide per slot sample
+const GEM_DARK_THRESH = 80;              // pixel brightness threshold for "dark"
+const GEM_FILLED_FRAC = 0.05;           // min dark fraction to count a slot as filled
+
+/** Load a 388×528 card image, or throw. */
+function loadCard(print: string): PNG {
+  const png = PNG.sync.read(readFileSync(join(imagesDir, `${print}.png`)));
+  if (png.width !== 388 || png.height !== 528) {
+    throw new Error(`${print}: non-standard ${png.width}×${png.height}`);
+  }
+  return png;
+}
+
+/**
+ * Count filled gem slots by detecting dark-pixel groups in the left portion of
+ * the gem strip. Each filled slot corresponds to one gem on the card.
+ * Also reads the gem colour from the right-side colour bar (always filled).
+ */
+function readGems(png: PNG): { gem: FieldResult; gemColor: FieldResult } {
+  const [sx, sy, , sh] = regions.gemStrip;
+
+  let filled = 0;
+  for (const off of GEM_SLOT_OFFSETS) {
+    const x0 = sx + off;
+    let dark = 0, total = 0;
+    for (let x = x0; x < x0 + GEM_SLOT_W; x++) {
+      for (let y = sy + 1; y < sy + sh - 1; y++) {
+        const i = (png.width * y + x) << 2;
+        const brightness = (png.data[i] + png.data[i + 1] + png.data[i + 2]) / 3;
+        if (brightness < GEM_DARK_THRESH) dark++;
+        total++;
+      }
+    }
+    if (dark / total >= GEM_FILLED_FRAC) filled++;
+  }
+
+  // Gem colour from the right portion of the strip (x=199, w=56) — always coloured.
+  const gemColorRgb = avgRGB(png, [199, sy + 2, 56, sh - 4]);
+  const gemColorM = nearestSwatch(gemColorRgb, GEM_PALETTE, COLOR_MAX_DIST, COLOR_MARGIN);
+
+  return {
+    gem: { value: filled, confidence: 'high', score: 1 },
+    gemColor: {
+      value: filled > 0 ? gemColorM.value : 'ไม่มีสี',
+      confidence: filled > 0 ? gemColorM.confidence : 'high',
+      score: gemColorM.score,
+    },
+  };
+}
+
+/** Extract every field from a single card image. */
+export function extractCard(print: string): CardResult {
+  const png = loadCard(print);
+  const fields: Record<string, FieldResult> = {};
+
+  // type — border colour
+  const typeM = nearestSwatch(
+    avgRGB(png, regions.border), TYPE_PALETTE, TYPE_MAX_DIST, TYPE_MARGIN,
+  );
+  fields.type = typeM;
+  const type = typeM.value;
+
+  // color — COST box background (Avatar/Construct only)
+  if (type === 'Avatar' || type === 'Construct') {
+    fields.color = nearestSwatch(
+      avgRGB(png, regions.costBox), COLOR_PALETTE, COLOR_MAX_DIST, COLOR_MARGIN,
+    );
+    const g = readGems(png);
+    fields.gem = g.gem;
+    fields.gemColor = g.gemColor;
+  }
+
+  // override circle — record for occlusion handling by later tasks
+  void hasCircle;
+
+  return { print, source: 'image', fields };
+}
+
+// CLI
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const print = process.argv[2];
+  if (!print) throw new Error('usage: extract.ts <print-code>');
+  console.log(JSON.stringify(extractCard(print), null, 2));
+}

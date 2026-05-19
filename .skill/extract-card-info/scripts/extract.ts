@@ -27,6 +27,10 @@ export function resolveBasePrint(print: string): string {
 
 const templatesDir = join(skillDir, 'templates');
 const TPL_MIN_SCORE = 0.55, TPL_MARGIN = 0.08;
+// ex stamps need a stricter gate: a no-stamp ex region still correlates with
+// the stamp templates around 0.6, while a real stamp scores >=0.77 on its own
+// template. 0.72 cleanly separates "stamp present" from "bare card art".
+const EX_MIN_SCORE = 0.72;
 
 /** Load every template PNG for one field into a label→PNG map. */
 function loadTemplates(field: string): Record<string, PNG> {
@@ -51,6 +55,9 @@ const DIGIT_TPL = loadTemplates('digit');
 const POWER_DIGIT_TPL = loadTemplates('powerDigit');
 const DIGIT_MIN_SCORE = 0.5;
 const DIGIT_MARGIN = 0.05;
+// segmentDigits occasionally yields a thin noise sliver beside a real glyph
+// (anti-aliasing on a box edge). Anything narrower than this is not a digit.
+const MIN_DIGIT_W = 5;
 
 /**
  * Read a 1–3 digit number from a region: segment into digit columns, match
@@ -66,7 +73,11 @@ function readNumber(
   rect: Rect,
   templates: Record<string, PNG> = DIGIT_TPL,
 ): FieldResult | null {
-  const segs = segmentDigits(crop(png, rect)).slice(0, 3);
+  let segs = segmentDigits(crop(png, rect));
+  // drop noise slivers; if every segment is thin, keep the widest one
+  const wide = segs.filter((s) => s.width >= MIN_DIGIT_W);
+  segs = (wide.length ? wide : segs.slice().sort((a, b) => b.width - a.width).slice(0, 1))
+    .slice(0, 3);
   if (segs.length === 0) return null;
   let digits = '';
   let minScore = 1;
@@ -96,8 +107,10 @@ export interface CardResult {
 
 /**
  * Border colour → card type.
- * Calibrated by sampling BT01 Avatar (dark red), BT01-050 Magic (dark blue),
- * BT06-064 Construct (golden yellow), BT01-051 Life (grey).
+ * Sampled from the left-edge border (regions.border) — chosen because the
+ * top-right override circle never occludes the left edge, so the type reads
+ * correctly even on circle cards. Calibrated against Avatar (dark red), Magic
+ * (dark blue), Construct (golden yellow), Life (grey).
  */
 const TYPE_PALETTE: Record<string, RGB> = {
   Avatar:    [131, 27, 25],
@@ -136,18 +149,19 @@ const COLOR_MARGIN = 20;
 
 /**
  * Gem slot detection constants.
- * The gem strip (x=100, y=32, w=155, h=26) encodes gem count as small gem icons.
- * Each gem adds a group of dark pixels at one of 4 positions in the left portion
- * of the strip. Slots are at x=104, 120, 136, 152 (8px wide).
- * A slot is "filled" (has a gem) when ≥5% of its pixels are dark (brightness < 80).
+ * The gem strip encodes gem count (0–4) as dark diamond icons in its left
+ * portion. The four diamonds sit at progressively wider offsets; an angled
+ * banner decoration crosses the upper part of the strip, so detection scans
+ * only the lower band of the strip to isolate the diamonds from the banner.
+ * A slot is "filled" when ≥12% of its lower-band pixels are dark.
  *
- * Calibrated on BT01 cards: gem=0 → 0%, gem=1 → 11%, gem=2 → [11%,18%,0%,0%],
- * gem=3 → [11%,18%,2%,15%].
+ * Calibrated across BT01–BT03: empty slots read 0–7%, filled diamonds 15–31%.
  */
-const GEM_SLOT_OFFSETS = [4, 20, 36, 52]; // offsets from regions.gemStrip[0]
-const GEM_SLOT_W = 8;                     // px wide per slot sample
-const GEM_DARK_THRESH = 80;               // pixel brightness threshold for "dark"
-const GEM_FILLED_FRAC = 0.05;             // min dark fraction to count a slot as filled
+const GEM_SLOT_OFFSETS = [0, 20, 46, 68]; // diamond x-offsets from gemStrip[0]
+const GEM_SLOT_W = 12;                    // px wide per slot sample
+const GEM_DARK_THRESH = 100;              // pixel brightness threshold for "dark"
+const GEM_FILLED_FRAC = 0.12;             // min dark fraction to count a slot as filled
+const GEM_BAND_TOP = 0.45;                // scan the strip's lower 55% (skip the banner)
 
 /** Load a 388×528 card image, or throw. */
 function loadCard(print: string): PNG {
@@ -174,12 +188,14 @@ function loadCard(print: string): PNG {
 function readGems(png: PNG): { gem: FieldResult; gemColor: FieldResult } {
   const [sx, sy, , sh] = regions.gemStrip;
 
+  const yTop = sy + Math.round(sh * GEM_BAND_TOP);
+  const yBot = sy + sh;
   let filled = 0;
   for (const off of GEM_SLOT_OFFSETS) {
     const x0 = sx + off;
     let dark = 0, total = 0;
     for (let x = x0; x < x0 + GEM_SLOT_W; x++) {
-      for (let y = sy + 1; y < sy + sh - 1; y++) {
+      for (let y = yTop; y < yBot; y++) {
         const i = (png.width * y + x) << 2;
         const brightness = (png.data[i] + png.data[i + 1] + png.data[i + 2]) / 3;
         if (brightness < GEM_DARK_THRESH) dark++;
@@ -246,12 +262,13 @@ export function extractCard(print: string): CardResult {
     );
   }
 
-  // ex — stamp under the race icon
+  // ex — stamp under the race icon. Margin 0: a real stamp's own template
+  // dominates, so only the EX_MIN_SCORE presence gate matters.
   if (occluded) {
     fields.ex = { value: 'unknown', confidence: 'low', score: 0 };
   } else {
-    const m = matchBest(crop(png, regions.ex), EX_TPL, TPL_MIN_SCORE, TPL_MARGIN);
-    // a low-confidence ex match most often means "no stamp present"
+    const m = matchBest(crop(png, regions.ex), EX_TPL, EX_MIN_SCORE, 0);
+    // best NCC below EX_MIN_SCORE → no stamp present
     fields.ex = m.confidence === 'high'
       ? m
       : { value: null, confidence: 'high', score: m.score };

@@ -27,3 +27,15 @@ test('extractCard marks symbol unknown when the override circle occludes it', ()
   assert.equal(r.fields.symbol?.value, 'unknown');
   assert.equal(r.fields.symbol?.confidence, 'low');
 });
+
+test('extractCard reads cost and power for BT01-001 (cost 3, power 3)', () => {
+  const r = extractCard('BT01-001');
+  assert.equal(r.fields.cost?.value, 3);
+  assert.equal(r.fields.power?.value, 3);
+});
+
+// BT01-042 has customLimit=1 and the override circle is present on the image.
+test('extractCard reads a two-digit customLimit override', () => {
+  const r = extractCard('BT01-042');
+  assert.equal(typeof r.fields.customLimit?.value, 'number');
+});

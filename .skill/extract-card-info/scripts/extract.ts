@@ -10,7 +10,7 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { PNG } from 'pngjs';
 import { imagesDir, skillDir } from './paths.ts';
-import { avgRGB, crop, hasCircle, matchBest, nearestSwatch, type Rect, type RGB } from './cv.ts';
+import { avgRGB, crop, hasCircle, matchBest, nearestSwatch, segmentDigits, type Rect, type RGB } from './cv.ts';
 
 const regions = JSON.parse(
   readFileSync(join(skillDir, 'scripts/regions.json'), 'utf8'),
@@ -27,7 +27,7 @@ function loadTemplates(field: string): Record<string, PNG> {
   for (const file of readdirSync(dir).filter((f) => f.endsWith('.png'))) {
     const base = file.replace(/\.png$/, '');
     // icon templates are base64url-encoded Thai/symbol values; digits are plain
-    const label = field === 'digit'
+    const label = (field === 'digit' || field === 'powerDigit')
       ? base
       : Buffer.from(base, 'base64url').toString('utf8');
     out[label] = PNG.sync.read(readFileSync(join(dir, file)));
@@ -38,6 +38,40 @@ function loadTemplates(field: string): Record<string, PNG> {
 const SYMBOL_TPL = loadTemplates('symbol');
 const SUBTYPE_TPL = loadTemplates('subtype');
 const EX_TPL = loadTemplates('ex');
+const DIGIT_TPL = loadTemplates('digit');
+const POWER_DIGIT_TPL = loadTemplates('powerDigit');
+const DIGIT_MIN_SCORE = 0.5;
+
+/**
+ * Read a 1–3 digit number from a region: segment into digit columns, match
+ * each against the 0–9 glyph templates, concatenate. Returns null if no
+ * digits segment out.
+ *
+ * The `templates` parameter lets callers select the appropriate template set:
+ * - DIGIT_TPL for white-on-dark regions (costNum, circle)
+ * - POWER_DIGIT_TPL for black-on-white regions (powerNum inner whitebox)
+ */
+function readNumber(
+  png: PNG,
+  rect: Rect,
+  templates: Record<string, PNG> = DIGIT_TPL,
+): FieldResult | null {
+  const segs = segmentDigits(crop(png, rect)).slice(0, 3);
+  if (segs.length === 0) return null;
+  let digits = '';
+  let minScore = 1;
+  for (const seg of segs) {
+    const m = matchBest(seg, templates, DIGIT_MIN_SCORE, 0.05);
+    digits += m.value;
+    minScore = Math.min(minScore, m.score);
+  }
+  const value = Number(digits);
+  return {
+    value: Number.isNaN(value) ? null : value,
+    confidence: minScore >= DIGIT_MIN_SCORE ? 'high' : 'low',
+    score: minScore,
+  };
+}
 
 export interface FieldResult {
   value: string | number | null;
@@ -211,6 +245,23 @@ export function extractCard(print: string): CardResult {
     fields.ex = m.confidence === 'high'
       ? m
       : { value: null, confidence: 'high', score: m.score };
+  }
+
+  // cost — COST box number (PlayableCard)
+  if (type !== 'Life') {
+    const c = readNumber(png, regions.costNum);
+    if (c) fields.cost = c;
+  }
+  // power — POWER box number (Avatar/Construct); uses the inner whitebox region
+  // which has black digits on white background, requiring POWER_DIGIT_TPL.
+  if (type === 'Avatar' || type === 'Construct') {
+    const p = readNumber(png, regions.powerNum, POWER_DIGIT_TPL);
+    if (p) fields.power = p;
+  }
+  // customLimit — only when the override circle is present
+  if (occluded) {
+    const cl = readNumber(png, regions.circle);
+    if (cl) fields.customLimit = cl;
   }
 
   return { print, source: 'image', fields };

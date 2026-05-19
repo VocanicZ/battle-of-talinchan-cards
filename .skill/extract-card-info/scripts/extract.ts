@@ -62,8 +62,10 @@ const GEM_PALETTE: Record<string, RGB> = {
   ดำ:   [40, 40, 40],
 };
 
-const TYPE_MAX_DIST = 80, TYPE_MARGIN = 25;
-const COLOR_MAX_DIST = 80, COLOR_MARGIN = 20;
+const TYPE_MAX_DIST = 80;
+const TYPE_MARGIN = 25;
+const COLOR_MAX_DIST = 80;
+const COLOR_MARGIN = 20;
 
 /**
  * Gem slot detection constants.
@@ -77,8 +79,8 @@ const COLOR_MAX_DIST = 80, COLOR_MARGIN = 20;
  */
 const GEM_SLOT_OFFSETS = [4, 20, 36, 52]; // offsets from regions.gemStrip[0]
 const GEM_SLOT_W = 8;                     // px wide per slot sample
-const GEM_DARK_THRESH = 80;              // pixel brightness threshold for "dark"
-const GEM_FILLED_FRAC = 0.05;           // min dark fraction to count a slot as filled
+const GEM_DARK_THRESH = 80;               // pixel brightness threshold for "dark"
+const GEM_FILLED_FRAC = 0.05;             // min dark fraction to count a slot as filled
 
 /** Load a 388×528 card image, or throw. */
 function loadCard(print: string): PNG {
@@ -92,7 +94,15 @@ function loadCard(print: string): PNG {
 /**
  * Count filled gem slots by detecting dark-pixel groups in the left portion of
  * the gem strip. Each filled slot corresponds to one gem on the card.
- * Also reads the gem colour from the right-side colour bar (always filled).
+ *
+ * The plan's seed approach (per-slot colour averaged against a sampled
+ * header-grey baseline) was superseded: the averaged baseline was unreliable
+ * across card colours. Dark-pixel fraction is card-colour-agnostic — gem icons
+ * are dark line-art regardless of the card's palette.
+ *
+ * The two halves use orthogonal strategies on purpose: slot counting reads the
+ * dark icons on the left; gemColor reads the solid colour bar on the right
+ * (regions.gemColorBar), which is always filled with the card's colour.
  */
 function readGems(png: PNG): { gem: FieldResult; gemColor: FieldResult } {
   const [sx, sy, , sh] = regions.gemStrip;
@@ -112,8 +122,8 @@ function readGems(png: PNG): { gem: FieldResult; gemColor: FieldResult } {
     if (dark / total >= GEM_FILLED_FRAC) filled++;
   }
 
-  // Gem colour from the right portion of the strip (x=199, w=56) — always coloured.
-  const gemColorRgb = avgRGB(png, [199, sy + 2, 56, sh - 4]);
+  // Gem colour from the solid colour bar on the right of the strip.
+  const gemColorRgb = avgRGB(png, regions.gemColorBar);
   const gemColorM = nearestSwatch(gemColorRgb, GEM_PALETTE, COLOR_MAX_DIST, COLOR_MARGIN);
 
   return {

@@ -21,7 +21,37 @@ import {
   CARDS_SD07,
   CARDS_SL01,
 } from '../cards';
-import type { Card, CardType, CardColor, Rarity, Symbol } from '../types/cards';
+import type {
+  Card,
+  CardType,
+  Color,
+  MagicSubtype,
+  Rarity,
+  Symbol,
+} from '../types/cards';
+
+/**
+ * Type for card definitions that can include multiple rarities
+ */
+export type CardDefinition = Card & { variants?: Rarity[] };
+
+/**
+ * Helper to create multiple cards from a single definition with variants
+ * @param definitions - Array of card definitions
+ * @returns Flattened array of cards
+ */
+export function createCards(definitions: CardDefinition[]): Card[] {
+  return definitions.flatMap((def) => {
+    const { variants, ...base } = def;
+    const cards = [base as Card];
+    if (variants) {
+      for (const rarity of variants) {
+        cards.push({ ...base, rare: rarity } as Card);
+      }
+    }
+    return cards;
+  });
+}
 
 // Map of set codes to their card arrays
 const SET_MAP: Record<string, Card[]> = {
@@ -86,14 +116,23 @@ export function searchCards(query: string): Card[] {
  */
 export interface FilterOptions {
   type?: CardType | CardType[];
-  color?: CardColor | CardColor[];
+  color?: Color | Color[];
   rarity?: Rarity | Rarity[];
   symbol?: Symbol | Symbol[];
   cost?: number | { min?: number; max?: number };
   gem?: number | { min?: number; max?: number };
+  gemColor?: Color | Color[];
   power?: number | { min?: number; max?: number };
   setCode?: string | string[];
   name?: string;
+  ex?: string;
+  mainEffect?: string;
+  search?: string;
+  dropRate?: string;
+  soi?: number | { min?: number; max?: number };
+  customLimit?: number | { min?: number; max?: number };
+  subtype?: MagicSubtype | MagicSubtype[];
+  favorText?: string;
 }
 
 /**
@@ -107,7 +146,7 @@ export function filterCards(filters: FilterOptions): Card[] {
   // Filter by type
   if (filters.type) {
     const types = Array.isArray(filters.type) ? filters.type : [filters.type];
-    cards = cards.filter((card) => types.includes(card.type));
+    cards = cards.filter((card) => types.includes(card.type as CardType));
   }
 
   // Filter by color
@@ -117,7 +156,7 @@ export function filterCards(filters: FilterOptions): Card[] {
       : [filters.color];
     cards = cards.filter((card) => {
       if ('color' in card && card.color) {
-        return colors.includes(card.color as CardColor);
+        return colors.includes(card.color as Color);
       }
       return false;
     });
@@ -128,7 +167,7 @@ export function filterCards(filters: FilterOptions): Card[] {
     const rarities = Array.isArray(filters.rarity)
       ? filters.rarity
       : [filters.rarity];
-    cards = cards.filter((card) => rarities.includes(card.rare));
+    cards = cards.filter((card) => rarities.includes(card.rare as Rarity));
   }
 
   // Filter by symbol
@@ -138,7 +177,7 @@ export function filterCards(filters: FilterOptions): Card[] {
       : [filters.symbol];
     cards = cards.filter((card) => {
       if ('symbol' in card) {
-        return symbols.includes(card.symbol);
+        return symbols.includes(card.symbol as Symbol);
       }
       return false;
     });
@@ -149,7 +188,7 @@ export function filterCards(filters: FilterOptions): Card[] {
     if (typeof filters.cost === 'number') {
       cards = cards.filter((card) => {
         if ('cost' in card) {
-          return card.cost === filters.cost;
+          return (card.cost ?? 0) === filters.cost;
         }
         return false;
       });
@@ -157,7 +196,7 @@ export function filterCards(filters: FilterOptions): Card[] {
       const { min, max } = filters.cost;
       cards = cards.filter((card) => {
         if ('cost' in card) {
-          const cost = card.cost;
+          const cost = card.cost ?? 0;
           if (min !== undefined && cost < min) return false;
           if (max !== undefined && cost > max) return false;
           return true;
@@ -172,7 +211,7 @@ export function filterCards(filters: FilterOptions): Card[] {
     if (typeof filters.gem === 'number') {
       cards = cards.filter((card) => {
         if ('gem' in card) {
-          return card.gem === filters.gem;
+          return (card.gem ?? 0) === filters.gem;
         }
         return false;
       });
@@ -180,7 +219,7 @@ export function filterCards(filters: FilterOptions): Card[] {
       const { min, max } = filters.gem;
       cards = cards.filter((card) => {
         if ('gem' in card) {
-          const gem = card.gem;
+          const gem = card.gem ?? 0;
           if (min !== undefined && gem < min) return false;
           if (max !== undefined && gem > max) return false;
           return true;
@@ -190,12 +229,25 @@ export function filterCards(filters: FilterOptions): Card[] {
     }
   }
 
+  // Filter by gem color
+  if (filters.gemColor) {
+    const gemColors = Array.isArray(filters.gemColor)
+      ? filters.gemColor
+      : [filters.gemColor];
+    cards = cards.filter((card) => {
+      if ('gemColor' in card && card.gemColor) {
+        return gemColors.includes(card.gemColor as Color);
+      }
+      return false;
+    });
+  }
+
   // Filter by power
   if (filters.power !== undefined) {
     if (typeof filters.power === 'number') {
       cards = cards.filter((card) => {
         if ('power' in card) {
-          return card.power === filters.power;
+          return (card.power ?? 0) === filters.power;
         }
         return false;
       });
@@ -203,7 +255,7 @@ export function filterCards(filters: FilterOptions): Card[] {
       const { min, max } = filters.power;
       cards = cards.filter((card) => {
         if ('power' in card) {
-          const power = card.power;
+          const power = card.power ?? 0;
           if (min !== undefined && power < min) return false;
           if (max !== undefined && power > max) return false;
           return true;
@@ -232,6 +284,106 @@ export function filterCards(filters: FilterOptions): Card[] {
     cards = cards.filter((card) =>
       card.name.toLowerCase().includes(lowerName)
     );
+  }
+
+  // Filter by ex (partial match, case-insensitive)
+  if (filters.ex) {
+    const lowerEx = filters.ex.toLowerCase();
+    cards = cards.filter((card) =>
+      card.ex && card.ex.toLowerCase().includes(lowerEx)
+    );
+  }
+
+  // Filter by mainEffect (partial match, case-insensitive)
+  if (filters.mainEffect) {
+    const lowerEffect = filters.mainEffect.toLowerCase();
+    cards = cards.filter((card) => {
+      if ('mainEffect' in card && card.mainEffect) {
+        return card.mainEffect.toLowerCase().includes(lowerEffect);
+      }
+      return false;
+    });
+  }
+
+  // Filter by dropRate (partial match, case-insensitive)
+  if (filters.dropRate) {
+    const lowerDropRate = filters.dropRate.toLowerCase();
+    cards = cards.filter((card) =>
+      card.dropRate && card.dropRate.toLowerCase().includes(lowerDropRate)
+    );
+  }
+
+  // Filter by soi
+  if (filters.soi !== undefined) {
+    if (typeof filters.soi === 'number') {
+      cards = cards.filter((card) => card.soi === filters.soi);
+    } else {
+      const { min, max } = filters.soi;
+      cards = cards.filter((card) => {
+        const soi = card.soi;
+        if (min !== undefined && soi < min) return false;
+        if (max !== undefined && soi > max) return false;
+        return true;
+      });
+    }
+  }
+
+  // Filter by customLimit
+  if (filters.customLimit !== undefined) {
+    if (typeof filters.customLimit === 'number') {
+      cards = cards.filter((card) => card.customLimit === filters.customLimit);
+    } else {
+      const { min, max } = filters.customLimit;
+      cards = cards.filter((card) => {
+        const customLimit = card.customLimit ?? Infinity;
+        if (min !== undefined && customLimit < min) return false;
+        if (max !== undefined && customLimit > max) return false;
+        return true;
+      });
+    }
+  }
+
+  // Filter by subtype
+  if (filters.subtype) {
+    const subtypes = Array.isArray(filters.subtype)
+      ? filters.subtype
+      : [filters.subtype];
+    cards = cards.filter((card) => {
+      if ('subtype' in card && card.subtype) {
+        return subtypes.includes(card.subtype as MagicSubtype);
+      }
+      return false;
+    });
+  }
+
+  // Filter by favorText (partial match, case-insensitive)
+  if (filters.favorText) {
+    const lowerFavorText = filters.favorText.toLowerCase();
+    cards = cards.filter((card) => {
+      if ('favorText' in card && card.favorText) {
+        return card.favorText.toLowerCase().includes(lowerFavorText);
+      }
+      return false;
+    });
+  }
+
+  // Global search across multiple fields
+  if (filters.search) {
+    const lowerSearch = filters.search.toLowerCase();
+    cards = cards.filter((card) => {
+      const inName = card.name.toLowerCase().includes(lowerSearch);
+      const inEx = card.ex && card.ex.toLowerCase().includes(lowerSearch);
+      const inEffect =
+        'mainEffect' in card &&
+        card.mainEffect &&
+        card.mainEffect.toLowerCase().includes(lowerSearch);
+      const inPrint = card.print.toLowerCase().includes(lowerSearch);
+      const inFavorText =
+        'favorText' in card &&
+        card.favorText &&
+        card.favorText.toLowerCase().includes(lowerSearch);
+      return inName || inEx || inEffect || inPrint || inFavorText;
+    });
   }
 
   return cards;

@@ -1,87 +1,65 @@
+import { Color, CardType, MagicSubtype, Rarity, Symbol } from './base';
+
+export * from './base';
+
 export interface DeckEntry {
   card: Card;
   quantity: number;
 }
-export type CardColor = 'แดง' | 'ฟ้า' | 'เขียว' | 'ม่วง' | 'ไม่มีสี';
-export type CardType = 'Avatar' | 'Magic' | 'Life' | 'Construct';
-export type MagicSubtype = 'Modification' | 'React' | 'Normal' | 'Land';
-export type Rarity =
-  | 'SR'
-  | 'UR'
-  | 'PR'
-  | 'CBR'
-  | 'C'
-  | 'SCR'
-  | 'R'
-  | 'PR'
-  | 'USEC';
-export type Symbol =
-  | 'เทพ'
-  | 'ยักษ์'
-  | 'จอมเวทย์'
-  | 'คน'
-  | 'แมลง'
-  | 'สัตว์'
-  | 'รัททาทุย'
-  | 'นรก'
-  | 'ผี'
-  | 'หุ่นยนต์'
-  | 'ปลา'
-  | 'สิ่งก่อสร้าง'
-  | 'ต่างชาติ'
-  | 'ต้นไม้'
-  | 'เปรต'
-  | 'เอเลี่ยน'
-  | 'ฤษี'
-  | 'กะปอม'
-  | 'สัตว์มหัศจรรย์'
-  | 'ทหาร'
-  | 'ไฟเบอร์';
 
+/**
+ * Base properties for all cards.
+ * Allowing string literals for backward compatibility during migration.
+ */
 export interface BaseCard {
   name: string;
-  type: CardType;
+  type: CardType | string;
   print: string;
-  rare: Rarity;
+  rare: Rarity | string;
   dropRate?: string;
-  soi: number; // ซอย
+  soi: number;
   customLimit?: number;
   ex?: string;
 }
 
-export interface AvatarCard extends BaseCard {
-  type: 'Avatar';
-  cost: number;
-  gem: number;
-  power: number;
-  symbol: Symbol;
-  color?: string; // Card colors: แดง (Red), ฟ้า (Blue), เขียว (Green), ม่วง (gray), etc.
-  mainEffect: string;
+/**
+ * Cards that can be played (Avatar, Magic, Construct)
+ * These share symbols, costs, and effects.
+ */
+export interface PlayableCard extends BaseCard {
+  symbol: Symbol | string;
+  cost?: number;
+  mainEffect?: string;
 }
 
-export interface MagicCard extends BaseCard {
-  type: 'Magic';
-  subtype: MagicSubtype;
-  cost: number;
-  symbol: Symbol;
-  color?: string;
-  mainEffect: string;
+/**
+ * Cards that participate in combat (Avatar, Construct)
+ * These have colors, gems, and power.
+ */
+export interface CombatCard extends PlayableCard {
+  color?: Color | string;
+  gem?: number;
+  gemColor?: Color | string;
+  power?: number;
+}
+
+export interface AvatarCard extends CombatCard {
+  type: CardType.Avatar | 'Avatar';
+}
+
+export interface MagicCard extends PlayableCard {
+  type: CardType.Magic | 'Magic';
+  subtype: MagicSubtype | string;
 }
 
 export interface LifeCard extends BaseCard {
-  type: 'Life';
-  mainEffect: string;
+  type: CardType.Life | 'Life';
   favorText: string;
+  mainEffect?: string;
 }
 
-export interface ConstructCard extends BaseCard {
-  type: 'Construct';
-  cost: number;
-  gem: number;
-  power: number;
-  symbol: Symbol;
-  color?: string;
-  mainEffect: string;
+export interface ConstructCard extends CombatCard {
+  type: CardType.Construct | 'Construct';
 }
 
 export type Card = AvatarCard | MagicCard | LifeCard | ConstructCard;

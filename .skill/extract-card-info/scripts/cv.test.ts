@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { PNG } from 'pngjs';
-import { avgRGB, dist, nearestSwatch, crop, ncc, matchBest, type RGB } from './cv.ts';
+import { avgRGB, dist, nearestSwatch, crop, ncc, matchBest, segmentDigits, type RGB } from './cv.ts';
 
 /** A solid w×h image of one color. */
 function solid(w: number, h: number, [r, g, b]: RGB): PNG {
@@ -91,4 +91,38 @@ test('matchBest ranks templates and flags confidence', () => {
   const m = matchBest(white, { topHalf: white, bottomHalf: other }, 0.7, 0.15);
   assert.equal(m.value, 'topHalf');
   assert.equal(m.confidence, 'high');
+});
+
+test('segmentDigits splits two ink blocks separated by background', () => {
+  // 20×10 image, background black, two 4-px-wide white blocks with a gap.
+  const png = solid(20, 10, [0, 0, 0]);
+  const paintCol = (xs: number[]) => {
+    for (const x of xs) {
+      for (let y = 0; y < 10; y++) {
+        const i = (20 * y + x) << 2;
+        png.data[i] = 255; png.data[i + 1] = 255; png.data[i + 2] = 255;
+      }
+    }
+  };
+  paintCol([2, 3, 4, 5]);      // block 1
+  paintCol([12, 13, 14, 15]);  // block 2
+  const digits = segmentDigits(png);
+  assert.equal(digits.length, 2);
+  assert.equal(digits[0].width, 4);
+  assert.equal(digits[1].width, 4);
+});
+
+test('segmentDigits returns one segment for a single block', () => {
+  const png = solid(20, 10, [0, 0, 0]);
+  for (let x = 8; x < 12; x++) {
+    for (let y = 0; y < 10; y++) {
+      const i = (20 * y + x) << 2;
+      png.data[i] = 255; png.data[i + 1] = 255; png.data[i + 2] = 255;
+    }
+  }
+  assert.equal(segmentDigits(png).length, 1);
+});
+
+test('segmentDigits returns empty for a blank patch', () => {
+  assert.equal(segmentDigits(solid(20, 10, [0, 0, 0])).length, 0);
 });

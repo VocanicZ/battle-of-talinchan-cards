@@ -119,3 +119,52 @@ export function matchBest(
     best.s >= minScore && (!rival || best.s - rival.s >= margin);
   return { value: best.label, confidence: high ? 'high' : 'low', score: best.s };
 }
+
+/** Mean color of the patch's four corner pixels — the background estimate. */
+function cornerBg(png: PNG): RGB {
+  const w = png.width, h = png.height;
+  const corners: RGB[] = [[0, 0], [w - 1, 0], [0, h - 1], [w - 1, h - 1]].map(
+    ([x, y]) => {
+      const i = (w * y + x) << 2;
+      return [png.data[i], png.data[i + 1], png.data[i + 2]] as RGB;
+    },
+  );
+  return [
+    Math.round(corners.reduce((s, c) => s + c[0], 0) / 4),
+    Math.round(corners.reduce((s, c) => s + c[1], 0) / 4),
+    Math.round(corners.reduce((s, c) => s + c[2], 0) / 4),
+  ];
+}
+
+const INK_DIST = 70;       // colour distance from background to count as "ink"
+const MIN_INK_FRAC = 0.12; // fraction of a column that must be ink
+
+/**
+ * Split a number region into digit-sized columns.
+ * A column is "ink" if enough of its pixels differ from the background;
+ * contiguous ink columns form one digit. Returns each digit cropped, left
+ * to right (0 segments = blank patch).
+ */
+export function segmentDigits(png: PNG): PNG[] {
+  const bg = cornerBg(png);
+  const inkCol: boolean[] = [];
+  for (let x = 0; x < png.width; x++) {
+    let ink = 0;
+    for (let y = 0; y < png.height; y++) {
+      const i = (png.width * y + x) << 2;
+      const d = dist([png.data[i], png.data[i + 1], png.data[i + 2]], bg);
+      if (d > INK_DIST) ink++;
+    }
+    inkCol.push(ink >= png.height * MIN_INK_FRAC);
+  }
+  const segments: PNG[] = [];
+  let start = -1;
+  for (let x = 0; x <= inkCol.length; x++) {
+    if (inkCol[x] && start < 0) start = x;
+    else if (!inkCol[x] && start >= 0) {
+      segments.push(crop(png, [start, 0, x - start, png.height]));
+      start = -1;
+    }
+  }
+  return segments;
+}

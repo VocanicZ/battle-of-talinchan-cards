@@ -84,8 +84,9 @@ out/
 *.tsbuildinfo
 
 # Card audit — generated artifacts inside the extract-card-info skill
-# (the skill's scripts/ are tracked; its audit/ output is not)
-extract-card-info/audit/
+# (the skill's scripts/ are tracked; its audit/ output is not).
+# Globbed so it matches every skill mirror (.skill/, .claude/skills/, .agents/skills/).
+**/extract-card-info/audit/
 
 # Tesseract.js language data cache (downloaded at runtime)
 *.traineddata

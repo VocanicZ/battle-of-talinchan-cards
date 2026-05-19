@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { PNG } from 'pngjs';
-import { avgRGB, dist, nearestSwatch, crop, ncc, matchBest, segmentDigits, type RGB } from './cv.ts';
+import { avgRGB, dist, nearestSwatch, crop, ncc, matchBest, segmentDigits, hasCircle, type RGB } from './cv.ts';
 
 /** A solid w×h image of one color. */
 function solid(w: number, h: number, [r, g, b]: RGB): PNG {
@@ -125,4 +125,14 @@ test('segmentDigits returns one segment for a single block', () => {
 
 test('segmentDigits returns empty for a blank patch', () => {
   assert.equal(segmentDigits(solid(20, 10, [0, 0, 0])).length, 0);
+});
+
+test('hasCircle is true when the region is heavily red', () => {
+  const png = solid(40, 40, [190, 40, 40]); // strong red region
+  assert.equal(hasCircle(png, [0, 0, 40, 40]), true);
+});
+
+test('hasCircle is false for a non-red region', () => {
+  const png = solid(40, 40, [200, 200, 200]); // grey region
+  assert.equal(hasCircle(png, [0, 0, 40, 40]), false);
 });

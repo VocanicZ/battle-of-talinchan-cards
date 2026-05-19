@@ -168,3 +168,19 @@ export function segmentDigits(png: PNG): PNG[] {
   }
   return segments;
 }
+
+const CIRCLE_RED_FRAC = 0.18; // min fraction of strong-red pixels
+
+/** True if a strongly-red pixel cluster (the override circle ring) fills the region. */
+export function hasCircle(png: PNG, [x0, y0, w, h]: Rect): boolean {
+  let red = 0, n = 0;
+  for (let y = y0; y < y0 + h; y++) {
+    for (let x = x0; x < x0 + w; x++) {
+      const i = (png.width * y + x) << 2;
+      const r = png.data[i], g = png.data[i + 1], b = png.data[i + 2];
+      if (r > 140 && g < 95 && b < 95) red++;
+      n++;
+    }
+  }
+  return n > 0 && red / n >= CIRCLE_RED_FRAC;
+}

@@ -17,6 +17,14 @@ const regions = JSON.parse(
   readFileSync(join(skillDir, 'scripts/regions.json'), 'utf8'),
 ) as Record<string, Rect>;
 
+// Rarity / promo suffixes that mark a variant of a base print.
+const VARIANT_SUFFIX = /-(SCR|UR|CBR|PR\d?|SR|R|C|USEC|PROMO)$/i;
+
+/** Strip a variant suffix to the base print code. */
+export function resolveBasePrint(print: string): string {
+  return print.replace(VARIANT_SUFFIX, '');
+}
+
 const templatesDir = join(skillDir, 'templates');
 const TPL_MIN_SCORE = 0.55, TPL_MARGIN = 0.08;
 
@@ -293,9 +301,14 @@ async function readName(print: string): Promise<FieldResult> {
 
 /** extractCard + the async OCR `name` field. */
 export async function extractCardFull(print: string): Promise<CardResult> {
-  const base = extractCard(print);
-  base.fields.name = await readName(print);
-  return base;
+  const base = resolveBasePrint(print);
+  if (base !== print && existsSync(join(imagesDir, `${base}.png`))) {
+    const inherited = await extractCardFull(base);
+    return { print, source: 'inherited', fields: inherited.fields };
+  }
+  const result = extractCard(print);
+  result.fields.name = await readName(print);
+  return result;
 }
 
 // CLI

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { extractCard } from './extract.ts';
 import { extractCardFull } from './extract.ts';
+import { resolveBasePrint } from './extract.ts';
 
 test('extractCard reads type/color/gem for a Red Avatar (BT01-001)', () => {
   const r = extractCard('BT01-001');
@@ -45,4 +46,17 @@ test('extractCardFull adds a name field', async () => {
   const r = await extractCardFull('BT01-001');
   assert.ok(r.fields.name, 'name field present');
   assert.equal(typeof r.fields.name?.value, 'string');
+});
+
+test('resolveBasePrint strips known rarity suffixes', () => {
+  assert.equal(resolveBasePrint('BT01-001-SCR'), 'BT01-001');
+  assert.equal(resolveBasePrint('BT01-001-CBR'), 'BT01-001');
+  assert.equal(resolveBasePrint('BT01-001'), 'BT01-001');
+});
+
+test('extractCardFull tags a variant print as inherited', async () => {
+  const r = await extractCardFull('BT01-001-SCR');
+  assert.equal(r.print, 'BT01-001-SCR');
+  assert.equal(r.source, 'inherited');
+  assert.equal(r.fields.type?.value, 'Avatar');
 });

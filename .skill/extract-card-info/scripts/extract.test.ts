@@ -21,7 +21,7 @@ test('extractCard reads symbol for BT01-001 (Symbol.Giant = ยักษ์)', (
 });
 
 // BT01-042: customLimit=1 in src/cards/bt01.ts, has images/BT01-042.png, and
-// hasCircle(png, regions.circle) returns true (verified by find-circle-scratch.ts).
+// its override circle trips hasCircle(png, regions.circle).
 test('extractCard marks symbol unknown when the override circle occludes it', () => {
   const r = extractCard('BT01-042');
   assert.equal(r.fields.symbol?.value, 'unknown');

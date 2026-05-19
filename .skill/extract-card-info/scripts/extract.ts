@@ -7,6 +7,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { PNG } from 'pngjs';
 import { imagesDir, skillDir } from './paths.ts';
 import { avgRGB, hasCircle, nearestSwatch, type Rect, type RGB } from './cv.ts';
@@ -154,7 +155,7 @@ export function extractCard(print: string): CardResult {
 }
 
 // CLI
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const print = process.argv[2];
   if (!print) throw new Error('usage: extract.ts <print-code>');
   console.log(JSON.stringify(extractCard(print), null, 2));

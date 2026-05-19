@@ -5,16 +5,39 @@
  *
  * Usage (single card): npx tsx .skill/extract-card-info/scripts/extract.ts BT01-001
  */
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { PNG } from 'pngjs';
 import { imagesDir, skillDir } from './paths.ts';
-import { avgRGB, hasCircle, nearestSwatch, type Rect, type RGB } from './cv.ts';
+import { avgRGB, crop, hasCircle, matchBest, nearestSwatch, type Rect, type RGB } from './cv.ts';
 
 const regions = JSON.parse(
   readFileSync(join(skillDir, 'scripts/regions.json'), 'utf8'),
 ) as Record<string, Rect>;
+
+const templatesDir = join(skillDir, 'templates');
+const TPL_MIN_SCORE = 0.55, TPL_MARGIN = 0.08;
+
+/** Load every template PNG for one field into a label→PNG map. */
+function loadTemplates(field: string): Record<string, PNG> {
+  const dir = join(templatesDir, field);
+  if (!existsSync(dir)) return {};
+  const out: Record<string, PNG> = {};
+  for (const file of readdirSync(dir).filter((f) => f.endsWith('.png'))) {
+    const base = file.replace(/\.png$/, '');
+    // icon templates are base64url-encoded Thai/symbol values; digits are plain
+    const label = field === 'digit'
+      ? base
+      : Buffer.from(base, 'base64url').toString('utf8');
+    out[label] = PNG.sync.read(readFileSync(join(dir, file)));
+  }
+  return out;
+}
+
+const SYMBOL_TPL = loadTemplates('symbol');
+const SUBTYPE_TPL = loadTemplates('subtype');
+const EX_TPL = loadTemplates('ex');
 
 export interface FieldResult {
   value: string | number | null;
@@ -158,8 +181,37 @@ export function extractCard(print: string): CardResult {
     fields.gemColor = g.gemColor;
   }
 
-  // override circle — record for occlusion handling by later tasks
-  void hasCircle;
+  // override circle occludes the top-right symbol + ex icons
+  const occluded = hasCircle(png, regions.circle);
+
+  // symbol — race icon, top-right (PlayableCard: Avatar/Magic/Construct)
+  // When occluded, always mark unknown regardless of detected type (the circle
+  // can corrupt the border colour sample, leading to type misdetection).
+  if (occluded) {
+    fields.symbol = { value: 'unknown', confidence: 'low', score: 0 };
+  } else if (type !== 'Life') {
+    fields.symbol = matchBest(
+      crop(png, regions.symbol), SYMBOL_TPL, TPL_MIN_SCORE, TPL_MARGIN,
+    );
+  }
+
+  // subtype — Magic only, COST-box position
+  if (type === 'Magic') {
+    fields.subtype = matchBest(
+      crop(png, regions.subtype), SUBTYPE_TPL, TPL_MIN_SCORE, TPL_MARGIN,
+    );
+  }
+
+  // ex — stamp under the race icon
+  if (occluded) {
+    fields.ex = { value: 'unknown', confidence: 'low', score: 0 };
+  } else {
+    const m = matchBest(crop(png, regions.ex), EX_TPL, TPL_MIN_SCORE, TPL_MARGIN);
+    // a low-confidence ex match most often means "no stamp present"
+    fields.ex = m.confidence === 'high'
+      ? m
+      : { value: null, confidence: 'high', score: m.score };
+  }
 
   return { print, source: 'image', fields };
 }

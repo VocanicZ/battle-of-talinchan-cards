@@ -14,3 +14,16 @@ test('extractCard reads type for a Magic card (BT01-050)', () => {
   const r = extractCard('BT01-050');
   assert.equal(r.fields.type?.value, 'Magic');
 });
+
+test('extractCard reads symbol for BT01-001 (Symbol.Giant = ยักษ์)', () => {
+  const r = extractCard('BT01-001');
+  assert.equal(r.fields.symbol?.value, 'ยักษ์');
+});
+
+// BT01-042: customLimit=1 in src/cards/bt01.ts, has images/BT01-042.png, and
+// hasCircle(png, regions.circle) returns true (verified by find-circle-scratch.ts).
+test('extractCard marks symbol unknown when the override circle occludes it', () => {
+  const r = extractCard('BT01-042');
+  assert.equal(r.fields.symbol?.value, 'unknown');
+  assert.equal(r.fields.symbol?.confidence, 'low');
+});

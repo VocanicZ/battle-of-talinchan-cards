@@ -69,8 +69,8 @@ const KNOWN_DB_TYPOS: ReadonlyArray<[string, string, string]> = [
   ['symbol', 'จอมเวทย์', 'BT01-037'],
 ];
 
-function buildIconField(field: string, region: Rect) {
-  const MAX_PER_VALUE = 3;
+function buildIconField(field: string, region: Rect, maxPerValue = 3) {
+  const MAX_PER_VALUE = maxPerValue;
   const fieldDir = join(templatesDir, field);
   mkdirSync(fieldDir, { recursive: true });
   for (const f of readdirSync(fieldDir)) {
@@ -114,7 +114,11 @@ function buildIconField(field: string, region: Rect) {
 
 buildIconField('symbol', regions.symbol);
 buildIconField('subtype', regions.subtype ?? regions.costBox);
-buildIconField('ex', regions.ex);
+// ex stamps render with subtle stroke-weight variation between print runs
+// (e.g. CC02 "Only #1" is slightly heavier than BT01's), so we need exemplars
+// from more sets to score above EX_MIN_SCORE on every print. The ex value
+// space is tiny (~3 values), so a higher cap costs almost nothing.
+buildIconField('ex', regions.ex, 30);
 
 /**
  * Build a 0-9 glyph set by cropping a numeric region from Avatar/Construct

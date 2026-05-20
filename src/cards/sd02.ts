@@ -16,6 +16,7 @@ export const CARDS_SD02: Card[] = createCards([
     symbol: Symbol.Human,
     color: Color.Blue,
     dropRate: "2 / กล่อง",
+    customLimit: 2,
   },
   {
     name: "ฮอล",
@@ -31,6 +32,7 @@ export const CARDS_SD02: Card[] = createCards([
     symbol: Symbol.Human,
     color: Color.Blue,
     dropRate: "2 / กล่อง",
+    customLimit: 2,
   },
   {
     name: "นาย",
@@ -46,6 +48,7 @@ export const CARDS_SD02: Card[] = createCards([
     symbol: Symbol.Human,
     color: Color.Blue,
     dropRate: "2 / กล่อง",
+    customLimit: 2,
   },
   {
     name: "ริกกี้ เพื่อนรัก",
@@ -240,6 +243,7 @@ export const CARDS_SD02: Card[] = createCards([
     cost: 2,
     symbol: Symbol.Rat,
     dropRate: "2 / กล่อง",
+    customLimit: 2,
   },
   {
     name: "บำเพ็ญประโยชน์",

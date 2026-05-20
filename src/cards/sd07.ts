@@ -84,7 +84,7 @@ export const CARDS_SD07: Card[] = createCards([
     mainEffect:
       "แทงหลัง (เปลี่ยนการ์ดนี้ที่อยู่บน Avatar Zone ในสภาพตื่นเป็นสภาพนอน และนำ POWER การ์ดนี้ +1 ไปเพิ่มให้กับ  Avatar ที่สั่งโจมตี จนจบการต่อสู้นั้น เมื่อจบการต่อสู้ ถ้า Avatar ที่สั่งโจมตี มีสีต่างกับ Avatar นี้ ทำลาย Avatar ที่สั่งโจมตี)\n\nอัตโนมัติ เทิร์นละครั้ง เมื่อการ์ดใบนี้ใช้ความสามารถ แทงหลัง ให้ Avatar สีแดง : เปลี่ยน Avatar ใบนี้จากสภาพนอนเป็นสภาพตื่น",
     cost: 3,
-    gem: 2,
+    gem: 0,
     power: 2,
     symbol: Symbol.Foreigner,
     color: Color.Red,

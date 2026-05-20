@@ -100,6 +100,7 @@ export const CARDS_BT05: Card[] = createCards([
     power: 0,
     symbol: Symbol.Foreigner,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "โจอี้ นักบอลขาหัก",
@@ -113,6 +114,7 @@ export const CARDS_BT05: Card[] = createCards([
     power: 0,
     symbol: Symbol.Foreigner,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "น้องส้ม ชู้วันชัย",
@@ -126,6 +128,7 @@ export const CARDS_BT05: Card[] = createCards([
     power: 1,
     symbol: Symbol.Human,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "น้องนาว ชู้วันชัย",
@@ -242,6 +245,7 @@ export const CARDS_BT05: Card[] = createCards([
     power: 6,
     symbol: Symbol.Foreigner,
     color: Color.Blue,
+    customLimit: 2,
   },
   {
     name: "ของขวัญที่เมียทิ้งไว้ให้",
@@ -336,6 +340,7 @@ export const CARDS_BT05: Card[] = createCards([
     power: 2,
     symbol: Symbol.Ghost,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "เฟรย่า แม่ทุกสถาบันแอสการ์ด",
@@ -350,6 +355,7 @@ export const CARDS_BT05: Card[] = createCards([
     power: 3,
     symbol: Symbol.God,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "เฮล่า เทพแอสการ์ดแห่งความตาย",
@@ -365,6 +371,7 @@ export const CARDS_BT05: Card[] = createCards([
     power: 2,
     symbol: Symbol.God,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "บรุนฮิลด์  เทพธิดาแห่งวัลฮัลลา",
@@ -378,6 +385,7 @@ export const CARDS_BT05: Card[] = createCards([
     power: 2,
     symbol: Symbol.God,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "Ecycle",
@@ -502,6 +510,7 @@ export const CARDS_BT05: Card[] = createCards([
     power: 1,
     symbol: Symbol.Human,
     color: Color.Green,
+    gemColor: "เขียว",
   },
   {
     name: "หมาเครื่องบิน Super Air",
@@ -529,6 +538,7 @@ export const CARDS_BT05: Card[] = createCards([
     power: 0,
     symbol: Symbol.Human,
     color: Color.Green,
+    gemColor: "เขียว",
   },
   {
     name: "กุมภกรรณ ทดน้ำ",
@@ -542,6 +552,7 @@ export const CARDS_BT05: Card[] = createCards([
     power: 3,
     symbol: Symbol.Giant,
     color: Color.Green,
+    gemColor: "เขียว",
   },
   {
     name: "วานรแบงค์",
@@ -583,6 +594,7 @@ export const CARDS_BT05: Card[] = createCards([
     power: 0,
     symbol: Symbol.Human,
     color: Color.Green,
+    gemColor: "เขียว",
   },
   {
     name: "มยุราซัง  ไอดอลยุค 80",
@@ -625,6 +637,7 @@ export const CARDS_BT05: Card[] = createCards([
     power: 2,
     symbol: Symbol.Foreigner,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "ง่อวซอรัส",

@@ -18,6 +18,7 @@ export const CARDS_SD06: Card[] = createCards([
     color: Color.Red,
     ex: "Only #1",
     dropRate: "1 / กล่อง",
+    gemColor: "แดง",
   },
   {
     name: "อิน สไนเปอร์",
@@ -77,6 +78,7 @@ export const CARDS_SD06: Card[] = createCards([
     symbol: Symbol.Human,
     color: Color.Red,
     dropRate: "2 / กล่อง",
+    gemColor: "แดง",
   },
   {
     name: "พ่อแท่น ผู้นำอาวุโส",
@@ -105,6 +107,7 @@ export const CARDS_SD06: Card[] = createCards([
     symbol: Symbol.Human,
     color: Color.Red,
     dropRate: "4 / กล่อง",
+    gemColor: "แดง",
   },
   {
     name: "บุญช่วย ควายรักชาติ",
@@ -162,6 +165,7 @@ export const CARDS_SD06: Card[] = createCards([
     symbol: Symbol.Human,
     color: Color.Red,
     dropRate: "4 / กล่อง",
+    gemColor: "แดง",
   },
   {
     name: "ผู้นำของเหล่าวีรชน",
@@ -195,7 +199,7 @@ export const CARDS_SD06: Card[] = createCards([
     print: "SD06-014",
     rare: Rarity.C,
     mainEffect: "เมื่อ Avatar อีกฝ่ายประกาศโจมตี : Avatar ที่โจมตี POWER ลดลงตามจำนวนการ์ดบนสนามและบนมือฝั่งเราใบละ 2",
-    subtype: MagicSubtype.Normal,
+    subtype: "React",
     cost: 1,
     symbol: Symbol.Animal,
     dropRate: "2 / กล่อง",

@@ -67,6 +67,7 @@ export const CARDS_BT04: Card[] = [
     power: 1,
     symbol: "คน",
     color: "แดง",
+    customLimit: 1,
   },
   {
     name: "ยายกบ 1954",
@@ -76,8 +77,8 @@ export const CARDS_BT04: Card[] = [
     rare: "C",
     mainEffect:
       "Avatar ใบนี้ไม่สามารถอัญเชิญแบบจ่าย Cost ได้ แต่สามารถอัญเชิญได้โดยการส่ง Avatar \"กบ\" ที่ได้รับผล เพิ่ม POWER ไปแล้ว 3 ครั้งหรือมากกว่า บน Avatar Zone ฝ่ายเราลงนรก\n\nPOWER ของ Avatar ใบนี้ เพิ่มขึ้นตาม POWER ของ Avatar \"กบ\" ที่ส่งลงนรกเพื่ออัญเชิญ",
-    cost: 0,
-    gem: 1,
+    cost: 5,
+    gem: 0,
     power: 2,
     symbol: "สัตว์",
     color: "แดง",
@@ -103,7 +104,7 @@ export const CARDS_BT04: Card[] = [
     rare: "UR",
     mainEffect:
       "เทิร์นละครั้ง สั่งใช้  เลือกปฏิบัติ :\n\n1) Avatar ใบนี้ POWER +2 จนถึง End Phase ต่อไปของฝ่ายตรงข้าม\n\n2) หากเทิร์นนี้ยังไม่มีการใช้ Modification Magic : นำ Modification Magic 1 ใบ จาก นรกฝ่ายเรา มาสวมใส่ที่ Avatar ใบนี้ และนับว่าเป็นการใช้ Modification Magic\n\n#Avatar ใบนี้ เป็น Symbol สัตว์ ด้วย",
-    cost: 5,
+    cost: 6,
     gem: 1,
     power: 4,
     symbol: "คน",
@@ -117,7 +118,7 @@ export const CARDS_BT04: Card[] = [
     rare: "SCR",
     mainEffect:
       "เทิร์นละครั้ง สั่งใช้  เลือกปฏิบัติ :\n\n1) Avatar ใบนี้ POWER +2 จนถึง End Phase ต่อไปของฝ่ายตรงข้าม\n\n2) หากเทิร์นนี้ยังไม่มีการใช้ Modification Magic : นำ Modification Magic 1 ใบ จาก นรกฝ่ายเรา มาสวมใส่ที่ Avatar ใบนี้ และนับว่าเป็นการใช้ Modification Magic\n\n#Avatar ใบนี้ เป็น Symbol สัตว์ ด้วย",
-    cost: 5,
+    cost: 6,
     gem: 1,
     power: 4,
     symbol: "คน",
@@ -135,6 +136,7 @@ export const CARDS_BT04: Card[] = [
     power: 0,
     symbol: "คน",
     color: "แดง",
+    gemColor: "แดง",
   },
   {
     name: "โทมาโทจัง ไอดอลเด็กน้อย",
@@ -190,6 +192,7 @@ export const CARDS_BT04: Card[] = [
     power: 2,
     symbol: "กะปอม",
     color: "ฟ้า",
+    gemColor: "ฟ้า",
   },
   {
     name: "เอเลี่ยนทูตดาวอังคาร",
@@ -203,6 +206,7 @@ export const CARDS_BT04: Card[] = [
     power: 2,
     symbol: "เอเลี่ยน",
     color: "ฟ้า",
+    gemColor: "ฟ้า",
   },
   {
     name: "โอตะตัวกะปอม",
@@ -212,7 +216,7 @@ export const CARDS_BT04: Card[] = [
     rare: "C",
     mainEffect:
       "เมื่อถูกทิ้งเป็นค่า Cost ให้กับ Avatar \"ไอดอล\" : สามารถนำการ์ดนี้มาสวมใส่ให้ Avatar \"ไอดอล\" ฝ่ายเรา 1 ใบ\n\nAvatar ที่สวมใส่การ์ดใบนี้ POWER +1\n\n#การ์ดใบนี้ใช้เป็น Cost การอัญเชิญได้เฉพาะ Avatar \"ไอดอล\" เท่านั้น",
-    cost: 0,
+    cost: 2,
     gem: 4,
     power: 0,
     symbol: "กะปอม",
@@ -311,6 +315,7 @@ export const CARDS_BT04: Card[] = [
     power: 2,
     symbol: "รัททาทุย",
     color: "ฟ้า",
+    gemColor: "ฟ้า",
   },
   {
     name: "คนแก่สติเลอะเลือนผู้รู้ความจริง",
@@ -320,9 +325,9 @@ export const CARDS_BT04: Card[] = [
     rare: "UR",
     mainEffect:
       "เมื่อการ์ดใบนี้ถูกสอดแนมโดย Avatar \" ผู้รู้ความจริง \" อัญเชิญ Avatar ใบนี้ลงบน Avatar Zone ฝ่ายเรา\n\nเทิร์นละครั้ง สั่งใช้ : จั่วการ์ดจาก Deck เรา 1 ใบ",
-    cost: 6,
+    cost: 5,
     gem: 3,
-    power: 5,
+    power: 6,
     symbol: "คน",
     color: "ม่วง",
     ex: "Only #1",
@@ -335,9 +340,9 @@ export const CARDS_BT04: Card[] = [
     rare: "SCR",
     mainEffect:
       "เมื่อการ์ดใบนี้ถูกสอดแนมโดย Avatar \" ผู้รู้ความจริง \" อัญเชิญ Avatar ใบนี้ลงบน Avatar Zone ฝ่ายเรา\n\nเทิร์นละครั้ง สั่งใช้ : จั่วการ์ดจาก Deck เรา 1 ใบ",
-    cost: 6,
+    cost: 5,
     gem: 3,
-    power: 5,
+    power: 6,
     symbol: "คน",
     color: "ม่วง",
     ex: "Only #1",
@@ -351,9 +356,10 @@ export const CARDS_BT04: Card[] = [
     mainEffect: "จุติ สอดแนม 2 ใบ หลังจากนั้นนำการ์ดที่สอดแนมเรียงไว้บนสุดหรือล่างสุดของ Deck เรา : ทำลาย Avatar อีกฝ่าย 1 ใบที่มีค่า Cost เท่ากับหรือน้อยกว่าผลรวมของ Cost การ์ดที่แสดงจากผลของการ์ดใบนี้",
     cost: 4,
     gem: 2,
-    power: 1,
+    power: 4,
     symbol: "คน",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "อู๊ด ประธานผู้รู้ความจริง",
@@ -364,9 +370,10 @@ export const CARDS_BT04: Card[] = [
     mainEffect: "จุติ สอดแนม 2 ใบ หลังจากนั้นนำการ์ดที่สอดแนมเรียงไว้บนสุดหรือล่างสุดของ Deck เรา : ทำลาย Avatar อีกฝ่าย 1 ใบที่มีค่า Cost เท่ากับหรือน้อยกว่าผลรวมของ Cost การ์ดที่แสดงจากผลของการ์ดใบนี้",
     cost: 4,
     gem: 2,
-    power: 1,
+    power: 4,
     symbol: "คน",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "อู๊ด ประธานผู้รู้ความจริง",
@@ -377,9 +384,10 @@ export const CARDS_BT04: Card[] = [
     mainEffect: "จุติ : สอดแนม 2 ใบ หลังจากนั้นนำการ์ดที่สอดแนมเรียงไว้บนสุดหรือล่างสุดของ Deck เรา : ทำลาย Avatar อีกฝ่าย 1 ใบที่มีค่า Cost เท่ากับหรือน้อยกว่าผลรวมของ Cost การ์ดที่แสดงจากผลของการ์ดใบนี้",
     cost: 4,
     gem: 2,
-    power: 1,
+    power: 4,
     symbol: "คน",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "อู๊ด ประธานผู้รู้ความจริง",
@@ -390,9 +398,10 @@ export const CARDS_BT04: Card[] = [
     mainEffect: "จุติ : สอดแนม 2 ใบ หลังจากนั้นนำการ์ดที่สอดแนมเรียงไว้บนสุดหรือล่างสุดของ Deck เรา : ทำลาย Avatar อีกฝ่าย 1 ใบที่มีค่า Cost เท่ากับหรือน้อยกว่าผลรวมของ Cost การ์ดที่แสดงจากผลของการ์ดใบนี้",
     cost: 4,
     gem: 2,
-    power: 1,
+    power: 4,
     symbol: "คน",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "น้องสาม ผู้รู้ความจริง",
@@ -406,6 +415,7 @@ export const CARDS_BT04: Card[] = [
     power: 1,
     symbol: "คน",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "รปภ ผู้รู้ความจริง",
@@ -419,6 +429,7 @@ export const CARDS_BT04: Card[] = [
     power: 2,
     symbol: "คน",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "วิไลวรรณ แม่แบงค์",
@@ -432,6 +443,7 @@ export const CARDS_BT04: Card[] = [
     power: 0,
     symbol: "คน",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "นายนิรยบาล หมอ",
@@ -510,6 +522,7 @@ export const CARDS_BT04: Card[] = [
     power: 5,
     symbol: "ยักษ์",
     color: "เขียว",
+    gemColor: "เขียว",
   },
   {
     name: "พญายักษ์ ทศกัณฑ์",
@@ -523,6 +536,7 @@ export const CARDS_BT04: Card[] = [
     power: 5,
     symbol: "ยักษ์",
     color: "เขียว",
+    gemColor: "เขียว",
   },
   {
     name: "เสามงคล ทรงโรมัน",
@@ -532,7 +546,7 @@ export const CARDS_BT04: Card[] = [
     rare: "C",
     mainEffect:
       "ต่อเนื่อง การ์ดใบนี้โจมตีไม่ได้\n\nอัตโนมัติ ในช่วง End Phase เรา อัญเชิญ Avatar \"ผู้เจริญ\" 1 ใบ จากนรกฝ่ายเรา ลงบน Avatar Zone ฝ่ายเรา",
-    cost: 5,
+    cost: 4,
     gem: 2,
     power: 3,
     symbol: "ต้นไม้",
@@ -547,7 +561,7 @@ export const CARDS_BT04: Card[] = [
     mainEffect:
       "เทิร์นละครั้ง สั่งใช้ นำ Avatar ตัวนี้บน Avatar Zone ไปสวมให้ Avatar \"รถถัง\" ที่อยู่บน Avatar Zone ฝ่ายเรา\n\nเมื่อ Avatar \"รถถัง\" ที่สวมใส่การ์ดใบนี้ตกเป็นเป้าหมายของการ์ด Magic เราสามารถทำลายการ์ดใบนี้จากสภาพสวมใส่ : ยกเลิกความสามารถของการ์ด Magic ใบนั้น",
     cost: 3,
-    gem: 2,
+    gem: 3,
     power: 1,
     symbol: "คน",
     color: "เขียว",
@@ -578,6 +592,7 @@ export const CARDS_BT04: Card[] = [
     power: 1,
     symbol: "คน",
     color: "เขียว",
+    gemColor: "เขียว",
   },
   {
     name: "พลปืนอาณาจักรของแพง",
@@ -592,6 +607,7 @@ export const CARDS_BT04: Card[] = [
     power: 1,
     symbol: "คน",
     color: "เขียว",
+    gemColor: "เขียว",
   },
   {
     name: "เจ้าของร้านอาบน้ำสัตว์",
@@ -601,7 +617,7 @@ export const CARDS_BT04: Card[] = [
     rare: "R",
     mainEffect:
       "โล่มนุษย์\n\nเทิร์นละครั้ง สั่งใช้ : สามารถ ทิ้ง Avatar \"พนักงานอาบน้ำสัตว์\" หรือ การ์ด {Symbol สัตว์} จากบนมือเรา 1 ใบ: เลือก Avatar {Symbol สัตว์} 1 ใบ ใน Avatar Zone ฝ่ายเรา POWER +1",
-    cost: 4,
+    cost: 3,
     gem: 3,
     power: 2,
     symbol: "คน",
@@ -614,8 +630,8 @@ export const CARDS_BT04: Card[] = [
     print: "BT04-034",
     rare: "C",
     mainEffect: "คำสั่งเสีย : อัญเชิญ Avatar \"หมา\" หรือ \"แมว\" ที่มี {Symbol สัตว์} และ Cost ไม่เกิน 3 จากในนรกฝ่ายเรา 1 ใบมาบน Avatar Zone ฝ่ายเรา",
-    cost: 1,
-    gem: 3,
+    cost: 2,
+    gem: 1,
     power: 0,
     symbol: "คน",
     color: "เขียว",
@@ -645,6 +661,7 @@ export const CARDS_BT04: Card[] = [
     power: 1,
     symbol: "คน",
     color: "แดง",
+    gemColor: "แดง",
   },
   {
     name: "ผู้เจริญระดับ 3",
@@ -671,6 +688,7 @@ export const CARDS_BT04: Card[] = [
     power: 6,
     symbol: "คน",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "แมวมัทฉะ",
@@ -856,7 +874,7 @@ export const CARDS_BT04: Card[] = [
       "เมื่อทั้ง 2 ฝ่ายมี Modification Magic สวมใส่อยู่ บน Magic Zone :\n\nนำ Modification Magic ที่ติดอยู่บนสนามของทั้ง 2 ฝ่าย ฝ่ายละ 1 ใบ ส่งลงนรก",
     subtype: "React",
     cost: 0,
-    symbol: "สัตว์",
+    symbol: "จอมเวทย์",
   },
   {
     name: "กลับหลังหัน !!!",
@@ -879,7 +897,7 @@ export const CARDS_BT04: Card[] = [
       "สวมใส่ได้เฉพาะ Avatar  \"ผู้กล้า\" ที่มี symbol เครื่องจักรเท่านั้น\n\nเทิร์นละครั้ง เมื่อ Avatar ที่สวมใส่การ์ดใบนี้จะออกจากสนามโดยการ์ดฝ่ายตรงข้าม : ทอยลูกเต๋า 1 ครั้ง ถ้าออกเลขคู่ Avatar ที่สวมใส่การ์ดใบนี้จะไม่ถูกนำออกจากสนาม",
     subtype: "Modification",
     cost: 1,
-    symbol: "จอมเวทย์",
+    symbol: "หุ่นยนต์",
   },
   {
     name: "ของขวัญจากโอตะ",
@@ -973,6 +991,7 @@ export const CARDS_BT04: Card[] = [
     subtype: "Land",
     cost: 1,
     symbol: "หุ่นยนต์",
+    ex: "โดนใจ",
   },
   {
     name: "Podcast Untitled Case",
@@ -984,5 +1003,6 @@ export const CARDS_BT04: Card[] = [
     subtype: "Land",
     cost: 1,
     symbol: "หุ่นยนต์",
+    ex: "โดนใจ",
   },
 ];

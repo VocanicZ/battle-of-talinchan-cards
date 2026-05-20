@@ -130,6 +130,7 @@ export const CARDS_BT03: Card[] = createCards([
     power: 5,
     symbol: Symbol.Animal,
     color: Color.Red,
+    ex: "โดนใจ",
   },
   {
     name: "ไดโนกาฬสินธุ์ - ภูเวียงสิรินเน",
@@ -322,6 +323,7 @@ export const CARDS_BT03: Card[] = createCards([
     power: 2,
     symbol: Symbol.God,
     color: Color.Purple,
+    customLimit: 2,
   },
   {
     name: "บัลเดอร์ เทพแสง แห่งแอสการ์ด",
@@ -375,6 +377,7 @@ export const CARDS_BT03: Card[] = createCards([
     power: 1,
     symbol: Symbol.Insect,
     color: Color.Purple,
+    customLimit: 1,
   },
   {
     name: "ราชาอาณาจักรของแพง  พระเจ้านิโคไล",
@@ -452,7 +455,7 @@ export const CARDS_BT03: Card[] = createCards([
     rare: Rarity.C,
     mainEffect: "คำสั่งเสีย (เมื่อAvatarใบนี้ถูกทำลาย) เลือก Avatar {symbol แมลง} Cost ไม่เกิน 4 และไม่ได้ชื่อ แมลงปอ บรรพบุรุษ จากนรกของฝ่ายเรา : อัญเชิญแบบ จุติ บน Avatar Zone ฝ่ายเรา",
     cost: 4,
-    gem: 1,
+    gem: 3,
     gemColor: Color.Blue,
     power: 1,
     symbol: Symbol.Insect,
@@ -498,6 +501,7 @@ export const CARDS_BT03: Card[] = createCards([
     power: 4,
     symbol: Symbol.Alien,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "แมลงปอนา",
@@ -617,7 +621,7 @@ export const CARDS_BT03: Card[] = createCards([
     mainEffect: "ผู้เล่นทุกคนต่างเลือก Avatar บน Avatar Zone ของตนเอง 1 ใบ นำกลับเข้าใต้ Deck เจ้าของ",
     subtype: MagicSubtype.Normal,
     cost: 1,
-    symbol: Symbol.Insect,
+    symbol: "จอมเวทย์",
   },
   {
     name: "ไม่เจ้ายังไม่พร้อม",

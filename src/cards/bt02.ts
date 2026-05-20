@@ -109,6 +109,7 @@ export const CARDS_BT02: Card[] = createCards([
     power: 6,
     symbol: Symbol.God,
     color: Color.Red,
+    customLimit: 3,
   },
   {
     name: "มีมมิจัง ไอดอลหน้าใหม่",
@@ -548,8 +549,8 @@ export const CARDS_BT02: Card[] = createCards([
     mainEffect:
       "หงาย LIFE ของเราทุกใบ : ในเทิร์นนี้ Avatar {symbol เปรต} ที่เราอัญเชิญลงบน Avatar Zone ฝ่ายเราจะได้รับความามารถดังต่อไปนี้\n\n-ไม่รับผลความสามารถของการ์ดทุกประเภท\n\n-ได้รับ เตะไข่ โดยที่ความสามารถ โล่มนุษย์ จะไม่สามารถใช้ได้\n\nโดยที่ความสามารถทั้ง 2 จะคงอยู่จนจบเทิร์นที่เล่นการ์ดใบนี้",
     subtype: MagicSubtype.Normal,
-    cost: 1,
-    symbol: Symbol.Pret,
+    cost: 0,
+    symbol: "เทพ",
   },
   {
     name: "ประชามติ",
@@ -741,7 +742,6 @@ export const CARDS_BT02: Card[] = createCards([
     subtype: MagicSubtype.Land,
     cost: 1,
     symbol: Symbol.Hell,
-    ex: "Only #1",
   },
   {
     name: "เทศกาลแมลงปอบุก",
@@ -766,5 +766,6 @@ export const CARDS_BT02: Card[] = createCards([
     subtype: MagicSubtype.Land,
     cost: 4,
     symbol: Symbol.God,
+    customLimit: 1,
   }
 ]);

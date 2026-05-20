@@ -26,6 +26,26 @@ export function avgRGB(png: PNG, [x0, y0, w, h]: Rect): RGB {
   return [Math.round(r / n), Math.round(g / n), Math.round(b / n)];
 }
 
+/** Per-channel population stddev (R, G, B) over a rectangle. */
+export function stddevRGB(png: PNG, [x0, y0, w, h]: Rect): RGB {
+  const [mr, mg, mb] = avgRGB(png, [x0, y0, w, h]);
+  let sr = 0, sg = 0, sb = 0, n = 0;
+  for (let y = y0; y < y0 + h; y++) {
+    for (let x = x0; x < x0 + w; x++) {
+      const i = (png.width * y + x) << 2;
+      sr += (png.data[i] - mr) ** 2;
+      sg += (png.data[i + 1] - mg) ** 2;
+      sb += (png.data[i + 2] - mb) ** 2;
+      n++;
+    }
+  }
+  return [
+    Math.round(Math.sqrt(sr / n)),
+    Math.round(Math.sqrt(sg / n)),
+    Math.round(Math.sqrt(sb / n)),
+  ];
+}
+
 /** Euclidean distance between two colors. */
 export const dist = (a: RGB, b: RGB): number =>
   Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);

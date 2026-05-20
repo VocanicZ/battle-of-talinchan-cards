@@ -42,6 +42,7 @@ export const CARDS_BT07: Card[] = [
     power: 2,
     symbol: "เทพ",
     color: "แดง",
+    gemColor: "แดง",
   },
   {
     name: "พระแม่อุมาเทวี",
@@ -56,6 +57,7 @@ export const CARDS_BT07: Card[] = [
     power: 2,
     symbol: "เทพ",
     color: "แดง",
+    gemColor: "แดง",
   },
   {
     name: "เจ้าแม่กาลี",
@@ -69,6 +71,7 @@ export const CARDS_BT07: Card[] = [
     power: 7,
     symbol: "เทพ",
     color: "แดง",
+    gemColor: "แดง",
   },
   {
     name: "เจ้าแม่กาลี",
@@ -82,6 +85,7 @@ export const CARDS_BT07: Card[] = [
     power: 7,
     symbol: "เทพ",
     color: "แดง",
+    gemColor: "แดง",
   },
   {
     name: "พรีวิวบอย",
@@ -123,6 +127,7 @@ export const CARDS_BT07: Card[] = [
     power: 1,
     symbol: "สัตว์มหัศจรรย์",
     color: "แดง",
+    gemColor: "แดง",
   },
   {
     name: "สัตว์ทดลอง #1",
@@ -188,7 +193,7 @@ export const CARDS_BT07: Card[] = [
     gem: 0,
     power: 2,
     symbol: "กะปอม",
-    color: "ฟ้า",
+    color: "แดง",
   },
   {
     name: "ครุฑสุบรรณ เจ้าเวหา",
@@ -233,6 +238,7 @@ export const CARDS_BT07: Card[] = [
     power: 3,
     symbol: "สัตว์มหัศจรรย์",
     color: "ฟ้า",
+    gemColor: "ฟ้า",
   },
   {
     name: "ครุฑวัสสวัส เจ้าโลก",
@@ -301,6 +307,7 @@ export const CARDS_BT07: Card[] = [
     power: 4,
     symbol: "ปลา",
     color: "ฟ้า",
+    gemColor: "ฟ้า",
   },
   {
     name: "ราชาหิมะ บิง",
@@ -328,6 +335,7 @@ export const CARDS_BT07: Card[] = [
     power: 2,
     symbol: "ต่างชาติ",
     color: "ฟ้า",
+    gemColor: "ฟ้า",
   },
   {
     name: "ราชินีหิมะ ชีหลิน",
@@ -342,6 +350,7 @@ export const CARDS_BT07: Card[] = [
     power: 2,
     symbol: "ต่างชาติ",
     color: "ฟ้า",
+    gemColor: "ฟ้า",
   },
   {
     name: "พลทหารหิมะ",
@@ -356,6 +365,7 @@ export const CARDS_BT07: Card[] = [
     symbol: "ต่างชาติ",
     color: "ฟ้า",
     customLimit: 12,
+    gemColor: "ฟ้า",
   },
   {
     name: "อัศวินแบงค์",
@@ -453,6 +463,7 @@ export const CARDS_BT07: Card[] = [
     power: 4,
     symbol: "คน",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "ทนายเตะปาก",
@@ -466,6 +477,7 @@ export const CARDS_BT07: Card[] = [
     power: 1,
     symbol: "คน",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "ทนายกิ๊บ",
@@ -479,6 +491,7 @@ export const CARDS_BT07: Card[] = [
     power: 2,
     symbol: "คน",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "พี่วัฒน์ BGN",
@@ -493,6 +506,7 @@ export const CARDS_BT07: Card[] = [
     power: 2,
     symbol: "คน",
     color: "ม่วง",
+    ex: "โดนใจ",
   },
   {
     name: "พี่วัฒน์ BGN",
@@ -535,6 +549,7 @@ export const CARDS_BT07: Card[] = [
     power: 2,
     symbol: "ต่างชาติ",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "จอมเวท กาลู",
@@ -549,6 +564,7 @@ export const CARDS_BT07: Card[] = [
     power: 2,
     symbol: "ต่างชาติ",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "จอมเวท อะปัด",
@@ -563,6 +579,7 @@ export const CARDS_BT07: Card[] = [
     power: 3,
     symbol: "คน",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "จอมเวท เบล่า",
@@ -577,6 +594,7 @@ export const CARDS_BT07: Card[] = [
     power: 2,
     symbol: "ต่างชาติ",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "จอมเวท เบล่า",
@@ -591,6 +609,7 @@ export const CARDS_BT07: Card[] = [
     power: 2,
     symbol: "ต่างชาติ",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "อาวุธชีวภาพ เอ็มตัวเต็ง",
@@ -745,6 +764,7 @@ export const CARDS_BT07: Card[] = [
     power: 2,
     symbol: "ปลา",
     color: "เขียว",
+    gemColor: "เขียว",
   },
   {
     name: "ตั๊กแตนหญิง",
@@ -837,6 +857,7 @@ export const CARDS_BT07: Card[] = [
     power: 4,
     symbol: "หุ่นยนต์",
     color: "แดง",
+    gemColor: "แดง",
   },
   {
     name: "ข้ารับใช้มนุษย์ดาว R18",
@@ -862,6 +883,8 @@ export const CARDS_BT07: Card[] = [
     gem: 1,
     power: 2,
     symbol: "สัตว์มหัศจรรย์",
+    color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "เจ้าของร้านปลาทูน่า",
@@ -875,6 +898,7 @@ export const CARDS_BT07: Card[] = [
     power: 1,
     symbol: "คน",
     color: "เขียว",
+    gemColor: "เขียว",
   },
   {
     name: "หยุด!! นี่ตำรวจ",
@@ -1207,6 +1231,7 @@ export const CARDS_BT07: Card[] = [
     power: 2,
     symbol: "หุ่นยนต์",
     color: "ม่วง",
+    gemColor: "ม่วง",
   },
   {
     name: "ยานรายการ เถียงทันหน่วง",
@@ -1220,6 +1245,7 @@ export const CARDS_BT07: Card[] = [
     gem: 4,
     power: 2,
     symbol: "หุ่นยนต์",
+    gemColor: "ม่วง",
   },
   {
     name: "บัลลังก์ตั๊กแตนศตวรรษ",
@@ -1235,6 +1261,7 @@ export const CARDS_BT07: Card[] = [
     symbol: "แมลง",
     color: "เขียว",
     ex: "Only #1",
+    gemColor: "เขียว",
   },
   {
     name: "ไม่นะ มณโท !",

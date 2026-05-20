@@ -164,6 +164,7 @@ export const CARDS_BT01: Card[] = createCards([
     power: 1,
     symbol: Symbol.Animal,
     color: Color.Blue,
+    customLimit: 1,
   },
   {
     name: "พ่อบุญใหญ่",
@@ -432,6 +433,7 @@ export const CARDS_BT01: Card[] = createCards([
     power: 3,
     symbol: Symbol.Hell,
     color: Color.Purple,
+    customLimit: 1,
   },
   {
     name: "แบงค์ เทคนิคประทุมทู",
@@ -492,7 +494,7 @@ export const CARDS_BT01: Card[] = createCards([
     mainEffect: "เซ่นไหว้ (ทำลายจากสนามลงนรก) Avatar {symbol สัตว์} บน Avatar Zone ฝ่ายเรา 1 ใบ : จั่วการ์ดจาก Deck 3 ใบ จากนั้นในเทิร์นนี้จะอัญเชิญได้แค่ Avatar {symbol สัตว์}",
     subtype: MagicSubtype.Normal,
     cost: 1,
-    symbol: Symbol.Mage,
+    symbol: "สัตว์",
   },
   {
     name: "ความเจริญ",
@@ -505,6 +507,7 @@ export const CARDS_BT01: Card[] = createCards([
     subtype: MagicSubtype.Normal,
     cost: 1,
     symbol: Symbol.Mage,
+    customLimit: 2,
   },
   {
     name: "เจ้ากล้าดียังไง",
@@ -516,6 +519,7 @@ export const CARDS_BT01: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 2,
     symbol: Symbol.God,
+    customLimit: 1,
   },
   {
     name: "หมอมาแล้วววว",
@@ -539,6 +543,7 @@ export const CARDS_BT01: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 0,
     symbol: Symbol.Mage,
+    customLimit: 2,
   },
   {
     name: "ริกกี้ นักปลอมแปลง",

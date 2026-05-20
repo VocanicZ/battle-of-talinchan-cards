@@ -120,6 +120,7 @@ export const CARDS_SD04: Card[] = createCards([
     symbol: Symbol.Human,
     color: Color.Green,
     dropRate: "4 / กล่อง",
+    gemColor: "เขียว",
   },
   {
     name: "พลทหาร",
@@ -176,6 +177,7 @@ export const CARDS_SD04: Card[] = createCards([
     symbol: Symbol.Human,
     color: Color.Green,
     dropRate: "2 / กล่อง",
+    gemColor: "แดง",
   },
   {
     name: "ไอ้หนุ่มรด.",
@@ -214,6 +216,7 @@ export const CARDS_SD04: Card[] = createCards([
     cost: 4,
     symbol: Symbol.Soldier,
     dropRate: "2 / กล่อง",
+    customLimit: 2,
   },
   {
     name: "ใบดำใบแดง",
@@ -238,6 +241,7 @@ export const CARDS_SD04: Card[] = createCards([
     cost: 3,
     symbol: Symbol.Soldier,
     dropRate: "2 / กล่อง",
+    customLimit: 2,
   },
   {
     name: "ขึ้นมาเร็ว ไอ้ลูกลิง !!",

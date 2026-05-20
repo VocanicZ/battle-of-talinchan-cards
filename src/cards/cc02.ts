@@ -13,7 +13,7 @@ export const CARDS_CC02: Card[] = createCards([
       "ลูกฮึด โล่มนุษย์ \nอัตโนมัติ เมื่อ Avatar ใบนี้ต่อสู้ : POWER +2 จนจบการต่อสู้ \nอัตโนมัติ เมื่อ Avatar ใบนี้จะถูกทำลายจากการต่อสู้ สามารถนำ Modification ที่สวมใส่การ์ดนี้อยู่ทั้งหมดลงนรก : Avatar ใบนี้จะไม่ถูกทำลาย\nคำสั่งเสีย : Avatar บน Avatar Zone ฝ่ายเรา POWER +1",
     cost: 6,
     gem: 2,
-    power: 7,
+    power: 6,
     symbol: Symbol.Human,
     color: Color.Red,
     ex: "Only #1",
@@ -60,6 +60,7 @@ export const CARDS_CC02: Card[] = createCards([
     power: 5,
     symbol: Symbol.Human,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "หมีบราซิล",
@@ -74,6 +75,7 @@ export const CARDS_CC02: Card[] = createCards([
     power: 2,
     symbol: Symbol.Foreigner,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "ซุส เทพเจ้าสูงสุดแห่งโอลิมปัส",
@@ -218,6 +220,7 @@ export const CARDS_CC02: Card[] = createCards([
     power: 2,
     symbol: Symbol.Foreigner,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "อินาริ โอคามิ แห่งการเก็บเกี่ยว",
@@ -246,7 +249,7 @@ export const CARDS_CC02: Card[] = createCards([
       "ต่อเนื่อง ตราบเท่าที่ Avatar Zone ฝ่ายเรา มี Avatar \"Overdose\" ชื่อไม่ซ้ำกัน 4 ใบ ฝ่ายตรงข้าม ไม่สามารถใช้ React Magic และ Normal Magic ได้ \nเทิร์นละครั้ง สั่งใช้ หงาย LIFE Card ของเรา 1 ใบ : เลือก Avatar 1 ใบ ในนรกของผู้เล่นใดก็ได้ อัญเชิญ Avatar ใบนั้นลงบน Avatar Zone ของเจ้าของใบนั้น หาก Avatar ใบนั้น เป็น Avatar ของฝ่ายตรงข้าม Avatar ใบนั้นจะไม่สามารถสั่งใช้ความสามารถได้",
     cost: 6,
     gem: 4,
-    power: 7,
+    power: 6,
     symbol: Symbol.Robot,
     color: Color.Green,
     ex: "Only #1",
@@ -278,6 +281,7 @@ export const CARDS_CC02: Card[] = createCards([
     power: 2,
     symbol: Symbol.Foreigner,
     color: Color.Green,
+    gemColor: "เขียว",
   },
   {
     name: "หมีเหลือง",
@@ -292,6 +296,7 @@ export const CARDS_CC02: Card[] = createCards([
     power: 2,
     symbol: Symbol.Foreigner,
     color: Color.Green,
+    gemColor: "เขียว",
   },
   {
     name: "ปื้ด เด็กเปรต",
@@ -361,6 +366,7 @@ export const CARDS_CC02: Card[] = createCards([
     power: 0,
     symbol: Symbol.Foreigner,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "ซันนี่",
@@ -513,6 +519,7 @@ export const CARDS_CC02: Card[] = createCards([
     power: 0,
     symbol: Symbol.Human,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "รถถัง B66 - เอ็กซ์เซลเซอร์",
@@ -569,6 +576,7 @@ export const CARDS_CC02: Card[] = createCards([
     power: 0,
     symbol: Symbol.Human,
     color: Color.Green,
+    gemColor: "เขียว",
   },
   {
     name: "มรดกของพระอิศวร",

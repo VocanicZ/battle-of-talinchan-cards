@@ -15,6 +15,7 @@ export const CARDS_SD03: Card[] = createCards([
     symbol: Symbol.Hell,
     color: Color.Purple,
     dropRate: "2 / กล่อง",
+    customLimit: 1,
   },
   {
     name: "นายนิรยบาล พ่อจีจ้า",

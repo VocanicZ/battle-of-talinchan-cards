@@ -48,7 +48,7 @@ export const CARDS_CC01: Card[] = createCards([
     gem: 2,
     gemColor: Color.Red,
     power: 6,
-    symbol: Symbol.Human,
+    symbol: "เทพ",
     color: Color.Red,
     ex: "Only #1",
   },
@@ -64,6 +64,7 @@ export const CARDS_CC01: Card[] = createCards([
     power: 2,
     symbol: Symbol.God,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "ปื๊ดเปรตกังฟู",
@@ -78,6 +79,7 @@ export const CARDS_CC01: Card[] = createCards([
     power: 3,
     symbol: Symbol.Pret,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "ไตรตัน เจ้าสมุทร",
@@ -94,6 +96,7 @@ export const CARDS_CC01: Card[] = createCards([
     symbol: Symbol.God,
     color: Color.Blue,
     ex: "Only #1",
+    gemColor: "ฟ้า",
   },
   {
     name: "วีรบุรุษสุดซอย",
@@ -165,6 +168,7 @@ export const CARDS_CC01: Card[] = createCards([
     power: 6,
     symbol: Symbol.Hell,
     color: Color.Purple,
+    ex: "Only #1",
   },
   {
     name: "เฟรนชี่",
@@ -221,6 +225,7 @@ export const CARDS_CC01: Card[] = createCards([
     power: 2,
     symbol: Symbol.Human,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "แมวนิค",
@@ -279,6 +284,7 @@ export const CARDS_CC01: Card[] = createCards([
     power: 3,
     symbol: Symbol.Human,
     color: Color.Green,
+    gemColor: "เขียว",
   },
   {
     name: "ผู้กองอึ่งอ่าง",
@@ -308,6 +314,7 @@ export const CARDS_CC01: Card[] = createCards([
     power: 3,
     symbol: Symbol.Human,
     color: Color.Red,
+    ex: "Only #1",
   },
   {
     name: "นนทก นิ้วเพชร",
@@ -520,6 +527,7 @@ export const CARDS_CC01: Card[] = createCards([
     power: 9,
     symbol: Symbol.Robot,
     color: Color.Red,
+    ex: "Only #1",
   },
   {
     name: "เด็กไม่ชอบแมลงสาบ",
@@ -637,6 +645,7 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 2,
     symbol: Symbol.Mage,
+    customLimit: 2,
   },
   {
     name: "ขอให้ทั้งตัวมีแต่---",
@@ -659,7 +668,7 @@ export const CARDS_CC01: Card[] = createCards([
       "Avatar ที่สวมใส่การ์ดใบนี้ POWER +2  \nหาก Avatar ที่สวมใส่การ์ดใบนี้ โจมตีได้ ต้องสั่งโจมตี",
     subtype: MagicSubtype.Modification,
     cost: 1,
-    symbol: Symbol.Rat,
+    symbol: "จอมเวทย์",
   },
   {
     name: "น้ำซุปชาบู",
@@ -673,6 +682,7 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.Modification,
     cost: 2,
     symbol: Symbol.Mage,
+    customLimit: 1,
   },
   {
     name: "Micro Plaza สะพานพลาสติก",
@@ -684,6 +694,7 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.Land,
     cost: 1,
     symbol: Symbol.Robot,
+    customLimit: 1,
   },
   {
     name: "SD Plaza สายเหนือเก่า",
@@ -696,6 +707,7 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.Land,
     cost: 1,
     symbol: Symbol.Robot,
+    customLimit: 1,
   },
   {
     name: "สมชายห้องเช่าพันล้าน",
@@ -708,6 +720,7 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.Land,
     cost: 2,
     symbol: Symbol.Mage,
+    customLimit: 1,
   },
   {
     name: "อุบัติเหตุ!!!",
@@ -730,6 +743,7 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.Modification,
     cost: 2,
     symbol: Symbol.Rat,
+    customLimit: 2,
   },
   {
     name: "รถถังลงถนน",
@@ -765,6 +779,7 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.Normal,
     cost: 1,
     symbol: Symbol.Mage,
+    customLimit: 2,
   },
   {
     name: "เมตตาระยะยาว",
@@ -790,6 +805,7 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 0,
     symbol: Symbol.Insect,
+    customLimit: 1,
   },
   {
     name: "โรงบาล",

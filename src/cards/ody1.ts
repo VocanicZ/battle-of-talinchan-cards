@@ -89,7 +89,7 @@ export const CARDS_ODY1: Card[] = createCards([
     mainEffect: "อัตโนมัติ เมื่อการ์ดใบนี้สั่งโจมตี Avatar {symbol เทพ} : ทำลาย Avatar ตัวที่ต่อสู้ด้วย",
     cost: 3,
     gem: 2,
-    power: 2,
+    power: 3,
     symbol: Symbol.Giant,
     color: Color.Red,
   },
@@ -127,7 +127,7 @@ export const CARDS_ODY1: Card[] = createCards([
     rare: Rarity.C,
     mainEffect: "ต่อเนื่อง การ์ดใบนี้ เพิ่ม POWER  ตามจำนวน Avatar {symbol เทพ} บนสนามฝ่ายเรา ใบละ 1",
     cost: 4,
-    gem: 1,
+    gem: 2,
     power: 3,
     symbol: Symbol.Animal,
     color: Color.Red,
@@ -222,6 +222,7 @@ export const CARDS_ODY1: Card[] = createCards([
     power: 4,
     symbol: Symbol.Rat,
     color: Color.Blue,
+    ex: "Only #1",
   },
   {
     name: "รัททาทุย พ่อพันธุ์",
@@ -276,6 +277,7 @@ export const CARDS_ODY1: Card[] = createCards([
     power: 1,
     symbol: Symbol.Animal,
     color: Color.Blue,
+    customLimit: 1,
   },
   {
     name: "พ่อบุญใหญ่",
@@ -365,8 +367,9 @@ export const CARDS_ODY1: Card[] = createCards([
     cost: 4,
     gem: 3,
     power: 5,
-    symbol: Symbol.Alien,
+    symbol: "ยักษ์",
     color: Color.Purple,
+    ex: "Only #1",
   },
   {
     name: "ศาลพระภูมิ",
@@ -707,6 +710,7 @@ export const CARDS_ODY1: Card[] = createCards([
     power: 3,
     symbol: Symbol.Hell,
     color: Color.Purple,
+    customLimit: 1,
   },
   {
     name: "แบงค์ เทคนิคประทุมทู",
@@ -830,7 +834,7 @@ export const CARDS_ODY1: Card[] = createCards([
     print: "ODY1-064",
     rare: Rarity.C,
     mainEffect: "เมื่อ Avatar \"ทาโกะ\" ตกเป็นเป้าหมายการโจมตี : Avatar ใบนั้น POWER +2 จนจบเทิร์น",
-    subtype: MagicSubtype.Normal,
+    subtype: "React",
     cost: 3,
     symbol: Symbol.Mage,
   },
@@ -841,7 +845,7 @@ export const CARDS_ODY1: Card[] = createCards([
     print: "ODY1-065",
     rare: Rarity.SR,
     mainEffect: "ทำลายการ์ดใบนี้ในสภาพสวมใส่: Avatar ที่เคยสวมใส่การ์ดใบนี้ POWER +2 จนจบเทิร์นถัดไปของฝ่ายตรงข้าม",
-    subtype: MagicSubtype.Normal,
+    subtype: "Modification",
     cost: 1,
     symbol: Symbol.Mage,
   },
@@ -852,9 +856,9 @@ export const CARDS_ODY1: Card[] = createCards([
     print: "ODY1-066",
     rare: Rarity.SR,
     mainEffect: "POWER +1 ให้ Avatar \"ทาโกะ\" บนสนามทุกใบ",
-    subtype: MagicSubtype.Normal,
+    subtype: "Land",
     cost: 1,
-    symbol: Symbol.Robot,
+    symbol: "จอมเวทย์",
   },
   {
     name: "เมตตาระยะยาว",
@@ -878,6 +882,7 @@ export const CARDS_ODY1: Card[] = createCards([
     subtype: MagicSubtype.Normal,
     cost: 1,
     symbol: Symbol.Mage,
+    customLimit: 2,
   },
   {
     name: "ชายจากอนาคต",
@@ -889,6 +894,7 @@ export const CARDS_ODY1: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 0,
     symbol: Symbol.Mage,
+    customLimit: 2,
   },
   {
     name: "ริกกี้ นักปลอมแปลง",
@@ -900,6 +906,7 @@ export const CARDS_ODY1: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 0,
     symbol: Symbol.Insect,
+    customLimit: 1,
   },
   {
     name: "ตีแม่",
@@ -988,7 +995,7 @@ export const CARDS_ODY1: Card[] = createCards([
     mainEffect: "เซ่นไหว์ Avatar {symbol สัตว์} บนสนามเรา 1 ใบ : จั่วการ์ดจาก Deck 3 ใบ แต่เทิร์นนี้จะอัญเชิญได้แค่ Avatar {symbol สัตว์}",
     subtype: MagicSubtype.Normal,
     cost: 1,
-    symbol: Symbol.Mage
+    symbol: "สัตว์",
   },
   {
     name: "น้ำชูกำลัง",
@@ -1010,7 +1017,7 @@ export const CARDS_ODY1: Card[] = createCards([
     mainEffect: "Avatar ที่สวมใส่การ์ดใบนี้ได้รับความสามารถ โล่มนุษย์",
     subtype: MagicSubtype.Modification,
     cost: 2,
-    symbol: Symbol.Mage,
+    symbol: "ทหาร",
   },
   {
     name: "เขาไกรลาสเอียง",
@@ -1032,7 +1039,7 @@ export const CARDS_ODY1: Card[] = createCards([
     mainEffect: "Avatar เผ่าแมลง สัตว์ รัททาทุย และมนุษย์ POWER +1",
     subtype: MagicSubtype.Land,
     cost: 2,
-    symbol: Symbol.Mage,
+    symbol: "ต้นไม้",
   },
   {
     name: "มวยทะเลลลลลล",
@@ -1055,6 +1062,7 @@ export const CARDS_ODY1: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 2,
     symbol: Symbol.God,
+    customLimit: 1,
   },
   {
     name: "ประมาทร่วม",
@@ -1118,7 +1126,7 @@ export const CARDS_ODY1: Card[] = createCards([
     print: "ODY1-090",
     rare: Rarity.C,
     mainEffect: "ส่ง Avatar {symbol นรก} 1 ใบจากมือลงนรก : ธรณีสูบ (ส่งการ์ดใบบนสุดจาก Deck ตกนรก) 2 ใบ แล้ว จั่วการ์ดจาก Deck 2 ใบ",
-    subtype: MagicSubtype.Land,
+    subtype: "Normal",
     cost: 1,
     symbol: Symbol.Hell,
   }

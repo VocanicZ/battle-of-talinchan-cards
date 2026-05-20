@@ -27,6 +27,7 @@ export const CARDS_BT06: Card[] = createCards([
     power: 3,
     symbol: Symbol.WonderAnimal,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "เอรา นาคเกล็ดเขียว",
@@ -127,6 +128,7 @@ export const CARDS_BT06: Card[] = createCards([
     power: 3,
     symbol: Symbol.Robot,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "พระอิศวรปลอม",
@@ -182,6 +184,7 @@ export const CARDS_BT06: Card[] = createCards([
     power: 0,
     symbol: Symbol.Fish,
     color: Color.Blue,
+    gemColor: "ฟ้า",
   },
   {
     name: "สวีนนีย์ มนุษย์ดาว R18",
@@ -223,6 +226,7 @@ export const CARDS_BT06: Card[] = createCards([
     power: 2,
     symbol: Symbol.Alien,
     color: Color.Blue,
+    gemColor: "ฟ้า",
   },
   {
     name: "วิลโล่ ปลาแกะ",
@@ -277,6 +281,7 @@ export const CARDS_BT06: Card[] = createCards([
     power: 1,
     symbol: Symbol.Human,
     color: Color.Blue,
+    gemColor: "ฟ้า",
   },
   {
     name: "ฮิฟีสตัส เทพโอลิมปัสแห่งการช่าง",
@@ -305,6 +310,7 @@ export const CARDS_BT06: Card[] = createCards([
     power: 6,
     symbol: Symbol.Human,
     color: Color.Purple,
+    ex: "Only #1",
   },
   {
     name: "อู๊ด คุณแม่",
@@ -318,6 +324,7 @@ export const CARDS_BT06: Card[] = createCards([
     power: 2,
     symbol: Symbol.Human,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "พี่หน่วง",
@@ -371,6 +378,7 @@ export const CARDS_BT06: Card[] = createCards([
     power: 2,
     symbol: Symbol.God,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "โอลรุน เทพธิดาแห่งวัลฮัลลา",
@@ -384,6 +392,7 @@ export const CARDS_BT06: Card[] = createCards([
     power: 3,
     symbol: Symbol.God,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "ซีกรุน เทพธิดาแห่งวัลฮัลลา",
@@ -397,6 +406,7 @@ export const CARDS_BT06: Card[] = createCards([
     power: 5,
     symbol: Symbol.God,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "อาม่อน No.7",
@@ -427,6 +437,7 @@ export const CARDS_BT06: Card[] = createCards([
     power: 1,
     symbol: Symbol.Animal,
     color: Color.Purple,
+    customLimit: 2,
   },
   {
     name: "พีเจี้ยน 3000",
@@ -441,6 +452,7 @@ export const CARDS_BT06: Card[] = createCards([
     power: 0,
     symbol: Symbol.Animal,
     color: Color.Green,
+    gemColor: "เขียว",
   },
   {
     name: "เสาซินแสมงคล",
@@ -479,8 +491,8 @@ export const CARDS_BT06: Card[] = createCards([
     print: "BT06-035",
     rare: Rarity.C,
     mainEffect: "จุติ : สอดแนม 5 ใบ เลือกการ์ด Construct 1 ใบ จากที่สอดแนม และนำขึ้นมือ จากนั้นนำการ์ดที่เหลือเรียงและนำไว้ใต้ Deck",
-    cost: 3,
-    gem: 2,
+    cost: 4,
+    gem: 3,
     power: 2,
     symbol: Symbol.Human,
     color: Color.Green,
@@ -495,8 +507,9 @@ export const CARDS_BT06: Card[] = createCards([
     cost: 3,
     gem: 2,
     power: 2,
-    symbol: Symbol.Animal,
+    symbol: "คน",
     color: Color.Green,
+    gemColor: "เขียว",
   },
   {
     name: "สว นาโนแมชชีน",
@@ -909,6 +922,7 @@ export const CARDS_BT06: Card[] = createCards([
     power: 4,
     symbol: Symbol.Soldier,
     color: Color.Green,
+    gemColor: "เขียว",
   },
   {
     name: "ตู้วารีบำบัด",

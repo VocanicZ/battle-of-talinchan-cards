@@ -30,6 +30,7 @@ export const CARDS_BT08: Card[] = createCards([
     power: 1,
     symbol: Symbol.Human,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "เณรคู ศิษย์เอกพระอาจารย์",
@@ -43,6 +44,7 @@ export const CARDS_BT08: Card[] = createCards([
     power: 0,
     symbol: Symbol.Human,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "น้าเอี๊ยด นักบรรเลง",
@@ -57,6 +59,7 @@ export const CARDS_BT08: Card[] = createCards([
     power: 1,
     symbol: Symbol.Human,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "ซุนกวน ผู้นำพยัคฆ์แห่งง่อก๊ก",
@@ -100,6 +103,7 @@ export const CARDS_BT08: Card[] = createCards([
     power: 3,
     symbol: Symbol.Foreigner,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "กาลาฮัด อัศวินโต๊ะกลมแห่งความกล้าหาญ",
@@ -215,6 +219,7 @@ export const CARDS_BT08: Card[] = createCards([
     power: 3,
     symbol: Symbol.Insect,
     color: Color.Blue,
+    gemColor: "ฟ้า",
   },
   {
     name: "ริกกี้ คุณหมอ",
@@ -316,6 +321,7 @@ export const CARDS_BT08: Card[] = createCards([
     power: 4,
     symbol: Symbol.Foreigner,
     color: Color.Blue,
+    gemColor: "ฟ้า",
   },
   {
     name: "มฤตยูเทวี",
@@ -358,6 +364,7 @@ export const CARDS_BT08: Card[] = createCards([
     power: 2,
     symbol: Symbol.Human,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "อีสานสลิงเกอร์ เปอร์",
@@ -386,6 +393,7 @@ export const CARDS_BT08: Card[] = createCards([
     power: 4,
     symbol: Symbol.Human,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "พี่ไท่ น้องเฟิง นักดาบวายุ",
@@ -475,6 +483,7 @@ export const CARDS_BT08: Card[] = createCards([
     power: 5,
     symbol: Symbol.Robot,
     color: Color.Green,
+    gemColor: "เขียว",
   },
   {
     name: "ฮากลิ้ง วานรกับหมา",
@@ -603,6 +612,7 @@ export const CARDS_BT08: Card[] = createCards([
     power: 4,
     symbol: Symbol.Animal,
     color: Color.Green,
+    gemColor: "เขียว",
   },
   {
     name: "รถถังเฟืองเหล็ก",
@@ -642,6 +652,7 @@ export const CARDS_BT08: Card[] = createCards([
     power: 4,
     symbol: Symbol.Foreigner,
     color: Color.Blue,
+    gemColor: "ฟ้า",
   },
   {
     name: "ตัวอะไรสักอย่างที่ใหญ่และน่ารัก",
@@ -655,6 +666,7 @@ export const CARDS_BT08: Card[] = createCards([
     power: 8,
     symbol: Symbol.Alien,
     color: Color.Blue,
+    gemColor: "ฟ้า",
   },
   {
     name: "นกอีก๋อย",
@@ -844,6 +856,7 @@ export const CARDS_BT08: Card[] = createCards([
     subtype: MagicSubtype.Modification,
     cost: 1,
     symbol: Symbol.Mage,
+    ex: "โดนใจ",
   },
   {
     name: "บิฟร็อสต์ สะพานสายรุ้ง",

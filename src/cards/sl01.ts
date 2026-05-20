@@ -80,6 +80,7 @@ export const CARDS_SL01: Card[] = createCards([
     power: 6,
     symbol: Symbol.God,
     color: Color.Red,
+    customLimit: 3,
   },
   {
     name: "ชายจากอนาคต",

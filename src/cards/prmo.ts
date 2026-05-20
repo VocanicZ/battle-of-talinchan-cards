@@ -24,9 +24,9 @@ export const CARDS_PRMO: Card[] = createCards([
     print: "PRMO-002",
     rare: Rarity.C,
     mainEffect: "",
-    cost: 1,
+    cost: 0,
     gem: 4,
-    power: 1,
+    power: 0,
     symbol: Symbol.Hell,
     color: Color.Purple,
   },
@@ -62,6 +62,7 @@ export const CARDS_PRMO: Card[] = createCards([
     subtype: MagicSubtype.Modification,
     cost: 2,
     symbol: Symbol.Rat,
+    customLimit: 2,
   },
   {
     name: "ลูกแม่ศรีนวล",
@@ -75,6 +76,7 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 1,
     symbol: Symbol.Animal,
     color: Color.Blue,
+    customLimit: 1,
   },
   {
     name: "ตีพ่อ",
@@ -225,6 +227,7 @@ export const CARDS_PRMO: Card[] = createCards([
     subtype: MagicSubtype.Normal,
     cost: 4,
     symbol: Symbol.Human,
+    customLimit: 2,
   },
   {
     name: "ความเจริญ",
@@ -236,6 +239,7 @@ export const CARDS_PRMO: Card[] = createCards([
     subtype: MagicSubtype.Normal,
     cost: 1,
     symbol: Symbol.Mage,
+    customLimit: 2,
   },
   {
     name: "พญายม",
@@ -249,6 +253,7 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 5,
     symbol: Symbol.Hell,
     color: Color.Purple,
+    customLimit: 1,
   },
   {
     name: "ใบดำใบแดง",
@@ -308,7 +313,7 @@ export const CARDS_PRMO: Card[] = createCards([
     rare: Rarity.SR,
     mainEffect: "อัตโนมัติ เทิร์นละครั้ง ถ้า Avatar ตัวนี้จะถูกทำลาย : ธณีสูบ 9 ใบ แทนการทำลายได้",
     cost: 4,
-    gem: 1,
+    gem: 2,
     power: 4,
     symbol: Symbol.God,
     color: Color.Purple,
@@ -413,6 +418,7 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 2,
     symbol: Symbol.Lizard,
     color: Color.Blue,
+    gemColor: "ฟ้า",
   },
   {
     name: "หมานมเย็น",
@@ -700,6 +706,7 @@ export const CARDS_PRMO: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 0,
     symbol: Symbol.Mage,
+    customLimit: 2,
   },
   {
     name: "อีช่า - สาวน้อยคนเก่ง",
@@ -713,6 +720,7 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 1,
     symbol: Symbol.Human,
     color: Color.Red,
+    customLimit: 1,
   },
   {
     name: "แมวมัทฉะ",
@@ -764,6 +772,7 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 2,
     symbol: Symbol.Ghost,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "อามัส มนุษย์ดาว R18",
@@ -834,6 +843,7 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 2,
     symbol: Symbol.Human,
     color: Color.Blue,
+    customLimit: 2,
   },
   {
     name: "ฮอล",
@@ -848,6 +858,7 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 2,
     symbol: Symbol.Human,
     color: Color.Blue,
+    customLimit: 2,
   },
   {
     name: "นาย",
@@ -862,6 +873,7 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 2,
     symbol: Symbol.Human,
     color: Color.Blue,
+    customLimit: 2,
   },
   {
     name: "เจ้ากล้าดียังไง",
@@ -873,6 +885,7 @@ export const CARDS_PRMO: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 2,
     symbol: Symbol.God,
+    customLimit: 1,
   },
   {
     name: "เอาไปอยู่ด้วย",
@@ -911,6 +924,7 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 3,
     symbol: Symbol.God,
     color: Color.Purple,
+    gemColor: "ม่วง",
   },
   {
     name: "จอย มนุษย์ดาว R18",
@@ -950,6 +964,7 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 3,
     symbol: Symbol.Robot,
     color: Color.Red,
+    gemColor: "แดง",
   },
   {
     name: "แมลงปอแจ๊ค",
@@ -1209,7 +1224,7 @@ export const CARDS_PRMO: Card[] = createCards([
     mainEffect:
       "เลือกปฏิบัติ :\n\n1) นำ Avatar Cost 5 หรือต่ำกว่า จาก นรก ฝ่ายเรา  ขึ้นมือ 1 ใบ ยกเว้นการ์ด {only} \n\n2) นำ Avatar ที่มี Cost 5 หรือต่ำกว่า จาก Deck ฝ่ายเรา ขึ้นมือ 1 ใบ ยกเว้นการ์ด  {only} 1 แล้วสับ Deck\n\nถ้า Life Card ของเราถูกหงายตั้งแต่ 4 ใบขึ้นไปและหงายมากกว่าฝ่ายตรงข้าม ทำความสามารถ 1) และ 2)",
     subtype: MagicSubtype.Normal,
-    cost: 1,
+    cost: 0,
     symbol: Symbol.Mage,
   },
   {

@@ -11,7 +11,7 @@ import { pathToFileURL } from 'node:url';
 import { PNG } from 'pngjs';
 import { createWorker } from 'tesseract.js';
 import { imagesDir, skillDir } from './paths.ts';
-import { avgRGB, crop, hasCircle, matchBest, nearestSwatch, segmentDigits, type Rect, type RGB } from './cv.ts';
+import { avgRGB, crop, hasCircle, matchBest, nearestSwatch, segmentDigits, stddevRGB, type Rect, type RGB } from './cv.ts';
 
 const regions = JSON.parse(
   readFileSync(join(skillDir, 'scripts/regions.json'), 'utf8'),
@@ -153,17 +153,26 @@ const COLOR_PALETTE: Record<string, RGB> = {
  * colour; an empty/silver gem reads near-gray (~140,140,140) and is classified
  * as ไม่มีสี by the gray-channel-spread check below, not by the palette.
  */
+// ฟ้า and ม่วง re-calibrated from the means of 12 known-correct samples
+// across BT01/BT04/BT08/CC01/SD05 after the original BT01-only swatches put
+// borderline prints (e.g. BT03-039 ม่วง, SD05-007 ฟ้า) on the wrong side of
+// the euclidean midpoint.
 const GEM_PALETTE: Record<string, RGB> = {
   แดง:  [130, 60, 60],
-  ฟ้า:  [80, 100, 125],
+  ฟ้า:  [66, 85, 113],
   เขียว: [70, 115, 90],
-  ม่วง: [80, 70, 100],
+  ม่วง: [92, 84, 104],
 };
 // Max(R,G,B) - Min(R,G,B) below this -> empty/silver gem -> ไม่มีสี.
 const GEM_GRAY_SPREAD = 15;
 
 const TYPE_MAX_DIST = 80;
 const TYPE_MARGIN = 25;
+// Bordered cards show < ~5 per-channel stddev in the border strip; borderless
+// prints (rarities above C) bleed art into that region and measure ≥ ~20.
+// Above this threshold the nearest-swatch result is unreliable — we return
+// 'unknown' instead of confidently misclassifying as Construct/Life.
+const TYPE_BORDERLESS_STDDEV = 10;
 const COLOR_MAX_DIST = 80;
 const COLOR_MARGIN = 20;
 
@@ -362,9 +371,23 @@ export function extractCard(print: string): CardResult {
   const fields: Record<string, FieldResult> = {};
 
   // type — border colour
-  const typeM = nearestSwatch(
-    avgRGB(png, regions.border), TYPE_PALETTE, TYPE_MAX_DIST, TYPE_MARGIN,
-  );
+  // Borderless prints (high-rarity variants) bleed artwork into the border
+  // strip, so we first check the strip's per-channel stddev. High variance
+  // means no uniform border — return 'unknown' rather than letting
+  // nearestSwatch lock onto a noisy artwork pixel.
+  const borderStd = stddevRGB(png, regions.border);
+  const borderless = Math.max(...borderStd) > TYPE_BORDERLESS_STDDEV;
+  const rawType = borderless
+    ? { value: 'unknown', confidence: 'low' as const, score: 0 }
+    : nearestSwatch(
+        avgRGB(png, regions.border), TYPE_PALETTE, TYPE_MAX_DIST, TYPE_MARGIN,
+      );
+  // Low-confidence swatch matches (palette miss beyond TYPE_MAX_DIST, or
+  // within margin of a rival) must not propagate as a concrete type — the
+  // downstream cost/power readers would run against the wrong assumption.
+  const typeM = rawType.confidence === 'high'
+    ? rawType
+    : { value: 'unknown', confidence: 'low' as const, score: rawType.score };
   fields.type = typeM;
   const type = typeM.value;
 
@@ -404,14 +427,27 @@ export function extractCard(print: string): CardResult {
 
   // ex — stamp under the race icon. Margin 0: a real stamp's own template
   // dominates, so only the EX_MIN_SCORE presence gate matters.
+  // Some prints (notably PRMO-096) render the stamp 10–15 px off the standard
+  // (x,y) — a fixed-region match never lines up. We slide the ex window over a
+  // small range and take the best score across offsets.
   if (occluded) {
     fields.ex = { value: 'unknown', confidence: 'low', score: 0 };
   } else {
-    const m = matchBest(crop(png, regions.ex), EX_TPL, EX_MIN_SCORE, 0);
+    const [ex0, ey0, ew, eh] = regions.ex;
+    let best = matchBest(crop(png, regions.ex), EX_TPL, EX_MIN_SCORE, 0);
+    for (let dx = -15; dx <= 15; dx += 5) {
+      for (let dy = -15; dy <= 15; dy += 5) {
+        if (dx === 0 && dy === 0) continue;
+        const m = matchBest(
+          crop(png, [ex0 + dx, ey0 + dy, ew, eh]), EX_TPL, EX_MIN_SCORE, 0,
+        );
+        if (m.score > best.score) best = m;
+      }
+    }
     // best NCC below EX_MIN_SCORE → no stamp present
-    fields.ex = m.confidence === 'high'
-      ? m
-      : { value: null, confidence: 'high', score: m.score };
+    fields.ex = best.confidence === 'high'
+      ? best
+      : { value: null, confidence: 'high', score: best.score };
   }
 
   // cost — Avatar/Construct render it as a digit in the COST box; Magic

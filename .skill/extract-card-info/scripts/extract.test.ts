@@ -36,6 +36,21 @@ test('extractCard reads cost and power for BT01-001 (cost 3, power 3)', () => {
   assert.equal(r.fields.power?.value, 3);
 });
 
+// BT01-032 is a regression target: silver-filled gems (so the dark-pixel
+// fraction is low), a customLimit circle that covers the gem colour bar,
+// and cost/power digits whose vertical position relative to the box border
+// differs from the rest of BT01.
+test('extractCard reads BT01-032 (purple Avatar with override circle)', () => {
+  const r = extractCard('BT01-032');
+  assert.equal(r.fields.type?.value, 'Avatar');
+  assert.equal(r.fields.color?.value, 'ม่วง');
+  assert.equal(r.fields.cost?.value, 9);
+  assert.equal(r.fields.gem?.value, 4);
+  assert.equal(r.fields.power?.value, 3);
+  // The customLimit circle occludes the gem-colour bar — gemColor is unknown.
+  assert.equal(r.fields.gemColor?.value, 'unknown');
+});
+
 // BT01-042 has customLimit=1 and the override circle is present on the image.
 test('extractCard reads a two-digit customLimit override', () => {
   const r = extractCard('BT01-042');

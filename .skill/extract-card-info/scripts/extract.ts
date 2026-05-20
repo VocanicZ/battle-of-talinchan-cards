@@ -5,7 +5,7 @@
  *
  * Usage (single card): npx tsx .skill/extract-card-info/scripts/extract.ts BT01-001
  */
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, realpathSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { PNG } from 'pngjs';
@@ -33,17 +33,20 @@ const TPL_MIN_SCORE = 0.55, TPL_MARGIN = 0.08;
 const EX_MIN_SCORE = 0.72;
 
 /** Load every template PNG for one field into a label→PNG map. */
-function loadTemplates(field: string): Record<string, PNG> {
+function loadTemplates(field: string): Record<string, PNG[]> {
   const dir = join(templatesDir, field);
   if (!existsSync(dir)) return {};
-  const out: Record<string, PNG> = {};
+  const out: Record<string, PNG[]> = {};
   for (const file of readdirSync(dir).filter((f) => f.endsWith('.png'))) {
     const base = file.replace(/\.png$/, '');
-    // icon templates are base64url-encoded Thai/symbol values; digits are plain
-    const label = (field === 'digit' || field === 'powerDigit')
-      ? base
-      : Buffer.from(base, 'base64url').toString('utf8');
-    out[label] = PNG.sync.read(readFileSync(join(dir, file)));
+    const isDigit = field === 'digit' || field === 'powerDigit' || field === 'circleDigit';
+    // Digit-like fields can have multiple exemplars per digit, named
+    // '{digit}-{print}.png' (e.g. '3-BT01-001.png'). The label is the digit
+    // before the first '-'. Single-exemplar names ('3.png') still work.
+    // Icon templates are base64url-encoded Thai/symbol values, one per label.
+    const label = isDigit ? base.split('-')[0]
+                          : Buffer.from(base, 'base64url').toString('utf8');
+    (out[label] ??= []).push(PNG.sync.read(readFileSync(join(dir, file))));
   }
   return out;
 }
@@ -53,6 +56,11 @@ const SUBTYPE_TPL = loadTemplates('subtype');
 const EX_TPL = loadTemplates('ex');
 const DIGIT_TPL = loadTemplates('digit');
 const POWER_DIGIT_TPL = loadTemplates('powerDigit');
+// customLimit digits inside the override circle don't match the cost-box
+// digit templates (different stroke weight, different background structure).
+// circleDigit templates are full 92×92 circle crops — one per known cl value
+// — matched against the test card's circle crop directly.
+const CIRCLE_DIGIT_TPL = loadTemplates('circleDigit');
 const DIGIT_MIN_SCORE = 0.5;
 const DIGIT_MARGIN = 0.05;
 // segmentDigits occasionally yields a thin noise sliver beside a real glyph
@@ -71,7 +79,7 @@ const MIN_DIGIT_W = 5;
 function readNumber(
   png: PNG,
   rect: Rect,
-  templates: Record<string, PNG> = DIGIT_TPL,
+  templates: Record<string, PNG[]> = DIGIT_TPL,
 ): FieldResult | null {
   let segs = segmentDigits(crop(png, rect));
   // drop noise slivers; if every segment is thin, keep the widest one
@@ -82,7 +90,12 @@ function readNumber(
   let digits = '';
   let minScore = 1;
   for (const seg of segs) {
-    const m = matchBest(seg, templates, DIGIT_MIN_SCORE, DIGIT_MARGIN);
+    // Digit templates come in multiple exemplars per digit (one per source
+    // card) so the per-label score is the MAX over its exemplars. With that,
+    // grayscale NCC is the more discriminative metric — Sobel edges lose the
+    // stroke/background contrast that distinguishes similar shapes (e.g. 2
+    // vs 3, 3 vs 9).
+    const m = matchBest(seg, templates, DIGIT_MIN_SCORE, DIGIT_MARGIN, 'gray');
     digits += m.value;
     minScore = Math.min(minScore, m.score);
   }
@@ -148,20 +161,28 @@ const COLOR_MAX_DIST = 80;
 const COLOR_MARGIN = 20;
 
 /**
- * Gem slot detection constants.
- * The gem strip encodes gem count (0–4) as dark diamond icons in its left
- * portion. The four diamonds sit at progressively wider offsets; an angled
- * banner decoration crosses the upper part of the strip, so detection scans
- * only the lower band of the strip to isolate the diamonds from the banner.
- * A slot is "filled" when ≥12% of its lower-band pixels are dark.
+ * Gem detection constants.
+ * The gem strip encodes gem count (0–4) as diamond icons in its left portion.
+ * An angled banner decoration crosses the upper part of the strip, so detection
+ * scans only the lower band of the strip to isolate the diamonds from the
+ * banner. The right ~40% of the strip is the solid colour bar (gemColorBar) —
+ * scanning is restricted to the left 60% to avoid mistaking the bar for a gem.
  *
- * Calibrated across BT01–BT03: empty slots read 0–7%, filled diamonds 15–31%.
+ * Detection counts contiguous "dark" column runs (a column is dark when ≥2 of
+ * its band pixels are below the brightness threshold; a run is a gem when ≥5
+ * such columns are adjacent). This is robust to:
+ *   - colour-filled diamonds (BT01-022/027: dark stroke + dark fill)
+ *   - silver/white-filled diamonds (BT01-032: dark stroke, light fill — far
+ *     less dark area, but still a continuous dark column run from the outline)
+ *   - small horizontal drift between cards (~8 px between BT01-022 and BT01-032)
+ *
+ * Verified across BT01 gem counts 0/1/2/3/4.
  */
-const GEM_SLOT_OFFSETS = [0, 20, 46, 68]; // diamond x-offsets from gemStrip[0]
-const GEM_SLOT_W = 12;                    // px wide per slot sample
-const GEM_DARK_THRESH = 100;              // pixel brightness threshold for "dark"
-const GEM_FILLED_FRAC = 0.12;             // min dark fraction to count a slot as filled
-const GEM_BAND_TOP = 0.45;                // scan the strip's lower 55% (skip the banner)
+const GEM_DARK_THRESH = 100;     // pixel brightness threshold for "dark"
+const GEM_BAND_TOP = 0.45;       // scan the strip's lower 55% (skip the banner)
+const GEM_SCAN_FRAC = 0.6;       // scan only the strip's left 60% (skip colour bar)
+const GEM_COL_MIN_DARK = 2;      // a column counts as dark when ≥ this many band pixels are dark
+const GEM_MIN_RUN = 5;           // a diamond is a dark-column run ≥ this wide
 
 /** Load a 388×528 card image, or throw. */
 function loadCard(print: string): PNG {
@@ -173,50 +194,98 @@ function loadCard(print: string): PNG {
 }
 
 /**
- * Count filled gem slots by detecting dark-pixel groups in the left portion of
- * the gem strip. Each filled slot corresponds to one gem on the card.
+ * Detect gems by scanning the gem strip for contiguous dark-column runs.
  *
  * The plan's seed approach (per-slot colour averaged against a sampled
  * header-grey baseline) was superseded: the averaged baseline was unreliable
- * across card colours. Dark-pixel fraction is card-colour-agnostic — gem icons
- * are dark line-art regardless of the card's palette.
+ * across card colours. A second approach (fixed slot offsets + dark-pixel
+ * fraction) also failed — on silver/white-filled diamonds the fraction drops
+ * below the threshold, and small layout drift between cards (~8 px) shifts
+ * gems out of their slots. Blob counting is robust to both: every diamond,
+ * whether colour- or silver-filled, leaves a contiguous run of columns with
+ * dark outline pixels.
  *
- * The two halves use orthogonal strategies on purpose: slot counting reads the
+ * The two halves use orthogonal strategies on purpose: gem counting reads the
  * dark icons on the left; gemColor reads the solid colour bar on the right
- * (regions.gemColorBar), which is always filled with the card's colour.
+ * (regions.gemColorBar), which is always filled with the card's colour —
+ * EXCEPT when the customLimit override circle covers it, in which case
+ * gemColor is reported as low-confidence.
  */
-function readGems(png: PNG): { gem: FieldResult; gemColor: FieldResult } {
-  const [sx, sy, , sh] = regions.gemStrip;
-
+function readGems(png: PNG, occluded: boolean): { gem: FieldResult; gemColor: FieldResult } {
+  const [sx, sy, sw, sh] = regions.gemStrip;
   const yTop = sy + Math.round(sh * GEM_BAND_TOP);
   const yBot = sy + sh;
-  let filled = 0;
-  for (const off of GEM_SLOT_OFFSETS) {
-    const x0 = sx + off;
-    let dark = 0, total = 0;
-    for (let x = x0; x < x0 + GEM_SLOT_W; x++) {
-      for (let y = yTop; y < yBot; y++) {
-        const i = (png.width * y + x) << 2;
-        const brightness = (png.data[i] + png.data[i + 1] + png.data[i + 2]) / 3;
-        if (brightness < GEM_DARK_THRESH) dark++;
-        total++;
-      }
+  const xEnd = sx + Math.round(sw * GEM_SCAN_FRAC);
+
+  // Per-column dark-pixel count across the scan band.
+  const cols: number[] = [];
+  for (let x = sx; x < xEnd; x++) {
+    let dark = 0;
+    for (let y = yTop; y < yBot; y++) {
+      const i = (png.width * y + x) << 2;
+      const brightness = (png.data[i] + png.data[i + 1] + png.data[i + 2]) / 3;
+      if (brightness < GEM_DARK_THRESH) dark++;
     }
-    if (dark / total >= GEM_FILLED_FRAC) filled++;
+    cols.push(dark);
   }
 
-  // Gem colour from the solid colour bar on the right of the strip.
-  const gemColorRgb = avgRGB(png, regions.gemColorBar);
-  const gemColorM = nearestSwatch(gemColorRgb, GEM_PALETTE, COLOR_MAX_DIST, COLOR_MARGIN);
+  // Count runs of consecutive "dark" columns at least GEM_MIN_RUN wide.
+  let filled = 0;
+  let inRun = false, runStart = 0;
+  for (let i = 0; i < cols.length; i++) {
+    const hot = cols[i] >= GEM_COL_MIN_DARK;
+    if (hot && !inRun) { inRun = true; runStart = i; }
+    else if (!hot && inRun) {
+      inRun = false;
+      if (i - runStart >= GEM_MIN_RUN) filled++;
+    }
+  }
+  if (inRun && cols.length - runStart >= GEM_MIN_RUN) filled++;
+
+  // gemColor: sample the colour bar — but the customLimit circle on top-right
+  // can completely overlap it (e.g. BT01-032), so mark unknown when occluded.
+  let gemColor: FieldResult;
+  if (occluded) {
+    gemColor = { value: 'unknown', confidence: 'low', score: 0 };
+  } else if (filled === 0) {
+    gemColor = { value: 'ไม่มีสี', confidence: 'high', score: 1 };
+  } else {
+    const rgb = avgRGB(png, regions.gemColorBar);
+    gemColor = nearestSwatch(rgb, GEM_PALETTE, COLOR_MAX_DIST, COLOR_MARGIN);
+  }
 
   return {
     gem: { value: filled, confidence: 'high', score: 1 },
-    gemColor: {
-      value: filled > 0 ? gemColorM.value : 'ไม่มีสี',
-      confidence: filled > 0 ? gemColorM.confidence : 'high',
-      score: gemColorM.score,
-    },
+    gemColor,
   };
+}
+
+/**
+ * Magic card "cost" = number of diamond icons in the strip right of the
+ * subtype glyph. Same blob-counter as readGems but on a different region.
+ */
+function readMagicCost(png: PNG): FieldResult {
+  const [sx, sy, sw, sh] = regions.magicCostStrip;
+  const yTop = sy + Math.round(sh * GEM_BAND_TOP);
+  const yBot = sy + sh;
+  let filled = 0, inRun = false, runStart = 0;
+  for (let x = sx; x <= sx + sw; x++) {
+    let dark = 0;
+    if (x < sx + sw) {
+      for (let y = yTop; y < yBot; y++) {
+        const i = (png.width * y + x) << 2;
+        const b = (png.data[i] + png.data[i + 1] + png.data[i + 2]) / 3;
+        if (b < GEM_DARK_THRESH) dark++;
+      }
+    }
+    const hot = x < sx + sw && dark >= GEM_COL_MIN_DARK;
+    if (hot && !inRun) { inRun = true; runStart = x; }
+    else if (!hot && inRun) {
+      inRun = false;
+      if (x - runStart >= GEM_MIN_RUN) filled++;
+    }
+  }
+  return { value: filled, confidence: 'high', score: 1 };
 }
 
 /** Extract every field from a single card image. */
@@ -231,18 +300,18 @@ export function extractCard(print: string): CardResult {
   fields.type = typeM;
   const type = typeM.value;
 
+  // override circle occludes the top-right symbol + ex + gemColorBar regions
+  const occluded = hasCircle(png, regions.circle);
+
   // color — COST box background (Avatar/Construct only)
   if (type === 'Avatar' || type === 'Construct') {
     fields.color = nearestSwatch(
       avgRGB(png, regions.costBox), COLOR_PALETTE, COLOR_MAX_DIST, COLOR_MARGIN,
     );
-    const g = readGems(png);
+    const g = readGems(png, occluded);
     fields.gem = g.gem;
     fields.gemColor = g.gemColor;
   }
-
-  // override circle occludes the top-right symbol + ex icons
-  const occluded = hasCircle(png, regions.circle);
 
   // symbol — race icon, top-right (PlayableCard: Avatar/Magic/Construct)
   // When occluded, always mark unknown regardless of detected type (the circle
@@ -250,8 +319,11 @@ export function extractCard(print: string): CardResult {
   if (occluded) {
     fields.symbol = { value: 'unknown', confidence: 'low', score: 0 };
   } else if (type !== 'Life') {
+    // Symbol icons are rendered in the card's colour (purple for จอมเวทย์,
+    // for example) — grayscale NCC was matching icons that shared a colour
+    // (จอมเวทย์ ↔ สัตว์). Edge correlation is colour-invariant.
     fields.symbol = matchBest(
-      crop(png, regions.symbol), SYMBOL_TPL, TPL_MIN_SCORE, TPL_MARGIN,
+      crop(png, regions.symbol), SYMBOL_TPL, TPL_MIN_SCORE, TPL_MARGIN, 'edges',
     );
   }
 
@@ -274,10 +346,14 @@ export function extractCard(print: string): CardResult {
       : { value: null, confidence: 'high', score: m.score };
   }
 
-  // cost — COST box number (PlayableCard)
-  if (type !== 'Life') {
+  // cost — Avatar/Construct render it as a digit in the COST box; Magic
+  // renders it as a count of diamond icons in a strip right of the subtype
+  // icon (the COST box on Magic cards holds the subtype glyph, not a digit).
+  if (type === 'Avatar' || type === 'Construct') {
     const c = readNumber(png, regions.costNum);
     if (c) fields.cost = c;
+  } else if (type === 'Magic') {
+    fields.cost = readMagicCost(png);
   }
   // power — POWER box number (Avatar/Construct); uses the inner whitebox region
   // which has black digits on white background, requiring POWER_DIGIT_TPL.
@@ -285,14 +361,20 @@ export function extractCard(print: string): CardResult {
     const p = readNumber(png, regions.powerNum, POWER_DIGIT_TPL);
     if (p) fields.power = p;
   }
-  // customLimit — only when the override circle is present.
-  // NOTE: the circle region yields inherently low NCC scores because its
-  // curved background produces noisy crops that don't cleanly match the
-  // white-on-dark digit templates. Consequently, customLimit confidence is
-  // essentially always 'low' even when the extracted value is correct.
+  // customLimit — only when the override circle is present. Use whole-crop
+  // template matching against per-cl exemplar circles (CIRCLE_DIGIT_TPL).
+  // Segmenting individual digits inside the circle fails because the red
+  // ring's anti-aliased pixels connect to the digit stroke and the digits
+  // are rendered with a much heavier weight than the cost-box templates.
   if (occluded) {
-    const cl = readNumber(png, regions.circle);
-    if (cl) fields.customLimit = cl;
+    const cir = crop(png, regions.circle);
+    const m = matchBest(cir, CIRCLE_DIGIT_TPL, 0.5, 0.05);
+    const num = Number(m.value);
+    fields.customLimit = {
+      value: Number.isNaN(num) ? null : num,
+      confidence: m.confidence,
+      score: m.score,
+    };
   }
 
   return { print, source: 'image', fields };
@@ -328,8 +410,9 @@ export async function extractCardFull(print: string): Promise<CardResult> {
   return result;
 }
 
-// CLI
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+// CLI. Compare realpaths because `.claude/skills` is a symlink to `.skill`:
+// import.meta.url resolves through the symlink, but process.argv[1] does not.
+if (import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
   const print = process.argv[2];
   if (!print) throw new Error('usage: extract.ts <print-code>');
   extractCardFull(print).then((r) => console.log(JSON.stringify(r, null, 2)));

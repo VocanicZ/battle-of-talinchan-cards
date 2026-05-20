@@ -47,7 +47,8 @@ review). The audit never edits card files.
 | `cost` | COST box number | digit glyph match |
 | `symbol` | top-right icon | template match — `unknown` if circle-occluded |
 | `ex` | icon under the symbol | template match — `unknown` if circle-occluded |
-| `gem` / `gemColor` | top-centre strip | fixed-slot dark-pixel scan + colour bar |
+| `gem` | top-centre strip | dark-column blob count (works on silver-filled diamonds) |
+| `gemColor` | top-centre strip colour bar | colour sample — `unknown` if circle-occluded |
 | `power` | bottom-left number | digit glyph match |
 | `customLimit` | top-right override circle | circle detect + digit glyph match |
 | `name` | bottom name plate | `tesseract.js` Thai OCR |
@@ -62,4 +63,6 @@ review). The audit never edits card files.
 - Calibration constants (palettes, thresholds) are named constants at the top
   of `extract.ts` and `cv.ts`.
 - `customLimit` reads inside the override circle yield inherently low NCC
-  scores; the value is usually correct but flagged low-confidence.
+  scores because the digit is rendered differently than the cost-box digits
+  the templates were built from; the score is always low-confidence and the
+  read value is best-effort.

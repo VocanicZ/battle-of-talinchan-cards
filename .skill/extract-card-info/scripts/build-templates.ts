@@ -9,7 +9,7 @@
  *
  * Usage: npx tsx .skill/extract-card-info/scripts/build-templates.ts
  */
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { PNG } from 'pngjs';
@@ -90,23 +90,33 @@ buildIconField('ex', regions.ex);
  * @param region      - image region to crop and segment
  */
 function buildDigitField(dirName: string, costOrPower: 'cost' | 'power', region: Rect) {
-  mkdirSync(join(templatesDir, dirName), { recursive: true });
+  // Save up to MAX_PER_DIGIT exemplars per digit, named '{d}-{print}.png'.
+  // loadTemplates groups them by leading digit and matchBest takes the max
+  // score across exemplars — robust against per-card rendering variation.
+  const MAX_PER_DIGIT = 3;
+  const fieldDir = join(templatesDir, dirName);
+  mkdirSync(fieldDir, { recursive: true });
+  // Clear old templates so single-name '.png' files don't shadow new ones.
+  for (const f of readdirSync(fieldDir)) {
+    if (f.endsWith('.png')) rmSync(join(fieldDir, f));
+  }
   for (let d = 0; d <= 9; d++) {
     const candidates = cards
       .filter((c) => c[costOrPower] === d && (c.type === 'Avatar' || c.type === 'Construct'))
       .sort((a, b) => (String(a.print).startsWith('BT01') ? -1 : 1));
-    let built = false;
+    let saved = 0;
     for (const card of candidates) {
+      if (saved >= MAX_PER_DIGIT) break;
       const png = image(String(card.print));
       if (!png) continue;
       const segs = segmentDigits(crop(png, region));
       if (segs.length !== 1) continue;
-      writeFileSync(join(templatesDir, dirName, `${d}.png`), PNG.sync.write(segs[0]));
-      crops.push({ label: `${dirName}:${d}`, png: segs[0] });
-      built = true;
-      break;
+      const print = String(card.print);
+      writeFileSync(join(fieldDir, `${d}-${print}.png`), PNG.sync.write(segs[0]));
+      crops.push({ label: `${dirName}:${d}-${print}`, png: segs[0] });
+      saved++;
     }
-    if (!built) console.warn(`  no clean exemplar for ${dirName} ${d}`);
+    if (saved === 0) console.warn(`  no clean exemplar for ${dirName} ${d}`);
   }
 }
 

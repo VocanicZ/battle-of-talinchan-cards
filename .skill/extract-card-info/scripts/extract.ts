@@ -40,12 +40,11 @@ function loadTemplates(field: string): Record<string, PNG[]> {
   for (const file of readdirSync(dir).filter((f) => f.endsWith('.png'))) {
     const base = file.replace(/\.png$/, '');
     const isDigit = field === 'digit' || field === 'powerDigit' || field === 'circleDigit';
-    // Digit-like fields can have multiple exemplars per digit, named
-    // '{digit}-{print}.png' (e.g. '3-BT01-001.png'). The label is the digit
-    // before the first '-'. Single-exemplar names ('3.png') still work.
-    // Icon templates are base64url-encoded Thai/symbol values, one per label.
-    const label = isDigit ? base.split('-')[0]
-                          : Buffer.from(base, 'base64url').toString('utf8');
+    // Multi-exemplar naming: '{label}-{print}.png' where print is one or two
+    // dash-segments (e.g. 'BT01-005', 'PRMO-005'). The label is everything
+    // before the FIRST dash and doesn't contain dashes itself.
+    const head = base.split('-')[0];
+    const label = isDigit ? head : Buffer.from(head, 'base64url').toString('utf8');
     (out[label] ??= []).push(PNG.sync.read(readFileSync(join(dir, file))));
   }
   return out;
@@ -89,13 +88,16 @@ function readNumber(
   if (segs.length === 0) return null;
   let digits = '';
   let minScore = 1;
+  // Pad narrow segs AND templates so both have roughly the same aspect ratio
+  // when resampled to NCC_SIZE². Without padding, a 3×25 "1" stretches to fill
+  // the full 32×32 frame and correlates poorly with wider templates.
+  const paddedTpls: Record<string, PNG[]> = {};
+  for (const [label, list] of Object.entries(templates)) {
+    paddedTpls[label] = list.map(padSegment);
+  }
   for (const seg of segs) {
-    // Digit templates come in multiple exemplars per digit (one per source
-    // card) so the per-label score is the MAX over its exemplars. With that,
-    // grayscale NCC is the more discriminative metric — Sobel edges lose the
-    // stroke/background contrast that distinguishes similar shapes (e.g. 2
-    // vs 3, 3 vs 9).
-    const m = matchBest(seg, templates, DIGIT_MIN_SCORE, DIGIT_MARGIN, 'gray');
+    const padded = padSegment(seg);
+    const m = matchBest(padded, paddedTpls, DIGIT_MIN_SCORE, DIGIT_MARGIN, 'gray');
     digits += m.value;
     minScore = Math.min(minScore, m.score);
   }
@@ -286,6 +288,45 @@ function readMagicCost(png: PNG): FieldResult {
     }
   }
   return { value: filled, confidence: 'high', score: 1 };
+}
+
+/**
+ * Pad a digit segment horizontally with background pixels so its width is at
+ * least PAD_MIN_W. Narrow "1" digits otherwise stretch to fill the entire
+ * NCC frame on resample and stop correlating with wider templates.
+ */
+const PAD_MIN_W = 6;
+function padSegment(seg: PNG): PNG {
+  if (seg.width >= PAD_MIN_W) return seg;
+  const newW = PAD_MIN_W;
+  const out = new PNG({ width: newW, height: seg.height });
+  // Sample the top-right corner — likely past the digit's vertical stroke.
+  const bgI = ((seg.width - 1)) << 2;
+  let bgR = seg.data[bgI], bgG = seg.data[bgI + 1], bgB = seg.data[bgI + 2];
+  // If that corner looks like ink, use top-left.
+  if (bgR < 200 && bgG < 200 && bgB < 200) {
+    bgR = seg.data[0]; bgG = seg.data[1]; bgB = seg.data[2];
+  }
+  // Fill with bg
+  for (let y = 0; y < seg.height; y++) {
+    for (let x = 0; x < newW; x++) {
+      const i = (newW * y + x) << 2;
+      out.data[i] = bgR; out.data[i + 1] = bgG; out.data[i + 2] = bgB; out.data[i + 3] = 255;
+    }
+  }
+  // Copy seg centered.
+  const ox = Math.floor((newW - seg.width) / 2);
+  for (let y = 0; y < seg.height; y++) {
+    for (let x = 0; x < seg.width; x++) {
+      const si = (seg.width * y + x) << 2;
+      const di = (newW * y + (ox + x)) << 2;
+      out.data[di] = seg.data[si];
+      out.data[di + 1] = seg.data[si + 1];
+      out.data[di + 2] = seg.data[si + 2];
+      out.data[di + 3] = 255;
+    }
+  }
+  return out;
 }
 
 /** Extract every field from a single card image. */

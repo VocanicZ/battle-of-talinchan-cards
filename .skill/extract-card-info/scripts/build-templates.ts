@@ -55,23 +55,60 @@ function exemplar(field: string, value: string): { print: string; png: PNG } | n
 
 const crops: { label: string; png: PNG }[] = [];
 
-/** Crop one icon template for every distinct value of an enum field. */
+/** Crop icon templates for every distinct value of an enum field.
+ * Saves up to MAX_PER_VALUE exemplars per value across sets, named
+ * '{base64url(value)}-{print}.png' (loadTemplates groups by leading
+ * b64 chunk). Multi-exemplar matching is the key to handling per-set
+ * rendering drift (e.g. BT01-048's tree vs BT02-024's tree).
+ */
+// DB labels that disagree with the printed art — using them as template
+// exemplars poisons the corresponding label's match. Confirmed by visual
+// inspection of the card image. Entries: [field, value, print].
+const KNOWN_DB_TYPOS: ReadonlyArray<[string, string, string]> = [
+  // BT01-037 is rendered with the สัตว์ (monkey) symbol but DB stores Mage.
+  ['symbol', 'จอมเวทย์', 'BT01-037'],
+];
+
 function buildIconField(field: string, region: Rect) {
-  const values = [...new Set(cards.map((c) => c[field]).filter(Boolean))].map(
-    String,
-  );
-  mkdirSync(join(templatesDir, field), { recursive: true });
+  const MAX_PER_VALUE = 3;
+  const fieldDir = join(templatesDir, field);
+  mkdirSync(fieldDir, { recursive: true });
+  for (const f of readdirSync(fieldDir)) {
+    if (f.endsWith('.png')) rmSync(join(fieldDir, f));
+  }
+  const values = [...new Set(cards.map((c) => c[field]).filter(Boolean))].map(String);
   for (const value of values) {
-    const ex = exemplar(field, value);
-    if (!ex) {
-      console.warn(`  no exemplar for ${field}=${value}`);
-      continue;
+    // Interleave by set so each set contributes ≥1 exemplar where possible.
+    const matching = cards.filter((c) => String(c[field] ?? '') === value);
+    const bySet = new Map<string, typeof matching>();
+    for (const c of matching) {
+      const set = String(c.print).split('-')[0];
+      (bySet.get(set) ?? bySet.set(set, []).get(set)!).push(c);
     }
-    const c = crop(ex.png, region);
-    // file name: sanitise so Thai/symbol values are filesystem-safe
+    const interleaved: typeof matching = [];
+    const setKeys = [...bySet.keys()].sort((a, b) => a === 'BT01' ? -1 : b === 'BT01' ? 1 : a.localeCompare(b));
+    let i = 0;
+    while (interleaved.length < matching.length) {
+      for (const k of setKeys) {
+        const arr = bySet.get(k)!;
+        if (i < arr.length) interleaved.push(arr[i]);
+      }
+      i++;
+    }
+    let saved = 0;
     const safe = Buffer.from(value).toString('base64url');
-    writeFileSync(join(templatesDir, field, `${safe}.png`), PNG.sync.write(c));
-    crops.push({ label: `${field}:${value}`, png: c });
+    for (const c of interleaved) {
+      if (saved >= MAX_PER_VALUE) break;
+      const print = String(c.print);
+      if (KNOWN_DB_TYPOS.some(([f, v, p]) => f === field && v === value && p === print)) continue;
+      const png = image(print);
+      if (!png || png.width !== 388 || png.height !== 528) continue;
+      const cr = crop(png, region);
+      writeFileSync(join(fieldDir, `${safe}-${print}.png`), PNG.sync.write(cr));
+      crops.push({ label: `${field}:${value}-${print}`, png: cr });
+      saved++;
+    }
+    if (saved === 0) console.warn(`  no exemplar for ${field}=${value}`);
   }
 }
 
@@ -101,17 +138,35 @@ function buildDigitField(dirName: string, costOrPower: 'cost' | 'power', region:
     if (f.endsWith('.png')) rmSync(join(fieldDir, f));
   }
   for (let d = 0; d <= 9; d++) {
+    // Group candidates by set (BT01, BT02, …) and pick ONE per set first
+    // before doubling up — gives template diversity across the rendering
+    // variations between card sets (BT02-010's narrow "1" doesn't match
+    // BT01's "1" templates, for instance).
     const candidates = cards
-      .filter((c) => c[costOrPower] === d && (c.type === 'Avatar' || c.type === 'Construct'))
-      .sort((a, b) => (String(a.print).startsWith('BT01') ? -1 : 1));
+      .filter((c) => c[costOrPower] === d && (c.type === 'Avatar' || c.type === 'Construct'));
+    const bySet = new Map<string, typeof candidates>();
+    for (const c of candidates) {
+      const set = String(c.print).split('-')[0];
+      (bySet.get(set) ?? bySet.set(set, []).get(set)!).push(c);
+    }
+    const interleaved: typeof candidates = [];
+    const setKeys = [...bySet.keys()].sort((a, b) => a === 'BT01' ? -1 : b === 'BT01' ? 1 : a.localeCompare(b));
+    let i = 0;
+    while (interleaved.length < candidates.length) {
+      for (const k of setKeys) {
+        const arr = bySet.get(k)!;
+        if (i < arr.length) interleaved.push(arr[i]);
+      }
+      i++;
+    }
     let saved = 0;
-    for (const card of candidates) {
+    for (const card of interleaved) {
       if (saved >= MAX_PER_DIGIT) break;
-      const png = image(String(card.print));
+      const print = String(card.print);
+      const png = image(print);
       if (!png) continue;
       const segs = segmentDigits(crop(png, region));
       if (segs.length !== 1) continue;
-      const print = String(card.print);
       writeFileSync(join(fieldDir, `${d}-${print}.png`), PNG.sync.write(segs[0]));
       crops.push({ label: `${dirName}:${d}-${print}`, png: segs[0] });
       saved++;

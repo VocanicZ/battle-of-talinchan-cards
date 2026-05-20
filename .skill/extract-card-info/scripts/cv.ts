@@ -210,7 +210,7 @@ const INK_DIST = 70;       // colour distance from background to count as "ink"
 // digit columns themselves are 30%+ ink, so a 0.25 threshold cleanly excludes
 // the noise band — important because the noise inflates the segment width past
 // the template width, which throws off NCC scale matching.
-const MIN_INK_FRAC = 0.25;
+const MIN_INK_FRAC = 0.20;
 const BAR_INK_FRAC = 0.7;
 const ROW_MIN_INK = 3;
 

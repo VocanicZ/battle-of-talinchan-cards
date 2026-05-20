@@ -139,11 +139,12 @@ test('extractCard classifies a blue gem on the ฟ้า/ม่วง boundary (
   assert.equal(r.fields.gemColor?.value, 'ฟ้า');
 });
 
-// BT04-025 and BT06-055 carry a customLimit=0 override — visually a diagonal
-// "prohibited" bar through the circle, not a digit. The previous template set
-// (circleDigit/{1,2,3}.png) forced these to misclassify; the 0.png exemplar
-// is cropped from BT04-025 itself.
-test('extractCard reads customLimit=0 from a "no-entry" circle (BT04-025)', () => {
+// BT04-025 and BT06-055 carry a diagonal "prohibited" bar through the circle
+// — visually similar to digits 1/2/3 but semantically distinct: the DB stores
+// no customLimit field for these cards. The 0.png exemplar lets matchBest
+// discriminate the bar from real digits, and the extractor emits
+// customLimit: null (no override) rather than a bogus 1/2/3 or a literal 0.
+test('extractCard emits null customLimit for a "no-entry" circle (BT04-025)', () => {
   const r = extractCard('BT04-025');
-  assert.equal(r.fields.customLimit?.value, 0);
+  assert.equal(r.fields.customLimit?.value, null);
 });

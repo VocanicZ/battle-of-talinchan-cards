@@ -16,7 +16,7 @@ Generated output goes to the gitignored `audit/` folder.
 ## Mode 1 — Single-card extraction
 
 ```bash
-npx tsx .claude/skills/extract-card-info/scripts/extract.ts BT01-001
+npx tsx .skill/extract-card-info/scripts/extract.ts BT01-001
 ```
 
 Prints a JSON object: `{ print, source, fields }`, where each field is
@@ -28,8 +28,8 @@ inherits its base print's result (`source: "inherited"`).
 ## Mode 2 — Batch audit
 
 ```bash
-npx tsx .claude/skills/extract-card-info/scripts/dump-db.ts   # DB diff baseline
-npx tsx .claude/skills/extract-card-info/scripts/audit.ts     # → audit/report.md
+npx tsx .skill/extract-card-info/scripts/dump-db.ts   # DB diff baseline
+npx tsx .skill/extract-card-info/scripts/audit.ts     # → audit/report.md
 ```
 
 `audit.ts` extracts every base print and diffs each field against the database.

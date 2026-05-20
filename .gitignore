@@ -96,14 +96,14 @@ out/
 .agents/
 
 # Local scratch / audit tooling — one-off scripts and dumps, not source
-audit-counts.cjs
-check-rarity.cjs
-compare.cjs
-fix-enums.js
-compare-fields.ts
-list-limits.ts
-db-cards.json
-potential_limits.json
-cards_to_audit.txt
-gem_color_audit_report.md
+/audit-counts.cjs
+/check-rarity.cjs
+/compare.cjs
+/fix-enums.js
+/compare-fields.ts
+/list-limits.ts
+/db-cards.json
+/potential_limits.json
+/cards_to_audit.txt
+/gem_color_audit_report.md
 

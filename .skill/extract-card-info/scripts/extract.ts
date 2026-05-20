@@ -10,7 +10,7 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { PNG } from 'pngjs';
 import { createWorker } from 'tesseract.js';
-import { imagesDir, skillDir } from './paths.ts';
+import { imagesDir, skillDir, dataDir } from './paths.ts';
 import { avgRGB, crop, hasCircle, matchBest, nearestSwatch, segmentDigits, stddevRGB, type Rect, type RGB } from './cv.ts';
 
 const regions = JSON.parse(
@@ -474,8 +474,13 @@ export function extractCard(print: string): CardResult {
     const cir = crop(png, regions.circle);
     const m = matchBest(cir, CIRCLE_DIGIT_TPL, 0.5, 0.05);
     const num = Number(m.value);
+    // The "0" exemplar is a diagonal prohibited-bar glyph, not a digit. Cards
+    // showing it carry no customLimit field in the DB — so when the bar is
+    // the best match we discriminate it from real digits 1/2/3 but emit
+    // customLimit: null to mean "no override".
+    const value = Number.isNaN(num) ? null : (num === 0 ? null : num);
     fields.customLimit = {
-      value: Number.isNaN(num) ? null : num,
+      value,
       confidence: m.confidence,
       score: m.score,
     };
@@ -488,7 +493,10 @@ export function extractCard(print: string): CardResult {
 async function readName(print: string): Promise<FieldResult> {
   const png = loadCard(print);
   const plate = crop(png, regions.namePlate);
-  const worker = await createWorker('tha');
+  const worker = await createWorker('tha', 1, {
+    langPath: dataDir,
+    gzip: false,
+  });
   try {
     const { data } = await worker.recognize(PNG.sync.write(plate));
     const text = data.text.trim().replace(/\s+/g, ' ');

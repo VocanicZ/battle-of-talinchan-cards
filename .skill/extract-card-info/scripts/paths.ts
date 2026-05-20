@@ -15,6 +15,7 @@ import { fileURLToPath } from 'node:url';
 const scriptsDir = dirname(fileURLToPath(import.meta.url));
 export const skillDir = dirname(scriptsDir);
 export const auditDir = join(skillDir, 'audit');
+export const dataDir = join(skillDir, 'data');
 
 export const projectRoot = process.cwd();
 export const imagesDir = join(projectRoot, 'images');

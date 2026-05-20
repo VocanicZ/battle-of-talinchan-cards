@@ -146,16 +146,21 @@ const COLOR_PALETTE: Record<string, RGB> = {
 };
 
 /**
- * Gem strip right-side colour → gemColor.
- * The right portion of the gem strip (x=199, w=56) is always filled with the
- * card's colour.
+ * Diamond-interior colour → gemColor.
+ * Calibrated by averaging the centre pixels INSIDE each detected diamond run
+ * on cards with known gemColor (BT03-006 Red, BT04-011/012 Blue, BT08-031/037
+ * Green, BT08-024/CC01-011 Purple). The gem icons are filled with the card's
+ * colour; an empty/silver gem reads near-gray (~140,140,140) and is classified
+ * as ไม่มีสี by the gray-channel-spread check below, not by the palette.
  */
 const GEM_PALETTE: Record<string, RGB> = {
-  แดง:  [217, 68, 71],
-  ฟ้า:  [93, 128, 189],
-  ม่วง: [109, 78, 130],
-  ดำ:   [40, 40, 40],
+  แดง:  [130, 60, 60],
+  ฟ้า:  [80, 100, 125],
+  เขียว: [70, 115, 90],
+  ม่วง: [80, 70, 100],
 };
+// Max(R,G,B) - Min(R,G,B) below this -> empty/silver gem -> ไม่มีสี.
+const GEM_GRAY_SPREAD = 15;
 
 const TYPE_MAX_DIST = 80;
 const TYPE_MARGIN = 25;
@@ -213,7 +218,7 @@ function loadCard(print: string): PNG {
  * EXCEPT when the customLimit override circle covers it, in which case
  * gemColor is reported as low-confidence.
  */
-function readGems(png: PNG, occluded: boolean): { gem: FieldResult; gemColor: FieldResult } {
+function readGems(png: PNG): { gem: FieldResult; gemColor: FieldResult } {
   const [sx, sy, sw, sh] = regions.gemStrip;
   const yTop = sy + Math.round(sh * GEM_BAND_TOP);
   const yBot = sy + sh;
@@ -231,29 +236,51 @@ function readGems(png: PNG, occluded: boolean): { gem: FieldResult; gemColor: Fi
     cols.push(dark);
   }
 
-  // Count runs of consecutive "dark" columns at least GEM_MIN_RUN wide.
-  let filled = 0;
+  // Count runs of consecutive "dark" columns at least GEM_MIN_RUN wide;
+  // remember each run's x extent for gemColor sampling.
+  const runs: { x0: number; x1: number }[] = [];
   let inRun = false, runStart = 0;
   for (let i = 0; i < cols.length; i++) {
     const hot = cols[i] >= GEM_COL_MIN_DARK;
     if (hot && !inRun) { inRun = true; runStart = i; }
     else if (!hot && inRun) {
       inRun = false;
-      if (i - runStart >= GEM_MIN_RUN) filled++;
+      if (i - runStart >= GEM_MIN_RUN) runs.push({ x0: sx + runStart, x1: sx + i });
     }
   }
-  if (inRun && cols.length - runStart >= GEM_MIN_RUN) filled++;
+  if (inRun && cols.length - runStart >= GEM_MIN_RUN) {
+    runs.push({ x0: sx + runStart, x1: sx + cols.length });
+  }
+  const filled = runs.length;
 
-  // gemColor: sample the colour bar — but the customLimit circle on top-right
-  // can completely overlap it (e.g. BT01-032), so mark unknown when occluded.
+  // gemColor: average the interior of the diamond icons themselves. The fill
+  // colour is the card's gemColor; empty/silver gems read near-gray and map to
+  // ไม่มีสี via the channel-spread check. The icons sit on the strip's left
+  // half (x ≤ ~190), so the customLimit circle on the right cannot occlude
+  // them — no `occluded` path needed.
   let gemColor: FieldResult;
-  if (occluded) {
-    gemColor = { value: 'unknown', confidence: 'low', score: 0 };
-  } else if (filled === 0) {
+  if (filled === 0) {
     gemColor = { value: 'ไม่มีสี', confidence: 'high', score: 1 };
   } else {
-    const rgb = avgRGB(png, regions.gemColorBar);
-    gemColor = nearestSwatch(rgb, GEM_PALETTE, COLOR_MAX_DIST, COLOR_MARGIN);
+    let R = 0, G = 0, B = 0, n = 0;
+    const cy0 = sy + Math.round(sh * 0.30);
+    const cy1 = sy + Math.round(sh * 0.85);
+    for (const r of runs) {
+      const cx0 = Math.round(r.x0 + (r.x1 - r.x0) * 0.25);
+      const cx1 = Math.round(r.x0 + (r.x1 - r.x0) * 0.75);
+      for (let y = cy0; y < cy1; y++) {
+        for (let x = cx0; x < cx1; x++) {
+          const i = (png.width * y + x) << 2;
+          R += png.data[i]; G += png.data[i + 1]; B += png.data[i + 2];
+          n++;
+        }
+      }
+    }
+    const rgb: RGB = [Math.round(R / n), Math.round(G / n), Math.round(B / n)];
+    const spread = Math.max(...rgb) - Math.min(...rgb);
+    gemColor = spread < GEM_GRAY_SPREAD
+      ? { value: 'ไม่มีสี', confidence: 'high', score: 1 }
+      : nearestSwatch(rgb, GEM_PALETTE, COLOR_MAX_DIST, COLOR_MARGIN);
   }
 
   return {
@@ -349,7 +376,7 @@ export function extractCard(print: string): CardResult {
     fields.color = nearestSwatch(
       avgRGB(png, regions.costBox), COLOR_PALETTE, COLOR_MAX_DIST, COLOR_MARGIN,
     );
-    const g = readGems(png, occluded);
+    const g = readGems(png);
     fields.gem = g.gem;
     fields.gemColor = g.gemColor;
   }

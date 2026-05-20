@@ -22,9 +22,7 @@ if (!existsSync(dbPath)) {
 }
 const db = JSON.parse(readFileSync(dbPath, 'utf8')) as Record<string, DbEntry>;
 
-// gemColor is intentionally excluded: it is a derived display value, not a
-// tracked card-DB property, so diffing it produces only noise.
-const FIELDS = ['type', 'color', 'gem', 'symbol', 'ex',
+const FIELDS = ['type', 'color', 'gem', 'gemColor', 'symbol', 'ex',
   'subtype', 'cost', 'power', 'customLimit'] as const;
 
 interface Row {

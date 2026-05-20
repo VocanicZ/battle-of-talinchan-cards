@@ -48,7 +48,7 @@ review). The audit never edits card files.
 | `symbol` | top-right icon | template match — `unknown` if circle-occluded |
 | `ex` | icon under the symbol | template match — `unknown` if circle-occluded |
 | `gem` | top-centre strip | dark-column blob count (works on silver-filled diamonds) |
-| `gemColor` | top-centre strip colour bar | colour sample — `unknown` if circle-occluded |
+| `gemColor` | inside gem-strip diamond icons | colour sample of diamond interior; near-gray → `ไม่มีสี` |
 | `power` | bottom-left number | digit glyph match |
 | `customLimit` | top-right override circle | circle detect + digit glyph match |
 | `name` | bottom name plate | `tesseract.js` Thai OCR |

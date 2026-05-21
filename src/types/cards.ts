@@ -9,7 +9,7 @@ export interface DeckEntry {
 
 /**
  * Base properties for all cards.
- * Allowing string literals for backward compatibility during migration.
+ * Every card must contain soi.
  */
 export interface BaseCard {
   name: string;
@@ -23,41 +23,56 @@ export interface BaseCard {
 }
 
 /**
- * Cards that can be played (Avatar, Magic, Construct)
- * These share symbols, costs, and effects.
+ * Cards that have gems, symbols and main effects (Avatar, Magic, Construct)
  */
-export interface PlayableCard extends BaseCard {
+export interface GemCard extends BaseCard {
+  gem: number;
+  gemColor?: Color | string;
   symbol: Symbol | string;
-  cost?: number;
   mainEffect?: string;
 }
 
 /**
- * Cards that participate in combat (Avatar, Construct)
- * These have colors, gems, and power.
+ * Magic cards (extends GemCard)
+ * No cost, power, or color fields.
  */
-export interface CombatCard extends PlayableCard {
-  color?: Color | string;
-  gem?: number;
-  gemColor?: Color | string;
-  power?: number;
-}
-
-export interface AvatarCard extends CombatCard {
-  type: CardType.Avatar | 'Avatar';
-}
-
-export interface MagicCard extends PlayableCard {
+export interface MagicCard extends GemCard {
   type: CardType.Magic | 'Magic';
   subtype: MagicSubtype | string;
 }
 
+/**
+ * Cards that participate in combat (Avatar, Construct)
+ * These have colors, costs, and power.
+ */
+export interface CombatCard extends GemCard {
+  color: Color | string;
+  cost: number;
+  power: number;
+}
+
+/**
+ * Avatar cards (extends CombatCard)
+ * Avatar must have a subtype.
+ */
+export interface AvatarCard extends CombatCard {
+  type: CardType.Avatar | 'Avatar';
+  subtype: string;
+}
+
+/**
+ * Life cards (extends BaseCard)
+ * No cost, power, color, gem, or symbol fields.
+ */
 export interface LifeCard extends BaseCard {
   type: CardType.Life | 'Life';
-  favorText: string;
+  favorText?: string;
   mainEffect?: string;
 }
 
+/**
+ * Construct cards (extends CombatCard)
+ */
 export interface ConstructCard extends CombatCard {
   type: CardType.Construct | 'Construct';
 }

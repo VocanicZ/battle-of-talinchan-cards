@@ -1,8 +1,10 @@
 {
   "1": {
+    "image": "images/SOI_001.webp",
     "SD01": {
       "creator": "official",
       "date": "2026-05-21T09:50:49.032Z",
+      "image": "images/SD01.webp",
       "deck": {
         "SD01-001": 2,
         "SD01-002": 2,
@@ -36,6 +38,7 @@
     "SD02": {
       "creator": "official",
       "date": "2026-05-21T09:50:49.033Z",
+      "image": "images/SD02.webp",
       "deck": {
         "SD02-001": 2,
         "SD02-002": 2,
@@ -69,6 +72,7 @@
     "SD03": {
       "creator": "official",
       "date": "2026-05-21T09:50:49.033Z",
+      "image": "images/SD03.webp",
       "deck": {
         "SD03-001": 1,
         "SD03-002": 3,

@@ -91,6 +91,12 @@ out/
 # Tesseract.js language data cache (downloaded at runtime)
 *.traineddata
 
+# Godot consumer artifacts — the game vendors this repo as a submodule and
+# imports images/, so Godot writes *.import sidecars (and a .godot/ cache)
+# here. Generated per-machine, never source.
+*.import
+.godot/
+
 # Local agent config (per-machine, not shared)
 .claude/
 .agents/

@@ -8,6 +8,16 @@ export interface DeckEntry {
 }
 
 /**
+ * Declarative deck-construction constraint (Sin list "Special Conditions").
+ * Enforced by the Core deck validator, not by in-game card scripts.
+ */
+export interface DeckRule {
+  kind: 'require_all_avatars_symbol';
+  symbol: Symbol | string;
+  scope: Array<'main' | 'side'>;
+}
+
+/**
  * Base properties for all cards.
  * Every card must contain soi.
  */
@@ -19,6 +29,7 @@ export interface BaseCard {
   dropRate?: string;
   soi: number;
   customLimit?: number;
+  deckRule?: DeckRule;
   ex?: string;
 }
 

@@ -74,6 +74,11 @@ export const CARDS_SD01: Card[] = createCards([
     rare: Rarity.UR,
     dropRate: "1 / กล่อง",
     customLimit: 1,
+    deckRule: {
+      kind: "require_all_avatars_symbol",
+      symbol: Symbol.God,
+      scope: ["main", "side"],
+    },
     ex: "Only #1",
     color: Color.Red,
     gem: 4,
@@ -270,6 +275,7 @@ export const CARDS_SD01: Card[] = createCards([
     symbol: Symbol.Mage,
     subtype: MagicSubtype.React,
     mainEffect: "เมื่อมี Avatar อัญเชิญลงมาบนสนาม : ทำลาย Avatar ตัวนั้น",
+    customLimit: 2,
   },
   {
     soi: 1,

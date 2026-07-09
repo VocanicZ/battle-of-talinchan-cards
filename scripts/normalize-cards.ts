@@ -35,24 +35,13 @@ for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) mask[y * W + x] = covera
 
 function classify(p: PNG): "keep" | "carve" | "shrink" {
   const A = (x: number, y: number) => p.data[(y * p.width + x) * 4 + 3];
-  const C = (x: number, y: number) => p.data.subarray((y * p.width + x) * 4, (y * p.width + x) * 4 + 3);
   const midY = p.height >> 1;
   let margin = 0;
   while (margin < 60 && A(margin, midY) < 128) margin++;
+  // full-bleed re-renders (margin <= 1) keep the template's content grid — always carve, never rescale;
+  // narrow-margin renders (2..7) have an oversized face and need shrinking into the template
   if (margin >= 8) return "keep";
-  // uniformity of the outer opaque ring
-  const ref = C(margin + 2, midY);
-  let maxd = 0;
-  const d = (x: number, y: number) => {
-    const c = C(x, y);
-    return Math.abs(c[0] - ref[0]) + Math.abs(c[1] - ref[1]) + Math.abs(c[2] - ref[2]);
-  };
-  for (let y = 40; y < p.height - 40; y += 20) maxd = Math.max(maxd, d(margin + 2, y), d(p.width - margin - 3, y));
-  for (let x = 40; x < p.width - 40; x += 20) maxd = Math.max(maxd, d(x, margin + 2), d(x, p.height - margin - 3));
-  // border thickness at mid-row
-  let bx = margin;
-  while (bx < 100 && d(bx, midY) <= 60) bx++;
-  return bx - margin >= 25 && maxd <= 40 ? "carve" : "shrink";
+  return margin <= 1 ? "carve" : "shrink";
 }
 
 export function normalize(buf: Buffer): { out: Buffer; treatment: string } {

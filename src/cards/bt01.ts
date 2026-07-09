@@ -5,6 +5,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "นนทก นิ้วเพชร",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-001",
     rare: Rarity.UR,
@@ -19,6 +20,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "ปื้ด เด็กเปรต",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-002",
     rare: Rarity.SR,
@@ -33,6 +35,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "พระเวสสุกรรม",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-003",
     rare: Rarity.R,
@@ -46,6 +49,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "หนุมาน",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-004",
     rare: Rarity.C,
@@ -59,6 +63,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "อู๊ดลูกเสือ",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-005",
     rare: Rarity.C,
@@ -72,6 +77,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "ชาวบ้านขายน้ำ",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-006",
     rare: Rarity.SR,
@@ -86,6 +92,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "แม่กบ",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-007",
     rare: Rarity.C,
@@ -99,6 +106,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "รัททาทุย นางพญา",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-008",
     rare: Rarity.UR,
@@ -114,6 +122,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "รัททาทุย พ่อพันธุ์",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-009",
     rare: Rarity.R,
@@ -127,6 +136,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "รัททาทุย",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-010",
     rare: Rarity.C,
@@ -142,6 +152,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "แมลงปอเลื่อยยนต์",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-011",
     rare: Rarity.R,
@@ -155,6 +166,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "ลูกแม่ศรีนวล",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-012",
     rare: Rarity.C,
@@ -169,6 +181,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "พ่อบุญใหญ่",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-013",
     rare: Rarity.SR,
@@ -183,6 +196,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "จ่ามะนาว",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-014",
     rare: Rarity.SR,
@@ -197,6 +211,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "นายนิรยบาล \"เต๋า\"",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-015",
     rare: Rarity.C,
@@ -210,6 +225,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "สุวรรณ",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-016",
     rare: Rarity.SR,
@@ -224,6 +240,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "ทศกัณฐ์ยักษ์ที่---เมียพระอิศวร",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-017",
     rare: Rarity.UR,
@@ -239,6 +256,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "นีโม่",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-018",
     rare: Rarity.R,
@@ -252,6 +270,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "ยมทูต",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-019",
     rare: Rarity.C,
@@ -265,6 +284,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "ศาลพระภูมิ",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-020",
     rare: Rarity.SR,
@@ -280,6 +300,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "สารวัตร ตำรวจสัมภเวสี",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-021",
     rare: Rarity.C,
@@ -293,6 +314,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "ตึก",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-022",
     rare: Rarity.R,
@@ -307,6 +329,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "ลูกกบ",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-023",
     rare: Rarity.C,
@@ -320,6 +343,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "พี่โด 2.0",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-024",
     rare: Rarity.R,
@@ -333,6 +357,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "เทวดาตำรวจ",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-025",
     rare: Rarity.C,
@@ -346,6 +371,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "ครูวีรชัย",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-026",
     rare: Rarity.C,
@@ -359,6 +385,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "ลูกค้าชาบู",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-027",
     rare: Rarity.R,
@@ -372,6 +399,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "เจ้าของร้านชาบู",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-028",
     rare: Rarity.C,
@@ -385,6 +413,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "จ่าแดงเดือด",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-029",
     rare: Rarity.C,
@@ -398,6 +427,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "เฟนริล",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-030",
     rare: Rarity.R,
@@ -411,6 +441,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "จอมมังการ์ด",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-031",
     rare: Rarity.C,
@@ -424,6 +455,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "นายนิรยบาล ตัวใหญ่พิเศษ",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-032",
     rare: Rarity.C,
@@ -438,6 +470,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "แบงค์ เทคนิคประทุมทู",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-033",
     rare: Rarity.C,
@@ -451,6 +484,7 @@ export const CARDS_BT01: Card[] = createCards([
   {
     name: "กาลจักร",
     type: CardType.Avatar,
+    subtype: "",
     soi: 1,
     print: "BT01-034",
     rare: Rarity.SR,

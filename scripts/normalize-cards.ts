@@ -33,21 +33,28 @@ function coverage(x: number, y: number): number {
 const mask = new Float32Array(W * H);
 for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) mask[y * W + x] = coverage(x, y);
 
+// full-bleed square-corner files whose content is nevertheless on the oversized grid —
+// the corner heuristic cannot see this; verified per-file against set siblings
+const FORCE_SHRINK = new Set(["SD08-001.png"]);
+
 function classify(p: PNG): "keep" | "carve" | "shrink" {
   const A = (x: number, y: number) => p.data[(y * p.width + x) * 4 + 3];
   const midY = p.height >> 1;
   let margin = 0;
   while (margin < 60 && A(margin, midY) < 128) margin++;
-  // full-bleed re-renders (margin <= 1) keep the template's content grid — always carve, never rescale;
-  // narrow-margin renders (2..7) have an oversized face and need shrinking into the template
   if (margin >= 8) return "keep";
-  return margin <= 1 ? "carve" : "shrink";
+  // square opaque corners = print-with-bleed, content sits on the template grid -> carve, never rescale.
+  // transparent (self-rounded) corners = render of the cut card, content fills the canvas -> shrink to fit.
+  const opaqueCorners =
+    (A(2, 2) >= 128 ? 1 : 0) + (A(p.width - 3, 2) >= 128 ? 1 : 0) +
+    (A(2, p.height - 3) >= 128 ? 1 : 0) + (A(p.width - 3, p.height - 3) >= 128 ? 1 : 0);
+  return opaqueCorners >= 2 ? "carve" : "shrink";
 }
 
-export function normalize(buf: Buffer): { out: Buffer; treatment: string } {
+export function normalize(buf: Buffer, name = ""): { out: Buffer; treatment: string } {
   let p = PNG.sync.read(buf);
   if (p.width !== W || p.height !== H) p = PNG.sync.read(resize(buf, W, H));
-  const treatment = classify(p);
+  const treatment = FORCE_SHRINK.has(path.basename(name)) ? "shrink" : classify(p);
   if (treatment === "keep") return { out: PNG.sync.write(p), treatment };
   if (treatment === "shrink") {
     const scaled = PNG.sync.read(resize(PNG.sync.write(p), RECT.w, RECT.h));
@@ -71,7 +78,7 @@ if (process.argv[1] && process.argv[1].endsWith("normalize-cards.ts")) {
   );
   const counts: Record<string, number> = {};
   for (const file of targets) {
-    const { out, treatment } = normalize(fs.readFileSync(file));
+    const { out, treatment } = normalize(fs.readFileSync(file), file);
     fs.writeFileSync(file, out);
     counts[treatment] = (counts[treatment] ?? 0) + 1;
   }

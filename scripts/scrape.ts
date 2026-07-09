@@ -214,18 +214,18 @@ function pngDims(buf: Buffer): [number, number] {
   return [buf.readUInt32BE(16), buf.readUInt32BE(20)];
 }
 
-export function resize(buf: Buffer): Buffer {
+export function resize(buf: Buffer, W = TARGET_W, H = TARGET_H): Buffer {
   const src = PNG.sync.read(buf);
-  const dst = new PNG({ width: TARGET_W, height: TARGET_H });
-  for (let y = 0; y < TARGET_H; y++) {
-    for (let x = 0; x < TARGET_W; x++) {
+  const dst = new PNG({ width: W, height: H });
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
       // bilinear sample
-      const fx = (x * (src.width - 1)) / (TARGET_W - 1);
-      const fy = (y * (src.height - 1)) / (TARGET_H - 1);
+      const fx = (x * (src.width - 1)) / (W - 1);
+      const fy = (y * (src.height - 1)) / (H - 1);
       const x0 = Math.floor(fx), y0 = Math.floor(fy);
       const x1 = Math.min(x0 + 1, src.width - 1), y1 = Math.min(y0 + 1, src.height - 1);
       const dx = fx - x0, dy = fy - y0;
-      const di = (y * TARGET_W + x) * 4;
+      const di = (y * W + x) * 4;
       for (let ch = 0; ch < 4; ch++) {
         const p = (xx: number, yy: number) => src.data[(yy * src.width + xx) * 4 + ch];
         dst.data[di + ch] =

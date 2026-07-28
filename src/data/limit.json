@@ -60,6 +60,15 @@
       ],
       "match_mode": "exact"
     },
+    "ดาบศักดิ์สิทธิ์ เอกซ์คาลิเบอร์": {
+      "kind": "require_all_avatars_named",
+      "name": "อัศวินโต๊ะกลม",
+      "scope": [
+        "main",
+        "side"
+      ],
+      "text_box_name": true
+    },
     "พี่หน่วง พิธีกรผมสวย": {
       "kind": "exclude_named_card",
       "name": "เลือกมันสำหรับพวก จน !!!",

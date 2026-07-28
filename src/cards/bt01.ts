@@ -176,7 +176,6 @@ export const CARDS_BT01: Card[] = createCards([
     power: 1,
     symbol: Symbol.Animal,
     color: Color.Blue,
-    customLimit: 1,
   },
   {
     name: "พ่อบุญใหญ่",
@@ -465,7 +464,6 @@ export const CARDS_BT01: Card[] = createCards([
     power: 3,
     symbol: Symbol.Hell,
     color: Color.Purple,
-    customLimit: 1,
   },
   {
     name: "แบงค์ เทคนิคประทุมทู",
@@ -541,7 +539,6 @@ export const CARDS_BT01: Card[] = createCards([
     subtype: MagicSubtype.Normal,
     cost: 1,
     symbol: Symbol.Mage,
-    customLimit: 2,
   },
   {
     name: "เจ้ากล้าดียังไง",
@@ -553,7 +550,6 @@ export const CARDS_BT01: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 2,
     symbol: Symbol.God,
-    customLimit: 1,
   },
   {
     name: "หมอมาแล้วววว",
@@ -577,7 +573,6 @@ export const CARDS_BT01: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 0,
     symbol: Symbol.Mage,
-    customLimit: 2,
   },
   {
     name: "ริกกี้ นักปลอมแปลง",
@@ -589,7 +584,6 @@ export const CARDS_BT01: Card[] = createCards([
     mainEffect: "เมื่อ Avatar บนสนามของเราถูกทำลายจากการต่อสู้ สามารถใช้การ์ดใบนี้ได้ : เปลี่ยนการควบคุม Avatar ที่อยู่ในสภาพนอน จากบนสนามอีกฝ่ายมาบนสนามฝ่ายเรา แล้วนำการ์ดใบนี้ไปเป็นModification Magic ถ้าการ์ดใบนี้ถูกทำลาย ส่ง Avatar กลับขึ้นมือเจ้าของ",
     subtype: MagicSubtype.React,
     cost: 0,
-    customLimit: 1,
     symbol: Symbol.Insect,
   },
   {

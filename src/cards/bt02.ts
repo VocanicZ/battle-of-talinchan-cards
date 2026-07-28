@@ -109,7 +109,6 @@ export const CARDS_BT02: Card[] = createCards([
     power: 6,
     symbol: Symbol.God,
     color: Color.Red,
-    customLimit: 3,
   },
   {
     name: "มีมมิจัง ไอดอลหน้าใหม่",
@@ -766,6 +765,5 @@ export const CARDS_BT02: Card[] = createCards([
     subtype: MagicSubtype.Land,
     cost: 4,
     symbol: Symbol.God,
-    customLimit: 1,
   }
 ]);

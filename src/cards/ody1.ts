@@ -277,7 +277,6 @@ export const CARDS_ODY1: Card[] = createCards([
     power: 1,
     symbol: Symbol.Animal,
     color: Color.Blue,
-    customLimit: 1,
   },
   {
     name: "พ่อบุญใหญ่",
@@ -358,7 +357,7 @@ export const CARDS_ODY1: Card[] = createCards([
     color: Color.Purple,
   },
   {
-    name: "ทศกัณฑ์ยักษ์ที่---เมียพระอิศวร",
+    name: "ทศกัณฐ์ยักษ์ที่---เมียพระอิศวร",
     type: CardType.Avatar,
     soi: 1,
     print: "ODY1-028",
@@ -660,7 +659,7 @@ export const CARDS_ODY1: Card[] = createCards([
     color: Color.Blue,
   },
   {
-    name: "รัททาทุย ผู้พิทักษ์ราชีนี",
+    name: "รัททาทุย ผู้พิทักษ์ราชินี",
     type: CardType.Avatar,
     soi: 1,
     print: "ODY1-051",
@@ -710,7 +709,6 @@ export const CARDS_ODY1: Card[] = createCards([
     power: 3,
     symbol: Symbol.Hell,
     color: Color.Purple,
-    customLimit: 1,
   },
   {
     name: "แบงค์ เทคนิคประทุมทู",
@@ -882,7 +880,6 @@ export const CARDS_ODY1: Card[] = createCards([
     subtype: MagicSubtype.Normal,
     cost: 1,
     symbol: Symbol.Mage,
-    customLimit: 2,
   },
   {
     name: "ชายจากอนาคต",
@@ -894,7 +891,6 @@ export const CARDS_ODY1: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 0,
     symbol: Symbol.Mage,
-    customLimit: 2,
   },
   {
     name: "ริกกี้ นักปลอมแปลง",
@@ -906,7 +902,6 @@ export const CARDS_ODY1: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 0,
     symbol: Symbol.Insect,
-    customLimit: 1,
   },
   {
     name: "ตีแม่",
@@ -1062,7 +1057,6 @@ export const CARDS_ODY1: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 2,
     symbol: Symbol.God,
-    customLimit: 1,
   },
   {
     name: "ประมาทร่วม",

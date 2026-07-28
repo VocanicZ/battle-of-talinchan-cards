@@ -15,6 +15,8 @@ export interface DeckRule {
   kind: 'require_all_avatars_symbol';
   symbol: Symbol | string;
   scope: Array<'main' | 'side'>;
+  /** Avatar also satisfies the rule when its text box carries the symbol marker. */
+  text_box_symbol?: boolean;
 }
 
 /**

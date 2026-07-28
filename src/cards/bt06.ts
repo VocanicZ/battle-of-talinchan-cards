@@ -437,7 +437,6 @@ export const CARDS_BT06: Card[] = createCards([
     power: 1,
     symbol: Symbol.Animal,
     color: Color.Purple,
-    customLimit: 2,
   },
   {
     name: "พีเจี้ยน 3000",

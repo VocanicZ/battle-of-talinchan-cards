@@ -62,7 +62,6 @@ export const CARDS_PRMO: Card[] = createCards([
     subtype: MagicSubtype.Modification,
     cost: 2,
     symbol: Symbol.Rat,
-    customLimit: 2,
   },
   {
     name: "ลูกแม่ศรีนวล",
@@ -76,7 +75,6 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 1,
     symbol: Symbol.Animal,
     color: Color.Blue,
-    customLimit: 1,
   },
   {
     name: "ตีพ่อ",
@@ -227,7 +225,6 @@ export const CARDS_PRMO: Card[] = createCards([
     subtype: MagicSubtype.Normal,
     cost: 4,
     symbol: Symbol.Human,
-    customLimit: 2,
   },
   {
     name: "ความเจริญ",
@@ -239,7 +236,6 @@ export const CARDS_PRMO: Card[] = createCards([
     subtype: MagicSubtype.Normal,
     cost: 1,
     symbol: Symbol.Mage,
-    customLimit: 2,
   },
   {
     name: "พญายม",
@@ -253,7 +249,6 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 5,
     symbol: Symbol.Hell,
     color: Color.Purple,
-    customLimit: 1,
   },
   {
     name: "ใบดำใบแดง",
@@ -644,7 +639,7 @@ export const CARDS_PRMO: Card[] = createCards([
     symbol: Symbol.Fish,
   },
   {
-    name: "แม่นาค พระปะแดง",
+    name: "แม่นาค พระประแดง",
     type: CardType.Avatar,
     soi: 1,
     print: "PRMO-052",
@@ -684,7 +679,7 @@ export const CARDS_PRMO: Card[] = createCards([
     color: Color.Red,
   },
   {
-    name: "ร้ททาทุย ผู้พิทักษ์ราชินี",
+    name: "รัททาทุย ผู้พิทักษ์ราชินี",
     type: CardType.Avatar,
     soi: 1,
     print: "PRMO-055",
@@ -706,7 +701,6 @@ export const CARDS_PRMO: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 0,
     symbol: Symbol.Mage,
-    customLimit: 2,
   },
   {
     name: "อีช่า - สาวน้อยคนเก่ง",
@@ -720,7 +714,6 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 1,
     symbol: Symbol.Human,
     color: Color.Red,
-    customLimit: 1,
   },
   {
     name: "แมวมัทฉะ",
@@ -843,7 +836,6 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 2,
     symbol: Symbol.Human,
     color: Color.Blue,
-    customLimit: 2,
   },
   {
     name: "ฮอล",
@@ -858,7 +850,6 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 2,
     symbol: Symbol.Human,
     color: Color.Blue,
-    customLimit: 2,
   },
   {
     name: "นาย",
@@ -873,7 +864,6 @@ export const CARDS_PRMO: Card[] = createCards([
     power: 2,
     symbol: Symbol.Human,
     color: Color.Blue,
-    customLimit: 2,
   },
   {
     name: "เจ้ากล้าดียังไง",
@@ -885,7 +875,6 @@ export const CARDS_PRMO: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 2,
     symbol: Symbol.God,
-    customLimit: 1,
   },
   {
     name: "เอาไปอยู่ด้วย",
@@ -967,7 +956,7 @@ export const CARDS_PRMO: Card[] = createCards([
     gemColor: "แดง",
   },
   {
-    name: "แมลงปอแจ๊ค",
+    name: "แมลงปอแจ็ค",
     type: CardType.Avatar,
     soi: 1,
     print: "PRMO-075",
@@ -1008,7 +997,7 @@ export const CARDS_PRMO: Card[] = createCards([
     color: Color.Green,
   },
   {
-    name: "หุ่นนักรบผู้กล้า ไมเกรน",
+    name: "หุ่นนักรบผู้กล้า : ไมเกรน",
     type: CardType.Avatar,
     soi: 1,
     print: "PRMO-078",

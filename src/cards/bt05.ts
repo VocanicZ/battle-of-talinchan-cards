@@ -245,7 +245,6 @@ export const CARDS_BT05: Card[] = createCards([
     power: 6,
     symbol: Symbol.Foreigner,
     color: Color.Blue,
-    customLimit: 2,
   },
   {
     name: "ของขวัญที่เมียทิ้งไว้ให้",

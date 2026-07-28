@@ -275,7 +275,6 @@ export const CARDS_SD05: Card[] = createCards([
     cost: 0,
     symbol: Symbol.Mage,
     dropRate: "1 / กล่อง",
-    customLimit: 2,
   },
   {
     name: "ไม่นะ กัปตันไกร !",

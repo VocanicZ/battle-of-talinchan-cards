@@ -323,7 +323,6 @@ export const CARDS_BT03: Card[] = createCards([
     power: 2,
     symbol: Symbol.God,
     color: Color.Purple,
-    customLimit: 2,
   },
   {
     name: "บัลเดอร์ เทพแสง แห่งแอสการ์ด",
@@ -377,7 +376,6 @@ export const CARDS_BT03: Card[] = createCards([
     power: 1,
     symbol: Symbol.Insect,
     color: Color.Purple,
-    customLimit: 1,
   },
   {
     name: "ราชาอาณาจักรของแพง  พระเจ้านิโคไล",

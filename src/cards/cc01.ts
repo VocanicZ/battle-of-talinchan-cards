@@ -645,7 +645,6 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 2,
     symbol: Symbol.Mage,
-    customLimit: 2,
   },
   {
     name: "ขอให้ทั้งตัวมีแต่---",
@@ -682,7 +681,6 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.Modification,
     cost: 2,
     symbol: Symbol.Mage,
-    customLimit: 1,
   },
   {
     name: "Micro Plaza สะพานพลาสติก",
@@ -694,7 +692,6 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.Land,
     cost: 1,
     symbol: Symbol.Robot,
-    customLimit: 1,
   },
   {
     name: "SD Plaza สายเหนือเก่า",
@@ -707,7 +704,6 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.Land,
     cost: 1,
     symbol: Symbol.Robot,
-    customLimit: 1,
   },
   {
     name: "สมชายห้องเช่าพันล้าน",
@@ -720,7 +716,6 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.Land,
     cost: 2,
     symbol: Symbol.Mage,
-    customLimit: 1,
   },
   {
     name: "อุบัติเหตุ!!!",
@@ -743,7 +738,6 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.Modification,
     cost: 2,
     symbol: Symbol.Rat,
-    customLimit: 2,
   },
   {
     name: "รถถังลงถนน",
@@ -779,7 +773,6 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.Normal,
     cost: 1,
     symbol: Symbol.Mage,
-    customLimit: 2,
   },
   {
     name: "เมตตาระยะยาว",
@@ -805,7 +798,6 @@ export const CARDS_CC01: Card[] = createCards([
     subtype: MagicSubtype.React,
     cost: 0,
     symbol: Symbol.Insect,
-    customLimit: 1,
   },
   {
     name: "โรงบาล",

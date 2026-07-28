@@ -17,7 +17,6 @@ export const CARDS_SD03: Card[] = createCards([
     color: Color.Purple,
     subtype: "",
     dropRate: "2 / กล่อง",
-    customLimit: 2,
   },
   {
     name: "นายนิรยบาล พ่อจีจ้า",

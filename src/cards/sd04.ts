@@ -216,7 +216,6 @@ export const CARDS_SD04: Card[] = createCards([
     cost: 4,
     symbol: Symbol.Soldier,
     dropRate: "2 / กล่อง",
-    customLimit: 2,
   },
   {
     name: "ใบดำใบแดง",
@@ -241,7 +240,6 @@ export const CARDS_SD04: Card[] = createCards([
     cost: 3,
     symbol: Symbol.Soldier,
     dropRate: "2 / กล่อง",
-    customLimit: 2,
   },
   {
     name: "ขึ้นมาเร็ว ไอ้ลูกลิง !!",

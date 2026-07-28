@@ -629,7 +629,7 @@ export const CARDS_BT01: Card[] = createCards([
     print: "BT01-046",
     rare: Rarity.C,
     mainEffect:
-      "ใน Battle Phase ถ้า Avatar ที่สวมใส่การ์ดใบนี้ทำลาย Avatar อีกฝ่ายสำเร็จ : สามารถกลับมาสภาพตื่นได้ 1 ครั้ง\n\nเมื่อการ์ดใบนี้ตกลงสู่นรก เมื่อการ์ดใบนี้ตกลงสู่นรก หงาย LIFE Card ใบบนสุดฝ่ายเรา 1 ใบ",
+      "ใน Battle Phase ถ้า Avatar ที่สวมใส่การ์ดใบนี้ทำลาย Avatar อีกฝ่ายสำเร็จ : สามารถกลับมาสภาพตื่นได้ 1 ครั้ง\n\nเมื่อการ์ดใบนี้ตกลงสู่นรก หงาย LIFE Card ใบบนสุดฝ่ายเรา 1 ใบ",
     subtype: MagicSubtype.Modification,
     cost: 3,
     symbol: Symbol.Human,

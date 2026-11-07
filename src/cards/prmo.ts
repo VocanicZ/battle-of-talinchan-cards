@@ -639,7 +639,7 @@ export const CARDS_PRMO: Card[] = createCards([
     symbol: Symbol.Fish,
   },
   {
-    name: "แม่นาค พระปะแดง",
+    name: "แม่นาค พระประแดง",
     type: CardType.Avatar,
     soi: 1,
     print: "PRMO-052",
@@ -956,7 +956,7 @@ export const CARDS_PRMO: Card[] = createCards([
     gemColor: "แดง",
   },
   {
-    name: "แมลงปอแจ๊ค",
+    name: "แมลงปอแจ็ค",
     type: CardType.Avatar,
     soi: 1,
     print: "PRMO-075",
@@ -997,7 +997,7 @@ export const CARDS_PRMO: Card[] = createCards([
     color: Color.Green,
   },
   {
-    name: "หุ่นนักรบผู้กล้า ไมเกรน",
+    name: "หุ่นนักรบผู้กล้า : ไมเกรน",
     type: CardType.Avatar,
     soi: 1,
     print: "PRMO-078",

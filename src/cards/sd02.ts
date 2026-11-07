@@ -233,7 +233,7 @@ export const CARDS_SD02: Card[] = createCards([
     soi: 1,
     print: "SD02-015",
     type: CardType.Avatar,
-    name: "รัททาทุย ผู้พิทักษ์ราชีนี",
+    name: "รัททาทุย ผู้พิทักษ์ราชินี",
     rare: Rarity.C,
     dropRate: "2 / กล่อง",
     color: Color.Blue,

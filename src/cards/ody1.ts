@@ -357,7 +357,7 @@ export const CARDS_ODY1: Card[] = createCards([
     color: Color.Purple,
   },
   {
-    name: "ทศกัณฑ์ยักษ์ที่---เมียพระอิศวร",
+    name: "ทศกัณฐ์ยักษ์ที่---เมียพระอิศวร",
     type: CardType.Avatar,
     soi: 1,
     print: "ODY1-028",
@@ -659,7 +659,7 @@ export const CARDS_ODY1: Card[] = createCards([
     color: Color.Blue,
   },
   {
-    name: "รัททาทุย ผู้พิทักษ์ราชีนี",
+    name: "รัททาทุย ผู้พิทักษ์ราชินี",
     type: CardType.Avatar,
     soi: 1,
     print: "ODY1-051",

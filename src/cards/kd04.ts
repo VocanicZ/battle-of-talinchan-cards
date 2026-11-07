@@ -51,7 +51,7 @@ export const CARDS_KD04: Card[] = createCards([
     print: "KD04-012",
     rare: Rarity.SR,
     variants: [Rarity.SCR],
-    mainEffect: "เลือก Avatar \"ไมเกรน\" 1 ใบ บน Avatar Zone ฝ่ายเรา : Avatar ใบที่เลือก ได้รับ \" อัตโนมัติ เมื่อ Avatar ใบนี้โจมตี : Avatar ใบนี้จะทำการต่อสู้กับ Avatar บน Avatar Zone ฝ่ายตรงข้าม ทุกใบพร้อมกัน\" จนจบเทิร์น \n สั่งใช้ เนรเทศ การ์ดใบนี้ในนรก : นำ {mod}\"อาวุรหุ่นนักรบผู้กล้า\" จากนรกชื่อ แตกต่างกันกี่ใบก็ได้ มาสวมใส่ให้ Avatar \"ไมเกรน\" 1 ใบ บน Avatar Zone ฝ่ายเรา ถ้าการ์ดใบนี้ถูก ธรณีสูบ หรือ สอดแนม ด้วย Avatar \"ไมเกรน\" : นำการ์ดใบนี้ ขึ้นมือ",
+    mainEffect: "เลือก Avatar \"ไมเกรน\" 1 ใบ บน Avatar Zone ฝ่ายเรา : Avatar ใบที่เลือก ได้รับ \"อัตโนมัติ เมื่อ Avatar ใบนี้โจมตี : Avatar ใบนี้จะทำการต่อสู้กับ Avatar บน Avatar Zone ฝ่ายตรงข้าม ทุกใบพร้อมกัน\" จนจบเทิร์น\nสั่งใช้ เนรเทศ การ์ดใบนี้ในนรก : นำ Modification Magic \"อาวุธหุ่นนักรบผู้กล้า\" จากนรกชื่อแตกต่างกันกี่ใบก็ได้ มาสวมใส่ให้ Avatar \"ไมเกรน\" 1 ใบ บน Avatar Zone ฝ่ายเรา\nถ้าการ์ดใบนี้ถูก ธรณีสูบ หรือ สอดแนม ด้วย Avatar \"ไมเกรน\" : นำการ์ดใบนี้ขึ้นมือ",
     subtype: MagicSubtype.Normal,
     cost: 4,
     symbol: Symbol.Robot,

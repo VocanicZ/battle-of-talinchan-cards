@@ -370,7 +370,7 @@ export const CARDS_BT03: Card[] = createCards([
     soi: 1,
     print: "BT03-027",
     rare: Rarity.C,
-    mainEffect: "คำสั่งเสีย (เมื่อAvatarตัวนี้ถูกทำลาย): ทำลาย Avatar ที่ Cost เท่ากับ 4 หรือต่ำกว่า บน Avatar Zone 1 ใบ",
+    mainEffect: "คำสั่งเสีย (เมื่อAvatarตัวนี้ถูกทำลาย): ทำลาย Avatar ที่ Cost เท่ากับ 4 หรือต่ำกว่า บนสนาม 1 ใบ",
     cost: 3,
     gem: 3,
     power: 1,

@@ -199,7 +199,7 @@ export const CARDS_BT08: Card[] = createCards([
     print: "BT08-014",
     rare: Rarity.SR,
     variants: [Rarity.SCR],
-    mainEffect: "สั่งใช้ เมื่อ Avatar ใบนี้ ทำลาย Avatar ของฝ่ายตรงข้ามสำเร็จจากการต่อสู้ : ส่ง Avatar ใบนี้ลงนรก อัญเชิญ จุติ Avatar \"ริกกี้\" ที่เป็น Symbol แมลง และชื่อไม่ซ้ำกับการ์ดใบนี้ 1 ใบ จากใน Deck เรา ลงบน Avatar Zone ฝ่ายเรา จากนั้นสับ Deck",
+    mainEffect: "สั่งใช้ เมื่อ Avatar ใบนี้ ทำลาย Avatar ของฝ่ายตรงข้ามสำเร็จจากการต่อสู้ : ส่ง Avatar ใบนี้ลงนรก อัญเชิญ จุติ Avatar \"ริกกี้\" ที่เป็น {Symbol แมลง} และชื่อไม่ซ้ำกับการ์ดใบนี้ 1 ใบ จากใน Deck เรา ลงบน Avatar Zone ฝ่ายเรา จากนั้นสับ Deck",
     cost: 4,
     gem: 1,
     gemColor: Color.Blue,
@@ -287,7 +287,7 @@ export const CARDS_BT08: Card[] = createCards([
     print: "BT08-020",
     rare: Rarity.C,
     mainEffect:
-      "จุติ : สอดแนม 5 ใบ เลือก Avatar \"ขุนพล\" ที่เป็น Symbol ต่างชาติ ที่มีสีเดียวกันกับ Avatar ใบนี้ 1 ใบ จากที่สอดแนม และนำขึ้นมือ การ์ดที่เหลือนำกลับเข้า Deck แล้วสับ\n#Avatar ใบนี้ถือว่าเป็น Avatar สีม่วง ด้วย",
+      "จุติ : สอดแนม 5 ใบ เลือก Avatar \"ขุนพล\" ที่เป็น {Symbol ต่างชาติ} ที่มีสีเดียวกันกับ Avatar ใบนี้ 1 ใบ จากที่สอดแนม และนำขึ้นมือ การ์ดที่เหลือนำกลับเข้า Deck แล้วสับ\n#Avatar ใบนี้ถือว่าเป็น Avatar สีม่วง ด้วย",
     cost: 4,
     gem: 2,
     power: 4,
@@ -552,7 +552,7 @@ export const CARDS_BT08: Card[] = createCards([
     rare: Rarity.UR,
     variants: [Rarity.SCR],
     mainEffect:
-      "เทิร์นละครั้ง สั่งใช้ เซ่นไหว้ Avatar {symbol ยักษ์} 1 ใบ : อัญเชิญ Avatar {symbol ยักษ์} 1 ใบ จากนรกเรา ที่มี POWER เท่ากับ Avatar ที่ เซ่นไหว้ ไป แต่คนละชื่อ ลงบน Avatar Zone ฝ่ายเรา Avatar ที่ถูกอัญเชิญ ด้วยความสามารถนี้ จะได้รับ POWER +2 จนจบเทิร์น\n#Avatar ใบนี้ นับว่าเป็น Symbol ยักษ์ ด้วย",
+      "เทิร์นละครั้ง สั่งใช้ เซ่นไหว้ Avatar {symbol ยักษ์} 1 ใบ : อัญเชิญ Avatar {symbol ยักษ์} 1 ใบ จากนรกเรา ที่มี POWER เท่ากับ Avatar ที่ เซ่นไหว้ ไป แต่คนละชื่อ ลงบน Avatar Zone ฝ่ายเรา Avatar ที่ถูกอัญเชิญ ด้วยความสามารถนี้ จะได้รับ POWER +2 จนจบเทิร์น\n#Avatar ใบนี้ นับว่าเป็น {Symbol ยักษ์} ด้วย",
     cost: 5,
     gem: 1,
     power: 3,

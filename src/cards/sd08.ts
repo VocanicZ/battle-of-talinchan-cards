@@ -47,7 +47,7 @@ export const CARDS_SD08: Card[] = createCards([
     color: Color.Blue,
   },
   {
-    name: 'รัททาทุยแบงค์',
+    name: "รัททาทุย แบงค์",
     type: CardType.Avatar,
     soi: 3,
     print: 'SD08-009',
@@ -66,7 +66,7 @@ export const CARDS_SD08: Card[] = createCards([
     print: 'SD08-013',
     rare: Rarity.C,
     mainEffect:
-      "เลือกปฏิบัติ :\n1) นำ Avatar Cost 5 หรือต่ำกว่า จาก นรก ฝ่ายเรา ขึ้นมือ 1 ใบ ยกเว้นการ์ด {only} 1\n2) นำ Avatar ที่มี Cost 5 หรือต่ำกว่า จาก Deck ฝ่ายเรา ขึ้นมือ 1 ใบ ยกเว้นการ์ด  {only} 1 แล้วสับ Deck\n\nถ้า Life Card ของเราถูกหงายตั้งแต่ 4 ใบขึ้นไปและหงายมากกว่าฝ่ายตรงข้าม ทำความสามารถ 1) และ 2)",
+      "เลือกปฏิบัติ :\n\n1) นำ Avatar Cost 5 หรือต่ำกว่า จาก นรก ฝ่ายเรา  ขึ้นมือ 1 ใบ ยกเว้นการ์ด {only}\n\n2) นำ Avatar ที่มี Cost 5 หรือต่ำกว่า จาก Deck ฝ่ายเรา ขึ้นมือ 1 ใบ ยกเว้นการ์ด  {only} 1 แล้วสับ Deck\n\nถ้า Life Card ของเราถูกหงายตั้งแต่ 4 ใบขึ้นไปและหงายมากกว่าฝ่ายตรงข้าม ทำความสามารถ 1) และ 2)",
     subtype: MagicSubtype.Normal,
     cost: 1,
     symbol: Symbol.Mage,

@@ -596,7 +596,7 @@ export const CARDS_PRMO: Card[] = createCards([
     soi: 2,
     print: "PRMO-048",
     rare: Rarity.C,
-    mainEffect: "จุติ : สอดแนม 3 ใบ เลือก การ์ด Avatar \"หมา\" หรือ \"แมว\" ที่เป็น Symbol สัตว์ 1 ใบ จากที่ สอดแนม และนำขึ้นมือ ถ้าการ์ดที่เลือกคือ หมานมเย็น อัญเชิญ จุติ ลงบน Avatar Zone ฝ่ายเราแทนการนำขึ้นมือ จากนั้นนำการ์ดที่เหลือกลับ Deck แล้วสับ",
+    mainEffect: "จุติ : สอดแนม 3 ใบ เลือก การ์ด Avatar \"หมา\" หรือ \"แมว\" ที่เป็น {Symbol สัตว์} 1 ใบ จากที่ สอดแนม และนำขึ้นมือ ถ้าการ์ดที่เลือกคือ หมานมเย็น อัญเชิญ จุติ ลงบน Avatar Zone ฝ่ายเราแทนการนำขึ้นมือ จากนั้นนำการ์ดที่เหลือกลับ Deck แล้วสับ",
     cost: 2,
     gem: 1,
     power: 2,
@@ -609,7 +609,7 @@ export const CARDS_PRMO: Card[] = createCards([
     soi: 2,
     print: "PRMO-049",
     rare: Rarity.C,
-    mainEffect: "จุติ : สอดแนม 5 ใบ เลือกการ์ด เครื่องบิน Super Air หรือ รหัสดำ จากที่ สอดแนม 1 ใบ และ/หรือ เลือกการ์ด Avatar \"Super Air\" ที่เป็น Symbol คน จากที่สอดแนม 1 ใบ นำขึ้นมือ จากนั้นนำการ์ดที่เหลือเรียงแล้วนำไปไว้ใต้ Deck",
+    mainEffect: "จุติ : สอดแนม 5 ใบ เลือกการ์ด เครื่องบิน Super Air หรือ รหัสดำ จากที่ สอดแนม 1 ใบ และ/หรือ เลือกการ์ด Avatar \"Super Air\" ที่เป็น {Symbol คน} จากที่สอดแนม 1 ใบ นำขึ้นมือ จากนั้นนำการ์ดที่เหลือเรียงแล้วนำไปไว้ใต้ Deck",
     cost: 2,
     gem: 1,
     power: 2,
@@ -639,7 +639,7 @@ export const CARDS_PRMO: Card[] = createCards([
     symbol: Symbol.Fish,
   },
   {
-    name: "แม่นาค พระประแดง",
+    name: "แม่นาค พระปะแดง",
     type: CardType.Avatar,
     soi: 1,
     print: "PRMO-052",
@@ -671,7 +671,7 @@ export const CARDS_PRMO: Card[] = createCards([
     print: "PRMO-054",
     rare: Rarity.C,
     mainEffect:
-      "โล่มนุษย์ สามัคคี \nต่อเนื่อง ตราบเท่าที่ Avatar ใบนี้ อยู่ในสภาพนอน POWER ของ Avatar ใบนี้จะเพิ่มขึ้นเท่ากับ Avatar \"\"หมา\"\" และ \"\"แมว\"\" ที่เป็น Symbol สัตว์ ใบอื่น บน Avatar Zone ฝ่ายเรา ใบละ 1",
+      "โล่มนุษย์ สามัคคี\nต่อเนื่อง ตราบเท่าที่ Avatar ใบนี้ อยู่ในสภาพนอน POWER ของ Avatar ใบนี้จะเพิ่มขึ้นเท่ากับ Avatar \"\"หมา\"\" และ \"\"แมว\"\" ที่เป็น {Symbol สัตว์} ใบอื่น บน Avatar Zone ฝ่ายเรา ใบละ 1",
     cost: 2,
     gem: 2,
     power: 2,
@@ -956,7 +956,7 @@ export const CARDS_PRMO: Card[] = createCards([
     gemColor: "แดง",
   },
   {
-    name: "แมลงปอแจ็ค",
+    name: "แมลงปอแจ๊ค",
     type: CardType.Avatar,
     soi: 1,
     print: "PRMO-075",
@@ -997,7 +997,7 @@ export const CARDS_PRMO: Card[] = createCards([
     color: Color.Green,
   },
   {
-    name: "หุ่นนักรบผู้กล้า : ไมเกรน",
+    name: "หุ่นนักรบผู้กล้า ไมเกรน",
     type: CardType.Avatar,
     soi: 1,
     print: "PRMO-078",

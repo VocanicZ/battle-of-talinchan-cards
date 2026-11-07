@@ -37,7 +37,7 @@ export const CARDS_KD02: Card[] = createCards([
     soi: 1,
     print: "KD02-006",
     rare: Rarity.SCR,
-    mainEffect: "อัตโนมัติ เมื่อ Avatar ใบนี้เป็นเป้าหมายโจมตีหรือสั่งโจมตี : ธรณีสูบ (ส่งการ์ดใบบนสุดจาก Deck ตกนรก) 2 ใบ POWER +1 จนจบเทิร์น",
+    mainEffect: "อัตโนมัติ เมื่อ Avatar ใบนี้เป็นเป้าหมายการโจมตีหรือโจมตี : ธรณีสูบ 1 ใบ POWER +1 จนจบเทิร์น",
     cost: 4,
     gem: 1,
     power: 3,

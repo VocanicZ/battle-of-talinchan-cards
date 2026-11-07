@@ -54,7 +54,7 @@ export const CARDS_CC02: Card[] = createCards([
     rare: Rarity.SR,
     variants: [Rarity.SCR],
     mainEffect:
-      "อัตโนมัติ เมื่อ Avatar ใบนี้ไม่ถูกทำลายจากการถูกโจมตี : ทำลาย Avatar บน Avatar Zone ของฝ่ายตรงข้าม 1 ใบ \n#Avatar ใบนี้นับเป็น Symbol หุ่นยนต์ ด้วย",
+      "อัตโนมัติ เมื่อ Avatar ใบนี้ไม่ถูกทำลายจากการถูกโจมตี : ทำลาย Avatar บน Avatar Zone ของฝ่ายตรงข้าม 1 ใบ\n#Avatar ใบนี้นับเป็น {Symbol หุ่นยนต์} ด้วย",
     cost: 5,
     gem: 2,
     power: 5,
@@ -126,7 +126,7 @@ export const CARDS_CC02: Card[] = createCards([
     print: "CC02-009",
     rare: Rarity.UR,
     variants: [Rarity.SCR],
-    mainEffect: "ต่อเนื่อง ตราบเท่าที่ Land Magic Zone มี \"บึงทมิฬ\" อยู่ ผู้เล่นทุกคน จะสามารถ ควบคุม Avatar ที่ไม่ใช่ Symbol ปลา ใน Avatar Zone ได้เพียง 1 ใบ",
+    mainEffect: "ต่อเนื่อง ตราบเท่าที่ Land Magic Zone มี \"บึงทมิฬ\" อยู่ ผู้เล่นทุกคน จะสามารถ ควบคุม Avatar ที่ไม่ใช่ {Symbol ปลา} ใน Avatar Zone ได้เพียง 1 ใบ",
     cost: 6,
     gem: 1,
     power: 4,
@@ -693,7 +693,7 @@ export const CARDS_CC02: Card[] = createCards([
     rare: Rarity.UR,
     variants: [Rarity.SCR],
     mainEffect:
-      "เทิร์นละครั้ง สั่งใช้ เปลี่ยนสภาพ Avatar {symbol ปลา} 1 ใบบน Avatar Zone เป็น สภาพนอน สอดแนม 3 ใบ เลือกการ์ด Symbol ปลา 1 ใบ ขึ้นมือ ที่เหลือ ทิ้งลงนรก\n#การ์ดใบนี้นับเป็นชื่อ บึงทมิฬ",
+      "เทิร์นละครั้ง สั่งใช้ เปลี่ยนสภาพ Avatar {symbol ปลา} 1 ใบบน Avatar Zone เป็น สภาพนอน สอดแนม 3 ใบ เลือกการ์ด {Symbol ปลา} 1 ใบ ขึ้นมือ ที่เหลือ ทิ้งลงนรก\n#การ์ดใบนี้นับเป็นชื่อ บึงทมิฬ",
     subtype: MagicSubtype.Land,
     cost: 2,
     symbol: Symbol.Fish,

@@ -58,7 +58,7 @@ export const CARDS_CC01: Card[] = createCards([
     soi: 1,
     print: "CC01-004",
     rare: Rarity.SR,
-    mainEffect: "จุติ : สอดแนม 3 ใบ เลือก การ์ด Symbol เทพ 1 ใบ จากที่สอดแนม และนำขึ้นมือ การ์ดที่เหลือนำไปไว้ใต้ Deck",
+    mainEffect: "จุติ : สอดแนม 3 ใบ เลือก การ์ด {Symbol เทพ} 1 ใบ จากที่สอดแนม และนำขึ้นมือ การ์ดที่เหลือนำไปไว้ใต้ Deck",
     cost: 3,
     gem: 2,
     power: 2,

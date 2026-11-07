@@ -54,4 +54,5 @@ export enum Symbol {
   WonderAnimal = 'สัตว์มหัศจรรย์',
   Soldier = 'ทหาร',
   Cyber = 'ไซเบอร์',
+  Dragon = 'มังกร',
 }

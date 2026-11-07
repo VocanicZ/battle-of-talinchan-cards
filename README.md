@@ -210,13 +210,29 @@ pnpm example:all
 ## Card Data Structure
 
 Cards are organized by set:
-- **BT01-BT08**: Booster sets
-- **SD01-SD07**: Structure decks
+- **BT01-BT12**: Booster sets
+- **SD01-SD09**: Structure decks
+- **KD00-KD04**: Kit decks
 - **CC01-CC02**: Collection sets
+- **RM01**: Remaster set
+- **B2SA, B2SB**: Back-to-school sets
 - **ODY1**: Odyssey set
 - **PRE0**: Pre-release set
-- **PRMO**: Promotion set
-- **SL01**: Special set
+- **PRMO, FPRO, APFD, STOR**: Promotion sets
+- **SL01, SL02**: Special sets
+
+Every official print on bottcg.com except Tokens is present (2026-11). To resync:
+
+```sh
+pnpm tsx scripts/scrape.ts data               # refresh scraped/site-cards.json from cdn.bottcg.com/data/cards.<hash>.json
+pnpm tsx scripts/sync-official.ts report      # reports/official-text-diff-*.json: existing prints whose official text/stats differ
+pnpm tsx scripts/sync-official.ts gen         # append every missing official print to src/cards/<set>.ts
+pnpm tsx scripts/scrape.ts images all         # download missing art from the official CDN
+pnpm tsx scripts/normalize-cards.ts images/<new files>
+pnpm tsx scripts/scrape.check.ts              # self-check of the scripts
+```
+
+Existing prints are never rewritten by `gen`; wording drift is reported, not applied.
 
 Each card has the following structure:
 

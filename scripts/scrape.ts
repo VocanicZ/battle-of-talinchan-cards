@@ -9,6 +9,7 @@
  *
  * Images land in images/ with the existing naming (PRINT.png, PRINT-<RARE>.png)
  * and are guaranteed 388x528 (CDN native size; resized with pngjs if it ever differs).
+ * Source: the official CDN cdn.bottcg.com/cards (per-set sub-dirs discovered from the site JS).
  */
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -20,13 +21,13 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const IMAGES_DIR = path.join(ROOT, "images");
 const SCRAPED_JSON = path.join(ROOT, "scraped", "site-cards.json");
 const SITE = "https://bottcg.com";
-const CDN = "https://cdn.bangbon.app/cards";
+const CDN = "https://cdn.bottcg.com/cards";
 const UPSTREAM_API = "https://api.github.com/repos/kerlos/battle-of-talinchan-cards/contents/src/cards";
 const TARGET_W = 388;
 const TARGET_H = 528;
 const UA = { "User-Agent": "Mozilla/5.0 (bot-cards-sync)" };
 
-interface SiteCard {
+export interface SiteCard {
   name: string;
   type: string;
   print: string;
@@ -42,6 +43,10 @@ interface SiteCard {
   mainEffect?: string;
   favorText?: string;
   dropRate?: string;
+  ex?: string;
+  customLimit?: number;
+  hashtagText?: string;
+  creator?: string;
 }
 
 async function get(url: string): Promise<Response> {
@@ -158,20 +163,49 @@ export function parseLiteral(src: string, start: number, scope: Record<string, u
   return value();
 }
 
-/** Find the JS chunk that bundles the card DB and eval its array literal. */
-async function fetchSiteCards(): Promise<SiteCard[]> {
+/** Site `<script>` chunk paths on a page (Next.js; `chunks/` before 2026-11, `immutable/chunks/` after). */
+export function chunkPaths(html: string): string[] {
+  return [...new Set([...html.matchAll(/(\/_next\/static\/[^"'\\\s]+\.js)/g)].map((m) => m[1]))];
+}
+
+/** The card DB URL inside a JS chunk: `https://cdn.bottcg.com/data/cards.<hash>.json` (hash changes on every deploy). */
+export function findCardsJsonUrl(js: string): string | null {
+  return /https:\/\/cdn\.bottcg\.com\/data\/cards\.[0-9a-f]+\.json/.exec(js)?.[0] ?? null;
+}
+
+/** Per-set image sub-directories on the official CDN, e.g. `{SD09:"123v1k1",BT12:"thankyoupnes"}` in the bundled `cardImagePath`. */
+export function findImageDirs(js: string): Record<string, string> {
+  const m = /\{((?:[A-Z][A-Z0-9]{3}:"[A-Za-z0-9_\/-]+",?)+)\}/.exec(js);
+  const dirs: Record<string, string> = {};
+  if (m) for (const e of m[1].matchAll(/([A-Z][A-Z0-9]{3}):"([^"]+)"/g)) dirs[e[1]] = e[2];
+  return dirs;
+}
+
+/** Discover the card DB location (and image dirs) from the /cards page chunks. */
+async function discoverSite(): Promise<{ cardsUrl: string | null; imageDirs: Record<string, string>; legacy: SiteCard[] | null }> {
+  const html = await (await get(`${SITE}/cards`)).text();
+  let cardsUrl: string | null = null;
+  let imageDirs: Record<string, string> = {};
+  for (const c of chunkPaths(html)) {
+    const js = await (await get(SITE + c)).text();
+    cardsUrl ??= findCardsJsonUrl(js);
+    if (js.includes("cardImagePath")) imageDirs = findImageDirs(js);
+    // pre-2026-11 layout: the DB array was inlined in a page chunk
+    if (!cardsUrl && js.includes("mainEffect:") && js.indexOf("=[{name:") !== -1)
+      return { cardsUrl: null, imageDirs, legacy: parseLiteral(js, js.indexOf("=[{name:") + 1) as SiteCard[] };
+  }
+  return { cardsUrl, imageDirs, legacy: null };
+}
+
+/** Fetch the card DB: cdn.bottcg.com/data/cards.<hash>.json (discovered from the page JS), else the legacy inline literal. */
+export async function fetchSiteCards(): Promise<SiteCard[]> {
   if (fs.existsSync(SCRAPED_JSON)) {
     return JSON.parse(fs.readFileSync(SCRAPED_JSON, "utf-8"));
   }
-  const html = await (await get(`${SITE}/cards`)).text();
-  const chunks = [...new Set([...html.matchAll(/src="(\/_next\/static\/chunks\/[^"]+)"/g)].map((m) => m[1]))];
-  for (const c of chunks) {
-    const js = await (await get(SITE + c)).text();
-    const i = js.indexOf("=[{name:");
-    if (i === -1 || !js.includes("mainEffect:")) continue;
-    return parseLiteral(js, i + 1) as SiteCard[];
-  }
-  throw new Error("card DB chunk not found on bottcg.com/cards");
+  const { cardsUrl, legacy } = await discoverSite();
+  if (cardsUrl) return (await (await get(cardsUrl)).json()) as SiteCard[];
+  if (legacy) return legacy;
+  throw new Error("card DB not found on bottcg.com/cards (no cards.<hash>.json URL, no inline array)");
 }
 
 interface PrintGroup {
@@ -237,15 +271,29 @@ export function resize(buf: Buffer, W = TARGET_W, H = TARGET_H): Buffer {
   return PNG.sync.write(dst);
 }
 
+const SUFFIXED_RARES = ["SCR", "PR", "CBR"];
+const ALWAYS_SUFFIXED_SETS = new Set(["B2SA", "B2SB"]);
+
+/** Official CDN path for a print+rarity, mirroring the site's `cardImagePath` (per-set dirs; rarity suffix only for SCR/PR/CBR, and every rarity of B2SA/B2SB). */
+export function remoteImagePath(print: string, rare: string | undefined, dirs: Record<string, string>): string {
+  const set = print.split("-")[0];
+  const dir = dirs[set]?.replace(/^\/+|\/+$/g, "");
+  const name = rare && (SUFFIXED_RARES.includes(rare) || ALWAYS_SUFFIXED_SETS.has(set)) ? `${print}-${rare}` : print;
+  return `${dir ? `${dir}/` : ""}${name}.png`;
+}
+
 async function cmdImages(set: string, force: boolean): Promise<void> {
   const groups = groupByPrint(await fetchSiteCards());
-  const wanted: string[] = [];
+  const { imageDirs } = await discoverSite();
+  // local file -> remote path. Local naming: PRINT.png for the first rarity, PRINT-<RARE>.png for the rest.
+  const wanted = new Map<string, string>();
   for (const [print, g] of groups) {
     if (set !== "all" && !print.startsWith(setPrefix(set))) continue;
-    wanted.push(`${print}.png`, ...g.rares.slice(1).map((r) => `${print}-${r}.png`));
+    if (g.base.type === "Token") continue;
+    g.rares.forEach((r, i) => wanted.set(i === 0 ? `${print}.png` : `${print}-${r}.png`, remoteImagePath(print, r, imageDirs)));
   }
-  const todo = force ? wanted : wanted.filter((f) => !fs.existsSync(path.join(IMAGES_DIR, f)));
-  console.log(`${wanted.length} images for "${set}", downloading ${todo.length} (${force ? "forced" : "missing only"})`);
+  const todo = [...wanted.keys()].filter((f) => force || !fs.existsSync(path.join(IMAGES_DIR, f)));
+  console.log(`${wanted.size} images for "${set}", downloading ${todo.length} (${force ? "forced" : "missing only"})`);
   fs.mkdirSync(IMAGES_DIR, { recursive: true });
 
   let done = 0, failed = 0, resized = 0;
@@ -254,7 +302,7 @@ async function cmdImages(set: string, force: boolean): Promise<void> {
     Array.from({ length: 4 }, async () => {
       for (let f = queue.shift(); f; f = queue.shift()) {
         try {
-          let buf = Buffer.from(await (await get(`${CDN}/${f}`)).arrayBuffer());
+          let buf = Buffer.from(await (await get(`${CDN}/${wanted.get(f)}`)).arrayBuffer());
           const [w, h] = pngDims(buf);
           if (w !== TARGET_W || h !== TARGET_H) {
             buf = resize(buf);
